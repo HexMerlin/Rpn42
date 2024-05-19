@@ -1,4 +1,0 @@
-repository "Rpn42@HexMerlin@cloud"
-  path "/"
-    br "/main"
-    co "/main"
