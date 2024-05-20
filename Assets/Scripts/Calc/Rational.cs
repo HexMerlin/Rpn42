@@ -1,42 +1,51 @@
-﻿using System.Collections.Generic;
-using System;
-using System.Numerics;
-using System.Linq;
-using System.Text;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Numerics;
+using System.Text;
 
 
-public enum RationalType
+
+public enum Separator
 {
-    Normal = 1,
-    Invalid = 0,
+    None = 1,
     RadixPoint = -1,
     RepetendBegin = -2,
     RadixPointAndRepetendBegin = -3,
-    RepetendEnd = -4,
 }
 
-public readonly partial struct Rational : IEquatable<Rational>, IComparable<Rational>
+public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
 {
     public readonly BigInteger Numerator { get; }
     public readonly BigInteger Denominator { get; }
 
+    private int computedLength;
+
+    private int computedPeriod;
+      
+
+    public static Rational Invalid => new Rational(0, 0, false);
     public static Rational Zero => new Rational(0, 1, false);
     public static Rational One => new Rational(1, 1, false);
 
     public static Rational Half => new Rational(1, 2, false);
 
     public bool IsSpecialDelimiter => Denominator < 0;
-    public bool IsInvalid => Type.Equals(RationalType.Invalid);
+    public bool IsInvalid => Denominator == 0;
 
-    public static implicit operator Rational(RationalType type)
-        => new Rational(0, (int)type, false);
 
-    public RationalType Type => Denominator > BigInteger.Zero
-       ? RationalType.Normal
-       : Enum.IsDefined(typeof(RationalType), (int)Denominator)
-           ? (RationalType)(int)Denominator
-           : throw new ArgumentOutOfRangeException(nameof(Denominator), "Invalid denominator value");
+    private const int uninitializedInt = int.MinValue + 1;
+
+ 
+    //public static implicit operator Rational(Delimiter type)
+    //    => new Rational(0, (int)type, false);
+
+    //public Separator Separator => Denominator > BigInteger.Zero
+    //   ? Separator.None
+    //   : Enum.IsDefined(typeof(Separator), (int)Denominator)
+    //       ? (Separator)(int)Denominator
+    //       : throw new ArgumentOutOfRangeException(nameof(Denominator), "Invalid denominator value");
 
 
     //public Rational() : this(0, 1, false) { }   //use when there is support for C# 10 
@@ -45,6 +54,9 @@ public readonly partial struct Rational : IEquatable<Rational>, IComparable<Rati
 
     private Rational(BigInteger numerator, BigInteger denominator, bool checkAndNormalize)
     {
+        computedLength = uninitializedInt;
+        computedPeriod = uninitializedInt;
+
         if (checkAndNormalize)
         {
             if (denominator <= 0)
@@ -76,6 +88,8 @@ public readonly partial struct Rational : IEquatable<Rational>, IComparable<Rati
 
     public Rational(string input)
     {
+        computedLength = uninitializedInt;
+        computedPeriod = uninitializedInt;
         Denominator = BigInteger.One;
 
         int pointIndex = input.IndexOf('.');
@@ -93,47 +107,73 @@ public readonly partial struct Rational : IEquatable<Rational>, IComparable<Rati
 
     }
 
+    private void ComputeLengthAndPeriod()
+    {
+        if (computedPeriod != uninitializedInt)
+            return;
+
+        computedLength = 0;
+        computedPeriod = 0;
+        foreach ((_, Separator separator) in RotationsBin)
+        {
+            if (computedPeriod >= 1)
+                computedPeriod++;
+            else if (separator == Separator.RepetendBegin || separator == Separator.RadixPointAndRepetendBegin)
+                computedPeriod = 1;
+               
+            computedLength++;
+        }
+
+    }
+
+    public int Length
+    {
+        get
+        {
+            ComputeLengthAndPeriod();
+            return computedLength;
+        }
+    }
+
+    public int Period
+    {
+        get
+        {
+            ComputeLengthAndPeriod();
+            return computedPeriod;
+        }
+    }
+        
+
     public BigInteger IntegerPart => Numerator / Denominator;
 
     public Rational FractionalPart => this - IntegerPart;
 
-    public int IntegerLength => (int)BigInteger.Abs(IntegerPart).GetBitLength(); 
+    public int IntegerLength => (int)BigInteger.Abs(IntegerPart).GetBitLength();
 
     public Rational this[int index] => (this << (index - IntegerLength)).FractionalPart;
 
-    public (int Period, BigInteger Repetend) Repetend
+    public Rational Weight(int index) => One << (IntegerLength - index - 1);
+
+    public Rational Term(int index)
     {
-        get
-        {
-            int period = 0;
-            BigInteger repetend = BigInteger.MinusOne;
+        int repetendStart = Length - Period;
+        bool bit = this[index] >= Half;
 
-            foreach (Rational r in RotationsBinOLD)
-            {
-                if (r.Type == RationalType.RepetendBegin || r.Type == RationalType.RadixPointAndRepetendBegin)
-                {
-                    repetend = 0; //repetend started
-                    continue;
-                }
-                if (repetend == BigInteger.MinusOne)
-                    continue;
-
-                repetend <<= 1;
-
-                if (r > Half)
-                    repetend++;
-                period++;
-            }
-            return (period, repetend);
-        }
+        if (index < repetendStart)
+            return bit ? Weight(index) : Zero;
+        else
+            return bit ? (Weight(index) << Period) / ((BigInteger.One << Period) - BigInteger.One) : Rational.Zero;
+        
+         
     }
-
+   
     public Rational DivideByMersenneCeiling()
     {
         BigInteger div = MersenneCeiling(Numerator);
         return this / div;
+        
     }
-
 
 
     public static BigInteger MersenneCeiling(BigInteger num)
@@ -149,7 +189,7 @@ public readonly partial struct Rational : IEquatable<Rational>, IComparable<Rati
 
 
 
-public Rational WeightFloor
+    public Rational WeightFloor
     {
         get
         {
@@ -160,303 +200,150 @@ public Rational WeightFloor
         }
     }
 
-    public IEnumerable<Rational> Partition
+
+    public IEnumerable<(Rational, Separator)> RotationsBalBin
     {
         get
         {
-            if (this < 0)
-            {
-                yield break;
-            }
-            Rational w = WeightFloor;
+            yield break;
+            //Rational r = this;
+            //Rational w = WeightFloor;
 
-            foreach (Rational rot in RotationsBinOLD)
-            {
-                RationalType type = rot.Type;
-                if (type == RationalType.RepetendBegin || type == RationalType.RadixPointAndRepetendBegin)
-                    break;
-                else if (type == RationalType.RadixPoint)
-                {
-                    continue;
-                }
-                else if (type == RationalType.Normal)
-                {
-                    yield return rot > w ? w : Rational.Zero;
-                    w >>= 1;
-                }
-                else throw new InvalidOperationException($"Unexpected {nameof(RationalType)} value {type}");
-            }
+            //while (w >= 1)
+            //{
+            //    yield return r;
+            //    if (r > 0)
+            //        r -= w;
+            //    else
+            //        r += w;
 
-            (int period, BigInteger repetend) = Repetend;
-            var numerator = BigInteger.One << (period - 1);
-            var denominator = (BigInteger.One << period) - BigInteger.One;
-            for (int i = 0; i < period; i++)
-            {
-                var r = new Rational(numerator, denominator);
-                if (r >= w)
-                {
-                    yield return r;
+            //    w >>= 1;
+            //}
+            //Debug.Assert(w == Half);
+            //static bool IsDoubleOdd(Rational r) => !r.Numerator.IsEven && !r.Denominator.IsEven; //used to determine when the repetend starts
+            //Rational repetendStart = IsDoubleOdd(r) ? r : Invalid; //used for bookkeeping when the repetend started
 
-                    numerator >>= 1;
-                }
-                else
-                    yield return Rational.Zero;
-            }
-            Debug.Assert(repetend.IsZero);
-        }
-    }
+            //if (repetendStart.IsInvalid)
+            //    yield return Delimiter.RadixPoint; //no repetend detected yet, return only the radix point
+            //else
+            //    yield return Delimiter.RadixPointAndRepetendBegin; //repetend detected, return the combined radix point and the repetend begin
 
-    public IEnumerable<Rational> RotationsBalBin
-    {
-        get
-        {
-            Rational r = this;
-            Rational w = WeightFloor;
+            //while (true)
+            //{
+            //    if (r.IsZero)
+            //        yield break;
+            //    if (repetendStart.IsInvalid && IsDoubleOdd(r))
+            //    {
+            //        repetendStart = r;
+            //        yield return Delimiter.RepetendBegin;
+            //    }
 
-            while (w >= 1)
-            {
-                yield return r;
-                if (r > 0)
-                    r -= w;
-                else
-                    r += w;
+            //    yield return r;
 
-                w >>= 1;
-            }
-            Debug.Assert(w == Half);
-            static bool IsDoubleOdd(Rational r) => !r.Numerator.IsEven && !r.Denominator.IsEven; //used to determine when the repetend starts
-            Rational repetendStart = IsDoubleOdd(r) ? r : RationalType.Invalid; //used for bookkeeping when the repetend started
+            //    r <<= 1;
 
-            if (repetendStart.IsInvalid)
-                yield return RationalType.RadixPoint; //no repetend detected yet, return only the radix point
-            else
-                yield return RationalType.RadixPointAndRepetendBegin; //repetend detected, return the combined radix point and the repetend begin
+            //    if (r > 0)
+            //        r--;
+            //    else
+            //        r++;
 
-            while (true)
-            {
-                if (r.IsZero)
-                    yield break;
-                if (repetendStart.IsInvalid && IsDoubleOdd(r))
-                {
-                    repetendStart = r;
-                    yield return RationalType.RepetendBegin;
-                }
-
-                yield return r;
-
-                r <<= 1;
-
-                if (r > 0)
-                    r--;
-                else
-                    r++;
-
-                if (r == repetendStart)
-                    yield break;
-            }
+            //    if (r == repetendStart)
+            //        yield break;
+            //}
 
         }
     }
-    public IEnumerable<Rational> RotationsBin
+   
+    public IEnumerable<(Rational rational, Separator separator)> RotationsBin
     {
         get
         {
             if (this < 0) yield break;
-            Rational firstInRepetend = RationalType.Invalid;
-
-            var integerLength = this.IntegerLength;
-
-            for (int i = 0; ; i++)
+            Rational firstInRepetend = Invalid;
+            
+            int integerLength = this.IntegerLength;
+            
+            for (int len = 0; ; len++)
             {
-                Rational r = this[i];
+                Rational r = this[len];
 
                 if (r == firstInRepetend || r.IsZero)
                    break;
-                bool emitRadixPoint = i == integerLength;
+                bool emitRadixPoint = len == integerLength;
                 bool emitRepetendBegin = firstInRepetend.IsInvalid && r.Denominator.IsOdd();
-
+                Separator separator = emitRepetendBegin && emitRadixPoint ? Separator.RadixPointAndRepetendBegin : emitRepetendBegin ? Separator.RepetendBegin : emitRadixPoint ? Separator.RadixPoint : Separator.None;
                 if (emitRepetendBegin)
-                {
                     firstInRepetend = r;
-                    if (emitRadixPoint)
-                        yield return RationalType.RadixPointAndRepetendBegin;
-                    else
-                        yield return RationalType.RepetendBegin;
-                }
-                if (emitRadixPoint && !emitRepetendBegin)
-                    yield return RationalType.RadixPoint;
 
-                yield return r;
+                yield return (r, separator);
             }
-            if (!Denominator.IsPowerOfTwo)
-                yield return RationalType.RepetendEnd;
-
-
+         
         }
     }
 
-
-    public IEnumerable<Rational> RotationsBinOLD
+    public IEnumerable<Rational> Partition
     {
         get
         {
-            if (this < 0)
-            {
-                yield break;
-            }
-            Rational r = this;
-            Rational w = WeightFloor;
-
-            while (w >= 1)
-            {
-                yield return r;
-                if (r > w)
-                    r -= w;
-
-                w >>= 1;
-            }
-            Debug.Assert(w == Half);
-
-            Rational repetendStart = !r.Denominator.IsEven ? r : RationalType.Invalid;
-
-            if (repetendStart.IsInvalid)
-                yield return RationalType.RadixPoint;
-            else
-                yield return RationalType.RadixPointAndRepetendBegin;
-
-            while (true)
-            {
-                if (r.IsZero)
-                    yield break;
-                if (repetendStart.IsInvalid && !r.Denominator.IsEven)
-                {
-                    repetendStart = r;
-                    yield return RationalType.RepetendBegin;
-                }
-
-                yield return r;
-
-                r <<= 1;
-
-                if (r > 1)
-                    r--;
-
-                if (r == repetendStart)
-                    yield break;
-            }
-
+            for (int i = 0; i < Length; i++)
+                yield return Term(i);
         }
     }
 
 
-    /// <summary>
-    /// Returns the rational number as a mixed number
-    /// </summary>
-    /// <remarks>
-    /// For any non-zero fractional part, the numerator is always <b>Odd</b>
-    /// </remarks>
-    /// <example>
-    /// <code>7/3   →  2 + 1/3</code>
-    /// <code>2/5   →  1 - 3/5</code>
-    /// <code>-5/3  → -2 + 1/3</code>
-    /// <code>13/6  →  2 + 1/6</code>
-    /// </example>
-    public (BigInteger Integer, Rational Fraction) Mixed
-    {
-        get
-        {
-            var numerator = BigInteger.Abs(Numerator);
-            BigInteger integer = numerator / Denominator;
-            BigInteger fractionalNumerator = numerator % Denominator;
-
-            if (fractionalNumerator.IsEven)
-            {
-                if (fractionalNumerator.IsZero)
-                    return (Numerator / Denominator, Rational.Zero);
-                integer++;
-                fractionalNumerator = fractionalNumerator - Denominator;
-            }
-            if (Numerator.Sign < 0)
-            {
-                integer = -integer;
-                fractionalNumerator = -fractionalNumerator;
-            }
-
-            return (integer, new Rational(fractionalNumerator, Denominator));
-        }
-    }
-
-    private char? ToSeparatorChar() => Type switch
+    private static char? ToSeparatorChar(Separator separator) => separator switch
     { 
-        RationalType.RadixPoint => '⠄',
-        RationalType.RepetendBegin => '⠁',
-        RationalType.RadixPointAndRepetendBegin => '⠅',
-        RationalType.RepetendEnd => '…',
+        Separator.RadixPoint => '⠄',
+        Separator.RepetendBegin => '⠁',
+        Separator.RadixPointAndRepetendBegin => '⠅',
+        //Separator.RepetendEnd => '…',
         _ => null
     };
 
     public string ToStringNormal() => Denominator == 1 ? Numerator.ToString() : $"{Numerator}/{Denominator}";
 
-    public string ToStringMixed()
-    {
-        (BigInteger integer, Rational fraction) = Mixed;
-        return fraction.IsZero ? integer.ToString() : $"{(integer.IsZero ? "" : integer.ToString() + " ")}{fraction.ToStringNormal()}";
-    }
 
-    public string ToStringBinOLD()
-    {
-        Rational weight = WeightFloor;
-        StringBuilder sb = new StringBuilder();
+    public string ToStringPartition() => $"{string.Join(" ", Partition.Select(r => r.ToString()))}";
 
-        foreach (Rational rot in RotationsBinOLD)
+    public string ToStringBin()
+    {
+        StringBuilder sb = new StringBuilder(); 
+        foreach ((Rational r, Separator s) in RotationsBin)
         {
-            if (rot.IsSpecialDelimiter)
-            {
-                sb.Append(rot.ToSeparatorChar());
-            }
-            else
-            {
-                sb.Append(rot > weight ? '1' : '0');
-                if (weight > Half)
-                    weight >>= 1;
-            }
-            sb.Append(' ');
-
+            if (s != Separator.None)
+                sb.Append(ToSeparatorChar(s));
+            sb.Append(r >= Half ? '1' : '0');
         }
-        if (sb.Length > 0) sb.Remove(sb.Length - 1, 1); //remove the last space
         return sb.ToString();
     }
 
-    public string ToStringPartition() => $"{string.Join(" ", Partition.Select(r => r.ToSeparatorChar()?.ToString() ?? r.ToString()))}";
-
-    public string ToStringBin() => $"{string.Join(" ", RotationsBin.Select(r => r.ToSeparatorChar() ?? (r >= Half ? '1' : '0')))}";
-
-    public string ToStringBalBin() => $"{string.Join(" ", RotationsBalBin.Select(r => r.ToSeparatorChar() ?? (r > 0 ? '+' : '-')))}";
+    public string ToStringBalBin() => "Not implemented";
 
     public string ToStringRotationsBin()
     {
-        var denominator = Denominator;
-        return $"{string.Join(" ", RotationsBin.Select(r => r.ToSeparatorChar()?.ToString() ?? (denominator == r.Denominator ? (r.Numerator + "/") : r.ToString())))}";
+        StringBuilder sb = new StringBuilder();
+        foreach ((Rational r, Separator s) in RotationsBin)
+        {
+            if (s != Separator.None)
+                sb.Append(ToSeparatorChar(s));
+            sb.Append(r.Denominator == r.Denominator ? (r.Numerator + "/") : r.ToString());
+            sb.Append(' ');
+        }
+        return sb.ToString();
+
     }
 
-    public string ToStringRotationsBinOLD()
-    {
-        var denominator = Denominator;
-        return $"{string.Join(" ", RotationsBinOLD.Select(r => r.ToSeparatorChar()?.ToString() ?? (denominator == r.Denominator ? (r.Numerator + "/") : r.ToString())))}";
-    }
 
-    public string ToStringRotationsBalBin()
-    {
-        var denominator = Denominator;
-        return $"{string.Join(" ", RotationsBalBin.Select(r => r.ToSeparatorChar()?.ToString() ?? (denominator == r.Denominator ? (r.Numerator + "/") : r.ToString())))}";
-    }
+    public string ToStringRotationsBalBin() => "Not implemented";
 
     public string ToStringRepInfo()
     {
-        (int period, BigInteger repetend) = Repetend;
-        return $"P={period} R={repetend}";
+
+        return $"P={Period}";
     }
 
     public override string ToString() => Denominator == 1 ? Numerator.ToString() : $"{Numerator}/{Denominator}";
+
+
 
 }

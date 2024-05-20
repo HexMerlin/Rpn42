@@ -2,7 +2,7 @@
 using System;
 using System.Numerics;
 
-public readonly partial struct Rational
+public partial struct Rational
 {
     public bool IsZero => Numerator.IsZero;
 
@@ -27,7 +27,7 @@ public readonly partial struct Rational
 
     public static bool operator >=(Rational a, Rational b) => a.CompareTo(b) >= 0;
 
-    public Rational Reciprocal => Numerator > BigInteger.Zero ? new Rational(Denominator, Numerator) : RationalType.Invalid;
+    public Rational Reciprocal => Numerator > BigInteger.Zero ? new Rational(Denominator, Numerator) : Invalid;
 
     public static Rational operator ++(Rational a) => new(a.Numerator + a.Denominator, a.Denominator);
 
@@ -54,7 +54,7 @@ public readonly partial struct Rational
     public static Rational operator %(Rational a, Rational b)
     {
         if (b.Numerator == 0)
-            return RationalType.Invalid; //cannot do modulus by zero
+            return Invalid; //cannot do modulus by zero
 
         BigInteger newNumerator = (a.Numerator * b.Denominator) % (a.Denominator * b.Numerator);
         BigInteger newDenominator = a.Denominator * b.Denominator;

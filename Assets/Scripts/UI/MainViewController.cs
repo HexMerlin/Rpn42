@@ -32,9 +32,6 @@ public class MainViewController : MonoBehaviour
         }
     }
 
-
-
-
     void OnEnable()
     {
         Input.backButtonLeavesApp = true;
@@ -52,14 +49,17 @@ public class MainViewController : MonoBehaviour
         output.itemsSource = outputEntries;
 
         static VisualElement makeCell() => new Label();
-         
-        output.columns[0].makeCell = makeCell;
-        output.columns[1].makeCell = makeCell;
-        output.columns[2].makeCell = makeCell;
+        Debug.Assert(output.columns.Count == 3, $"Expected column count 3, but acutal was {output.columns.Count}");
 
-        output.columns[0].bindCell = (e, i) => (e as Label).text = outputEntries[i].Col0Data(NumberFormat);
-        output.columns[1].bindCell = (e, i) => (e as Label).text = outputEntries[i].Col1Data(NumberFormat);
-        output.columns[2].bindCell = (e, i) => (e as Label).text = outputEntries[i].Col2Data(NumberFormat);
+        for (int columnIndex = 0; columnIndex < 3; columnIndex++)
+        {
+            output.columns[columnIndex].makeCell = makeCell;
+          
+        }
+        output.columns[0].bindCell = (e, row) => (e as Label).text = outputEntries[row].ColumnData(0, NumberFormat);
+        output.columns[1].bindCell = (e, row) => (e as Label).text = outputEntries[row].ColumnData(1, NumberFormat);
+        output.columns[2].bindCell = (e, row) => (e as Label).text = outputEntries[row].ColumnData(2, NumberFormat);
+
 
         output.makeNoneElement = () => new Label(""); //avoid message "List is empty"
   
@@ -73,11 +73,11 @@ public class MainViewController : MonoBehaviour
             numberFormatButtons[(int)format] = format switch
             {
                 Format.Normal => buttonGrid.Q<Button>("button-format-normal"),
-                Format.Mixed => buttonGrid.Q<Button>("button-format-mixed"),
                 Format.Bin => buttonGrid.Q<Button>("button-format-bin"),
                 Format.BalBin => buttonGrid.Q<Button>("button-format-balbin"),
                 Format.RotationsBin => buttonGrid.Q<Button>("button-format-rotbin"),
                 Format.RotationsBalBin => buttonGrid.Q<Button>("button-format-rotbalbin"),
+                Format.Partition => buttonGrid.Q<Button>("button-format-partition"),
                 _ => throw new ArgumentOutOfRangeException(nameof(format), format, "Unknown format")
             };
             if (numberFormatButtons[(int)format] == null)
@@ -108,7 +108,7 @@ public class MainViewController : MonoBehaviour
         if (output.itemsSource.Count > 0)
         {
             output.ScrollToItem(output.itemsSource.Count - 1);
-            ResizeCol2Width();
+            AssertColumnWidths();
         }
     }
 
@@ -364,32 +364,34 @@ public class MainViewController : MonoBehaviour
     }
 
 
-    private void ResizeCol2Width()
+
+    private void AssertColumnWidths()
     {
         if (outputEntries.Count == 0)
             return;
-        int maxCharCount = 10;
 
-        for (int i = 0; i < outputEntries.Count; i++)
+        for (int column = 0; column < output.columns.Count; column++)
         {
-            NumberEntry entry = outputEntries[i];
-            int charCount = entry.Col2Data(NumberFormat).Length;
-            if (charCount > maxCharCount)
+            int maxCharCount = 8;
+            for (int row = 0; row < outputEntries.Count; row++)
             {
-                maxCharCount = charCount;
+                NumberEntry entry = outputEntries[row];
+                int charCount = entry.ColumnData(column, NumberFormat).Length;
+                if (charCount > maxCharCount)
+                {
+                    maxCharCount = charCount;
+                }
             }
+            output.columns[column].width = maxCharCount * 24;
         }
-        output.columns[2].width = maxCharCount * 24;
     }
 
     private void OnDisable()
     {
         if (buttonGrid != null)
         {
-            // Unregister the GeometryChangedEvent callback
             buttonGrid.UnregisterCallback<GeometryChangedEvent>(OnButtonGridGeometryChanged);
 
-            // Unregister the ClickEvent callback
             buttonGrid.UnregisterCallback<ClickEvent>(OnButtonGridClick);
         }
     }
