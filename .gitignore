@@ -1,25 +1,5 @@
-# This .gitignore file should be placed at the root of your Unity project directory
-#
-# Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
-#
 
 *.meta
-# Include the Assets directory and its contents
-#!Assets/
-#!Assets/**
-
-# Include all .cs files under Assets/Scripts/ and its subdirectories
-#!Assets/Scripts/**/*.cs
-
-# Include all .cs files under Assets/Scripts/UI/
-#!Assets/Scripts/UI/*.cs
-
-# Include all .uxml and .uss files under Assets/UI Toolkit/ and its subdirectories
-#!Assets/UI\ Toolkit/**/*.uxml
-#!Assets/UI\ Toolkit/**/*.uss
-
-
-
 
 /.plastic
 /.utmp

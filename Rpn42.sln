@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{A40CE0E0-9E60-36EC-5B4F-421ECAD41483}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7EB0A27A-B675-4160-BEFD-761B9A751056}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A40CE0E0-9E60-36EC-5B4F-421ECAD41483}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A40CE0E0-9E60-36EC-5B4F-421ECAD41483}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A40CE0E0-9E60-36EC-5B4F-421ECAD41483}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A40CE0E0-9E60-36EC-5B4F-421ECAD41483}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
