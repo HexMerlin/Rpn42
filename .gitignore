@@ -4,17 +4,18 @@
 #
 
 # Ignore everything
+*
 
 # Except for these 
-!/.git
 !/.gitignore
 !/.gitattributes
-!Assets/Scripts/**/*.cs
-!Assets/UI Toolkit/**/*.uxml
-!Assets/UI Toolkit/**/*.uss
+!/Assets/
+!/Assets/Scripts/
+!/Assets/Scripts/**/*.cs
+!/Assets/Scripts/UI/*.cs
+!/Assets/UI Toolkit/**/*.uxml
+!/Assets/UI Toolkit/**/*.uss
 
 
 
 
-
-/Assets
