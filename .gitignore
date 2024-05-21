@@ -79,3 +79,4 @@ crashlytics-build.properties
 /Assets/Resources/PerformanceTestRunSettings.json.meta
 /Assets/Resources/Fonts & Materials/CascadiaCode SDF.asset
 *.meta
+/ProjectSettings/ProjectSettings.asset
