@@ -78,6 +78,24 @@ public partial struct Rational
 
     public Rational Abs => new Rational(BigInteger.Abs(Numerator), Denominator, false);
 
+    public Rational DivideByMersenneCeiling()
+    {
+        BigInteger div = MersenneCeiling(Numerator);
+        return this / div;
+
+    }
+
+    public static BigInteger MersenneCeiling(BigInteger num)
+    {
+        num = BigInteger.Abs(num);
+        BigInteger ceiling = 1;
+
+        while (ceiling <= num)
+            ceiling = (ceiling << 1) + 1;
+
+        return ceiling;
+    }
+
     public override bool Equals(object obj) => obj is Rational other && Equals(other);
     public override int GetHashCode() => HashCode.Combine(Numerator, Denominator);
 

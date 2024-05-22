@@ -20,7 +20,7 @@
                 <ui:Button text="7" name="button-7" class="button" />
                 <ui:Button text="8" name="button-8" class="button" />
                 <ui:Button text="9" name="button-9" class="button" />
-                <ui:Button text="⌫" name="button-back-drop" class="button" />
+                <ui:Button text="←" name="button-back-drop" class="button" />
             </ui:VisualElement>
             <ui:VisualElement name="row-2" style="flex-grow: 1; flex-direction: row; justify-content: center;">
                 <ui:Button name="button-format-partition" text="Partition" class="button mode-button" />

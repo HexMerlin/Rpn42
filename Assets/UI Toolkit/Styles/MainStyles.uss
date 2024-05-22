@@ -1,4 +1,5 @@
 Label {
+    -unity-font-definition: resource('Fonts & Materials/CascadiaCodeNF SDF');
     font-size: 40px;
     color: rgb(255, 214, 0);
     white-space: nowrap;
@@ -9,6 +10,7 @@ Label {
 }
 
 .button {
+    -unity-font-definition: resource('Fonts & Materials/CascadiaCodeNF SDF');
     background-color: rgb(10, 10, 10);
     color: rgb(255, 255, 255);
     border-radius: 20px;
@@ -26,8 +28,6 @@ Label {
     min-height: auto;
     max-width: none;
     align-self: auto;
-    -unity-font-style: normal;
-    -unity-text-align: middle-center;
     border-color: rgb(80, 80, 80);
     border-width: 10px;
     padding-top: 0;
@@ -43,6 +43,7 @@ Label {
     border-top-right-radius: 30px;
     border-bottom-right-radius: 30px;
     border-bottom-left-radius: 30px;
+    -unity-text-align: middle-center;
 }
 
 .button:hover {

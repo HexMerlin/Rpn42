@@ -1,19 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-
-
-
-public enum Separator
-{
-    None = 1,
-    RadixPoint = -1,
-    RepetendBegin = -2,
-    RadixPointAndRepetendBegin = -3,
-}
 
 public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
 {
@@ -34,19 +21,7 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
     public bool IsSpecialDelimiter => Denominator < 0;
     public bool IsInvalid => Denominator == 0;
 
-
     private const int uninitializedInt = int.MinValue + 1;
-
- 
-    //public static implicit operator Rational(Delimiter type)
-    //    => new Rational(0, (int)type, false);
-
-    //public Separator Separator => Denominator > BigInteger.Zero
-    //   ? Separator.None
-    //   : Enum.IsDefined(typeof(Separator), (int)Denominator)
-    //       ? (Separator)(int)Denominator
-    //       : throw new ArgumentOutOfRangeException(nameof(Denominator), "Invalid denominator value");
-
 
     //public Rational() : this(0, 1, false) { }   //use when there is support for C# 10 
 
@@ -54,33 +29,32 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
 
     private Rational(BigInteger numerator, BigInteger denominator, bool checkAndNormalize)
     {
+        Numerator = numerator;
+        Denominator = denominator;
         computedLength = uninitializedInt;
         computedPeriod = uninitializedInt;
 
         if (checkAndNormalize)
         {
-            if (denominator <= 0)
+            if (Denominator <= 0)
             {
-                Numerator = 0;
-                Denominator = 0;
+                Numerator = Denominator = 0;
                 return;
             }
 
             if (denominator.Sign == -1)
             {
-                numerator = -numerator;
-                denominator = -denominator;
+                Numerator = -Numerator;
+                Denominator = -Denominator;
             }
 
-            BigInteger gcd = BigInteger.GreatestCommonDivisor(BigInteger.Abs(numerator), BigInteger.Abs(denominator));
+            BigInteger gcd = BigInteger.GreatestCommonDivisor(BigInteger.Abs(Numerator), BigInteger.Abs(Denominator));
             if (gcd > 1)
             {
-                numerator /= gcd;
-                denominator /= gcd;
+                Numerator /= gcd;
+                Denominator /= gcd;
             }
         }
-        this.Numerator = numerator;
-        this.Denominator = denominator;
     }
 
 
@@ -90,7 +64,7 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
     {
         computedLength = uninitializedInt;
         computedPeriod = uninitializedInt;
-        Denominator = BigInteger.One;
+        Denominator = 1;
 
         int pointIndex = input.IndexOf('.');
         if (pointIndex != -1) //not currently supporting point notation
@@ -106,44 +80,6 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
         Numerator = BigInteger.Parse(input);
 
     }
-
-    private void ComputeLengthAndPeriod()
-    {
-        if (computedPeriod != uninitializedInt)
-            return;
-
-        computedLength = 0;
-        computedPeriod = 0;
-        foreach ((_, Separator separator) in RotationsBin)
-        {
-            if (computedPeriod >= 1)
-                computedPeriod++;
-            else if (separator == Separator.RepetendBegin || separator == Separator.RadixPointAndRepetendBegin)
-                computedPeriod = 1;
-               
-            computedLength++;
-        }
-
-    }
-
-    public int Length
-    {
-        get
-        {
-            ComputeLengthAndPeriod();
-            return computedLength;
-        }
-    }
-
-    public int Period
-    {
-        get
-        {
-            ComputeLengthAndPeriod();
-            return computedPeriod;
-        }
-    }
-        
 
     public BigInteger IntegerPart => Numerator / Denominator;
 
@@ -164,42 +100,9 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
             return bit ? Weight(index) : Zero;
         else
             return bit ? (Weight(index) << Period) / ((BigInteger.One << Period) - BigInteger.One) : Rational.Zero;
-        
          
     }
    
-    public Rational DivideByMersenneCeiling()
-    {
-        BigInteger div = MersenneCeiling(Numerator);
-        return this / div;
-        
-    }
-
-
-    public static BigInteger MersenneCeiling(BigInteger num)
-    {
-        num = BigInteger.Abs(num);
-        BigInteger ceiling = 1;
-
-        while (ceiling <= num)
-            ceiling = (ceiling << 1) + 1;
-
-        return ceiling;
-    }
-
-
-
-    public Rational WeightFloor
-    {
-        get
-        {
-            Rational w = Rational.One;
-            while (w < this.Abs)
-                w <<= 1;
-            return w >> 1;
-        }
-    }
-
 
     public IEnumerable<(Rational, Separator)> RotationsBalBin
     {
@@ -257,19 +160,20 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
     public IEnumerable<(Rational rational, Separator separator)> RotationsBin
     {
         get
-        {
+        {            
             if (this < 0) yield break;
             Rational firstInRepetend = Invalid;
             
             int integerLength = this.IntegerLength;
-            
-            for (int len = 0; ; len++)
-            {
-                Rational r = this[len];
+            bool InFractionPart(int i) => i >= integerLength;
 
-                if (r == firstInRepetend || r.IsZero)
-                   break;
-                bool emitRadixPoint = len == integerLength;
+            for (int i = 0; ; i++)
+            {
+                Rational r = this[i];
+
+                if (InFractionPart(i) && (r == firstInRepetend || r.IsZero))
+                    break;
+                bool emitRadixPoint = i == integerLength;
                 bool emitRepetendBegin = firstInRepetend.IsInvalid && r.Denominator.IsOdd();
                 Separator separator = emitRepetendBegin && emitRadixPoint ? Separator.RadixPointAndRepetendBegin : emitRepetendBegin ? Separator.RepetendBegin : emitRadixPoint ? Separator.RadixPoint : Separator.None;
                 if (emitRepetendBegin)
@@ -290,60 +194,89 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
         }
     }
 
-
-    private static char? ToSeparatorChar(Separator separator) => separator switch
-    { 
-        Separator.RadixPoint => '⠄',
-        Separator.RepetendBegin => '⠁',
-        Separator.RadixPointAndRepetendBegin => '⠅',
-        //Separator.RepetendEnd => '…',
-        _ => null
-    };
-
-    public string ToStringNormal() => Denominator == 1 ? Numerator.ToString() : $"{Numerator}/{Denominator}";
-
-
-    public string ToStringPartition() => $"{string.Join(" ", Partition.Select(r => r.ToString()))}";
-
-    public string ToStringBin()
+    /// <summary>
+    /// Returns the rational number as a mixed number
+    /// </summary>
+    /// <remarks>
+    /// For any non-zero fractional part, the numerator is always <b>Odd</b>
+    /// </remarks>
+    /// <example>
+    /// <code>7/3   →  2 + 1/3</code>
+    /// <code>2/5   →  1 - 3/5</code>
+    /// <code>-5/3  → -2 + 1/3</code>
+    /// <code>13/6  →  2 + 1/6</code>
+    /// </example>
+    public (BigInteger Integer, Rational Fraction) Mixed
     {
-        StringBuilder sb = new StringBuilder(); 
-        foreach ((Rational r, Separator s) in RotationsBin)
+        get
         {
-            if (s != Separator.None)
-                sb.Append(ToSeparatorChar(s));
-            sb.Append(r >= Half ? '1' : '0');
+            var numerator = BigInteger.Abs(Numerator);
+            BigInteger integer = numerator / Denominator;
+            BigInteger fractionNumerator = numerator % Denominator;
+
+            if (fractionNumerator.IsEven)
+            {
+                if (fractionNumerator.IsZero)
+                    return (Numerator / Denominator, Rational.Zero);
+                integer++;
+                fractionNumerator = fractionNumerator - Denominator;
+            }
+            if (Numerator.Sign < 0)
+            {
+                integer = -integer;
+                fractionNumerator = -fractionNumerator;
+            }
+
+            return (integer, new Rational(fractionNumerator, Denominator));
         }
-        return sb.ToString();
     }
 
-    public string ToStringBalBin() => "Not implemented";
 
-    public string ToStringRotationsBin()
+    public int Length
     {
-        StringBuilder sb = new StringBuilder();
-        foreach ((Rational r, Separator s) in RotationsBin)
+        get
         {
-            if (s != Separator.None)
-                sb.Append(ToSeparatorChar(s));
-            sb.Append(r.Denominator == r.Denominator ? (r.Numerator + "/") : r.ToString());
-            sb.Append(' ');
+            ComputeLengthAndPeriod();
+            return computedLength;
         }
-        return sb.ToString();
-
     }
 
-
-    public string ToStringRotationsBalBin() => "Not implemented";
-
-    public string ToStringRepInfo()
+    public int Period
     {
-
-        return $"P={Period}";
+        get
+        {
+            ComputeLengthAndPeriod();
+            return computedPeriod;
+        }
     }
 
-    public override string ToString() => Denominator == 1 ? Numerator.ToString() : $"{Numerator}/{Denominator}";
+    private void ComputeLengthAndPeriod()
+    {
+        if (computedPeriod != uninitializedInt)
+            return;
+
+        computedLength = 0;
+        computedPeriod = 0;
+        foreach ((_, Separator separator) in RotationsBin)
+        {
+            if (computedPeriod >= 1)
+                computedPeriod++;
+            else if (separator == Separator.RepetendBegin || separator == Separator.RadixPointAndRepetendBegin)
+                computedPeriod = 1;
+
+            computedLength++;
+        }
+    }
 
 
-
+    public Rational WeightFloor
+    {
+        get
+        {
+            Rational w = Rational.One;
+            while (w < this.Abs)
+                w <<= 1;
+            return w >> 1;
+        }
+    }
 }

@@ -61,11 +61,13 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.0b16\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Calc\Rational.ToString.cs" />
     <Compile Include="Assets\Scripts\Calc\Rational.Operations.cs" />
     <Compile Include="Assets\Scripts\Calc\BigIntegerExtensions.cs" />
     <Compile Include="Assets\Scripts\Calc\Rational.cs" />
     <Compile Include="Assets\Scripts\UI\MainViewController.cs" />
     <Compile Include="Assets\Scripts\UI\NumberEntry.cs" />
+    <Compile Include="Assets\Scripts\Calc\Separator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\UI Toolkit\Styles\MainStyles.uss" />
