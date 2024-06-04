@@ -108,51 +108,8 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
     {
         get
         {
-            yield break;
-            //Rational r = this;
-            //Rational w = WeightFloor;
-
-            //while (w >= 1)
-            //{
-            //    yield return r;
-            //    if (r > 0)
-            //        r -= w;
-            //    else
-            //        r += w;
-
-            //    w >>= 1;
-            //}
-            //Debug.Assert(w == Half);
-            //static bool IsDoubleOdd(Rational r) => !r.Numerator.IsEven && !r.Denominator.IsEven; //used to determine when the repetend starts
-            //Rational repetendStart = IsDoubleOdd(r) ? r : Invalid; //used for bookkeeping when the repetend started
-
-            //if (repetendStart.IsInvalid)
-            //    yield return Delimiter.RadixPoint; //no repetend detected yet, return only the radix point
-            //else
-            //    yield return Delimiter.RadixPointAndRepetendBegin; //repetend detected, return the combined radix point and the repetend begin
-
-            //while (true)
-            //{
-            //    if (r.IsZero)
-            //        yield break;
-            //    if (repetendStart.IsInvalid && IsDoubleOdd(r))
-            //    {
-            //        repetendStart = r;
-            //        yield return Delimiter.RepetendBegin;
-            //    }
-
-            //    yield return r;
-
-            //    r <<= 1;
-
-            //    if (r > 0)
-            //        r--;
-            //    else
-            //        r++;
-
-            //    if (r == repetendStart)
-            //        yield break;
-            //}
+            Rational r = (this << 1).FractionalPart;
+            return r.RotationsBin;        
 
         }
     }

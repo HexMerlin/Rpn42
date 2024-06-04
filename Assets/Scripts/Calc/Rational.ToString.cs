@@ -32,7 +32,17 @@ public partial struct Rational
         return sb.ToString();
     }
 
-    public string ToStringBalBin() => "Not implemented";
+    public string ToStringBalBin()
+    {
+        StringBuilder sb = new StringBuilder();
+        foreach ((Rational r, Separator s) in RotationsBalBin)
+        {
+            if (s != Separator.None)
+                sb.Append(ToSeparatorChar(s));
+            sb.Append(r.Numerator.IsOdd() ? '1' : '0');
+        }
+        return sb.ToString();
+    }
 
     public string ToStringRotationsBin()
     {
@@ -49,7 +59,19 @@ public partial struct Rational
     }
 
 
-    public string ToStringRotationsBalBin() => "Not implemented";
+    public string ToStringRotationsBalBin()
+    {
+        StringBuilder sb = new StringBuilder();
+        foreach ((Rational r, Separator s) in RotationsBalBin)
+        {
+            if (s != Separator.None)
+                sb.Append(ToSeparatorChar(s));
+            sb.Append(r.Denominator == Denominator ? (r.Numerator + "/") : r.ToString());
+            sb.Append(' ');
+        }
+        return sb.ToString();
+
+    }
 
     public string ToStringRepInfo()
     {
