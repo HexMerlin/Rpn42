@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 
 [RequireComponent(typeof(UIDocument))]
-public class MainViewController : MonoBehaviour
+public partial class MainViewController : MonoBehaviour
 {
     public UIDocument UIDocument;
 
-    private List<NumberEntry> outputEntries;
-
+    private readonly OperationController OperationController = new ();
+ 
     private Label input;
 
     private MultiColumnListView output;
@@ -37,28 +36,26 @@ public class MainViewController : MonoBehaviour
         const string inputElementName = "input";
         const string buttonGridName = "button-grid";
 
-        outputEntries = new List<NumberEntry>();
-
         VisualElement root = UIDocument.rootVisualElement;
         this.input = root.Q<Label>(inputElementName) ?? throw new NullReferenceException($"{inputElementName} not found in the UIDocument.");
 
         this.output = root.Q<MultiColumnListView>(outputElementName) ?? throw new NullReferenceException("output not found in the UIDocument.");
 
-        output.itemsSource = outputEntries;
+        output.itemsSource = (System.Collections.IList) OperationController.OutputEntries;
 
         static VisualElement makeCell() => new Label();
-        Debug.Assert(output.columns.Count == 3, $"Expected column count 3, but acutal was {output.columns.Count}");
+        Debug.Assert(output.columns.Count == 3, $"Expected column count 3, but actual was {output.columns.Count}");
 
         for (int columnIndex = 0; columnIndex < 3; columnIndex++)
         {
             output.columns[columnIndex].makeCell = makeCell;
           
         }
-        output.columns[0].bindCell = (e, row) => (e as Label).text = outputEntries[row].ColumnData(0, NumberFormat);
-        output.columns[1].bindCell = (e, row) => (e as Label).text = outputEntries[row].ColumnData(1, NumberFormat);
-        output.columns[2].bindCell = (e, row) => (e as Label).text = outputEntries[row].ColumnData(2, NumberFormat);
+        output.columns[0].bindCell = (e, row) => (e as Label).text = OperationController[row].ColumnData(0, NumberFormat);
+        output.columns[1].bindCell = (e, row) => (e as Label).text = OperationController[row].ColumnData(1, NumberFormat);
+        output.columns[2].bindCell = (e, row) => (e as Label).text = OperationController[row].ColumnData(2, NumberFormat);
 
-
+        
         output.makeNoneElement = () => new Label(""); //avoid message "List is empty"
   
         buttonGrid = root.Q<VisualElement>(buttonGridName) ?? throw new NullReferenceException($"{buttonGridName} not found in the UIDocument.");
@@ -118,10 +115,10 @@ public class MainViewController : MonoBehaviour
         set => this.input.text = value;
     }
 
-    private bool OutputEmpty => outputEntries.Count == 0;
+    private bool OutputEmpty => OperationController.OutputIsEmpty;
     private bool InputEmpty => string.IsNullOrEmpty(InputText);
 
-    private int AvailableOperands => outputEntries.Count + (InputEmpty ? 0 : 1);
+    private int AvailableOperands => OperationController.OutputCount + (InputEmpty ? 0 : 1);
 
 
     private void SetNumberFormat(Format format)
@@ -146,7 +143,7 @@ public class MainViewController : MonoBehaviour
 
     void ClearOutput()
     {
-        outputEntries.Clear();
+        OperationController.ClearOutput();
         RefreshOutput();
     }
 
@@ -154,33 +151,8 @@ public class MainViewController : MonoBehaviour
     {
         if (OutputEmpty)
             return;
-        outputEntries.RemoveAt(outputEntries.Count - 1);
+        OperationController.RemoveLastOutput();
         RefreshOutput();
-    }
-
-
-    bool PushNumber()
-    {
-        if (InputEmpty)
-        {
-            if (outputEntries.Count == 0)
-                return true; //no number to push
-            outputEntries.Add(new NumberEntry(outputEntries[^1].Rational));
-            RefreshOutput();
-            return true;
-        }
-        
-        Rational rational = new Rational(InputText);
-        if (rational.IsInvalid)
-        {
-            Debug.LogWarning($"Failed to parse {InputText}");
-            return false;
-        }
-        NumberEntry entry = new NumberEntry(rational);
-        outputEntries.Add(entry);
-        ClearInput();
-        RefreshOutput();
-        return true;
     }
 
     private void OnButtonGridClick(ClickEvent evt)
@@ -188,13 +160,15 @@ public class MainViewController : MonoBehaviour
         if (evt.target is not Button button)
             return;
 
-        // Check and number format buttons if they were clicked
+
+        // Check if a number-format button was clicked
         int numberFormatButtonIndex = Array.IndexOf(numberFormatButtons, button);
         if (numberFormatButtonIndex >= 0)
         {
             NumberFormat = (Format)numberFormatButtonIndex;
             return;
         }
+        SuspendUserInterface();
 
         const string buttonPrefix = "button-";
 
@@ -261,93 +235,11 @@ public class MainViewController : MonoBehaviour
                 Debug.LogWarning($"Unhandled button: {button.name}");
                 break;
         }
-
+        ResumeUserInterface();
     }
 
 
-
-
-    void PerformUnaryOperation(Func<Rational, Rational> operation)
-    {
-        if (AvailableOperands < 1)
-            return; //need a number to perform operation: abort operation
-
-        Rational operand;
-
-        if (InputEmpty)
-        {
-            operand = outputEntries[^1].Rational;
-        }
-        else
-        {
-            operand = new Rational(InputText);
-            if (operand.IsInvalid)
-            {
-                Debug.LogWarning($"Failed to parse {InputText}");
-                return;
-            }
-        }
-
-        Rational result = operation(operand);
-        if (result.IsInvalid)
-        {
-            Debug.LogWarning($"Invalid operation");
-            return;
-        }
-        
-        if (InputEmpty)
-            outputEntries.RemoveAt(outputEntries.Count - 1);
-        else
-            ClearInput();
-
-        outputEntries.Add(new NumberEntry(result));
-        RefreshOutput();
-
-
-    }
-
-    void PerformBinaryOperation(Func<Rational, Rational, Rational> operation)
-    {
-        if (AvailableOperands < 2)   
-            return; //need two numbers to perform operation: abort operation
-
-        Rational operandA, operandB;
-
-        if (InputEmpty)
-        {
-            operandA = outputEntries[^2].Rational;
-            operandB = outputEntries[^1].Rational;
-        }
-        else
-        {
-            operandA = outputEntries[^1].Rational;
-            operandB = new Rational(InputText);
-            if (operandB.IsInvalid)
-            {
-                Debug.LogWarning($"Failed to parse {InputText}");
-                return;
-            }
-        }
-
-        Rational result = operation(operandA, operandB);
-        if (result.IsInvalid)
-        {
-            Debug.LogWarning($"Invalid operation");
-            return;
-        }
-        outputEntries.RemoveAt(outputEntries.Count - 1);
-
-        if (InputEmpty)
-            outputEntries.RemoveAt(outputEntries.Count - 1);
-        else
-            ClearInput();
-
-        outputEntries.Add(new NumberEntry(result));
-        RefreshOutput();
-
-        
-    }
-
+    
     private void OnButtonGridGeometryChanged(GeometryChangedEvent evt)
     {
         var height = buttonGrid.resolvedStyle.height;
@@ -365,15 +257,15 @@ public class MainViewController : MonoBehaviour
 
     private void AssertColumnWidths()
     {
-        if (outputEntries.Count == 0)
+        if (OperationController.OutputIsEmpty)
             return;
 
         for (int column = 0; column < output.columns.Count; column++)
         {
             int maxCharCount = 8;
-            for (int row = 0; row < outputEntries.Count; row++)
+            for (int row = 0; row < OperationController.OutputCount; row++)
             {
-                NumberEntry entry = outputEntries[row];
+                NumberEntry entry = OperationController[row];
                 int charCount = entry.ColumnData(column, NumberFormat).Length;
                 if (charCount > maxCharCount)
                 {
@@ -392,5 +284,18 @@ public class MainViewController : MonoBehaviour
 
             buttonGrid.UnregisterCallback<ClickEvent>(OnButtonGridClick);
         }
+    }
+    public void SuspendUserInterface()
+    {
+        input.SetEnabled(false);
+        output.SetEnabled(false);
+        buttonGrid.SetEnabled(false);
+    }
+
+    public void ResumeUserInterface()
+    {
+        input.SetEnabled(true);
+        output.SetEnabled(true);
+        buttonGrid.SetEnabled(true);
     }
 }

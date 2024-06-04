@@ -9,7 +9,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{A40CE0E0-9E60-36EC-5B4F-421ECAD41483}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -65,9 +66,11 @@
     <Compile Include="Assets\Scripts\Calc\Rational.Operations.cs" />
     <Compile Include="Assets\Scripts\Calc\BigIntegerExtensions.cs" />
     <Compile Include="Assets\Scripts\Calc\Rational.cs" />
+    <Compile Include="Assets\Scripts\UI\OperationController.cs" />
     <Compile Include="Assets\Scripts\UI\MainViewController.cs" />
     <Compile Include="Assets\Scripts\UI\NumberEntry.cs" />
     <Compile Include="Assets\Scripts\Calc\Separator.cs" />
+    <Compile Include="Assets\Scripts\UI\MainViewController.Operations.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\UI Toolkit\Styles\MainStyles.uss" />

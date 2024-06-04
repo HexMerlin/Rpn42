@@ -8,7 +8,7 @@
                 <ui:Column name="Column2" width="75%" sortable="false" stretchable="true" resizable="true" optional="false" />
             </ui:Columns>
         </ui:MultiColumnListView>
-        <ui:Label text="Input" name="input" class="label" style="-unity-text-align: upper-right; flex-grow: 0; height: 5%; font-size: 40px; color: rgb(252, 255, 0); background-color: rgb(51, 51, 51);" />
+        <ui:Label text="Input" name="input" class="label" style="-unity-text-align: upper-left; flex-grow: 0; height: 5%; font-size: 40px; color: rgb(252, 255, 0); background-color: rgb(51, 51, 51);" />
         <ui:VisualElement name="button-grid" style="flex-grow: 8; flex-direction: column; flex-wrap: nowrap; justify-content: center; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-shrink: 1; position: relative; bottom: auto; top: auto; left: auto; right: auto; align-self: auto; flex-basis: auto; height: 50%; max-height: none; min-height: auto;">
             <ui:VisualElement name="row-1" style="flex-grow: 1; flex-direction: row; justify-content: center;">
                 <ui:Button name="button-format-normal" text="Normal" class="button mode-button" />
