@@ -7,8 +7,6 @@ public enum Format { Normal, Bin, BalBin, RotationsBin, RotationsBalBin, Partiti
 public class NumberEntry
 {
 
-
-
     public NumberEntry(BigInteger number) : this(new Rational(number))
     {
     }
@@ -26,8 +24,9 @@ public class NumberEntry
     }
 
 
-
     public Rational Rational { get; }
+
+    public static readonly NumberEntry Invalid = new NumberEntry(Rational.Invalid);
 
     public string ColumnData(int columnIndex, Format format) => columnIndex switch
     {
