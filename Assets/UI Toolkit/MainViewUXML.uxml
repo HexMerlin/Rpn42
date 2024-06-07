@@ -32,7 +32,7 @@
                 <ui:Button text="4" name="button-4" class="button" />
                 <ui:Button text="5" name="button-5" class="button" />
                 <ui:Button text="6" name="button-6" class="button" />
-                <ui:Button text="Swap" name="button-swap" class="button" />
+                <ui:Button text="Swap" name="button-swap" enabled="false" class="button" />
             </ui:VisualElement>
             <ui:VisualElement name="row-3" style="flex-grow: 1; flex-direction: row; justify-content: center;">
                 <ui:Button class="button" />
@@ -49,8 +49,8 @@
             <ui:VisualElement name="row-4" style="flex-grow: 1; flex-direction: row; justify-content: center;">
                 <ui:Button name="button-clear" text="Clear" class="button" />
                 <ui:Button class="button" />
-                <ui:Button class="button" />
-                <ui:Button class="button" />
+                <ui:Button name="button-undo" text="Undo" class="button" />
+                <ui:Button text="Redo" name="button-redo" class="button" />
                 <ui:Button name="button-mod" text="Mod" class="button" />
                 <ui:Button text="+" name="button-sum" class="button" />
                 <ui:Button text="." name="button-point" class="button" />

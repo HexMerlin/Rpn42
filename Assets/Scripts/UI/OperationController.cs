@@ -7,14 +7,14 @@ public class OperationController
 {
     private List<NumberEntry> outputEntries;
 
-    private readonly StringBuilder input = new StringBuilder();
+    private readonly StringBuilder inputBuf = new StringBuilder();
 
     public IReadOnlyList<NumberEntry> OutputEntries => outputEntries;
 
     Action<string> OnInputUpdate;
     Action OnOutputUpdate;
     
-    private Change CurrentChange = Change.None.SetCheckPoint(true);
+    private Change CurrentChange = Change.CreateStart();
 
     public OperationController(Action<string> onInputUpdate, Action onOutputUpdate)
     {
@@ -29,7 +29,7 @@ public class OperationController
 
     private bool OutputEmpty => outputEntries.Count == 0;
     
-    private bool InputEmpty => input.Length == 0;
+    private bool InputEmpty => inputBuf.Length == 0;
      
     private NumberEntry LastOutput => outputEntries[^1];
 
@@ -51,7 +51,7 @@ public class OperationController
             case "7":
             case "8":
             case "9":
-                CurrentChange = CurrentChange.AddInput(buttonValue, input);
+                CurrentChange = CurrentChange.AddInput(buttonValue, inputBuf);
                 outputChanged = false;
                 break;
 
@@ -72,11 +72,11 @@ public class OperationController
                 if (InputEmpty)
                 {
                     if (OutputEmpty) return;
-                    CurrentChange = CurrentChange.RemoveOutput(outputEntries);
+                        CurrentChange = CurrentChange.RemoveOutput(outputEntries);
                 }
                 else
                 {
-                    CurrentChange = CurrentChange.RemoveInputChar(input);
+                    CurrentChange = CurrentChange.RemoveInputChar(inputBuf);
                 }
                 break;
             case "swap":
@@ -105,7 +105,7 @@ public class OperationController
                 break;
             case "clear":
                 if (!InputEmpty)
-                    CurrentChange = CurrentChange.ClearInput(input);
+                    CurrentChange = CurrentChange.ClearInput(inputBuf);
                 if (!OutputEmpty)
                     CurrentChange = CurrentChange.ClearAllOutputs(outputEntries);
                 break;
@@ -115,12 +115,19 @@ public class OperationController
             case "div-ones":
                 PerformUnaryOperation((a) => a.DivideByMersenneCeiling());
                 break;
+            case "undo":
+                PerformUndoOperation();
+                break;
+
+            case "redo":
+                PerformRedoOperation();
+                break;
             default:
                 Debug.LogWarning($"Unhandled button: {buttonValue}");
                 return;
         }
-        CurrentChange.SetCheckPoint();
-        OnInputUpdate(input.ToString());
+        CurrentChange.IsCheckPoint = true;
+        OnInputUpdate(inputBuf.ToString());
         if (outputChanged) OnOutputUpdate();
     }
 
@@ -136,7 +143,7 @@ public class OperationController
 
         CurrentChange = InputEmpty ?
             CurrentChange.ReplaceOutput(new NumberEntry(result), outputEntries) :
-            CurrentChange.ClearInput(input).AddOutput(new NumberEntry(result), outputEntries);
+            CurrentChange.ClearInput(inputBuf).AddOutput(new NumberEntry(result), outputEntries);
     }
 
     private void PerformBinaryOperation(Func<Rational, Rational, Rational> operation)
@@ -150,16 +157,52 @@ public class OperationController
 
         CurrentChange = InputEmpty ?
             CurrentChange.RemoveOutput(outputEntries).ReplaceOutput(new NumberEntry(result), outputEntries) :
-            CurrentChange.ClearInput(input).ReplaceOutput(new NumberEntry(result), outputEntries);
+            CurrentChange.ClearInput(inputBuf).ReplaceOutput(new NumberEntry(result), outputEntries);
     }
 
+    public void PerformUndoOperation()
+    {
+        if (CurrentChange is NoChange)
+            return;
 
+        while (true)
+        {
+            CurrentChange = CurrentChange switch
+            {
+                InputChange inputChange => inputChange.Rollback(inputBuf).Previous,
+                OutputChange outputChange => outputChange.Rollback(outputEntries).Previous,
+                _ => throw new ArgumentOutOfRangeException($"Unknown ChangeType {CurrentChange.GetType().Name}")
+            };
+            if (CurrentChange.IsCheckPoint)
+                return;
+        }
+    }
+
+    public void PerformRedoOperation()
+    {
+             
+        while (true)
+        {
+            if (CurrentChange.Next is null)
+                return;
+            CurrentChange = CurrentChange.Next;
+
+            CurrentChange = CurrentChange switch
+            {
+                InputChange inputChange => inputChange.Execute(inputBuf),
+                OutputChange outputChange => outputChange.Execute(outputEntries),
+                _ => throw new ArgumentOutOfRangeException($"Unknown ChangeType {CurrentChange.GetType().Name}")
+            };
+            if (CurrentChange.IsCheckPoint)
+                return;
+        }
+    }
 
     private (bool success, Rational operand) PeekOperand()
     {
         if (OutputCount + (InputEmpty ? 0 : 1) >= 1)
         {
-            Rational operand = InputEmpty ? LastOutput.Rational : new Rational(input.ToString());
+            Rational operand = InputEmpty ? LastOutput.Rational : new Rational(inputBuf.ToString());
             if (!operand.IsInvalid)
                 return (true, operand);
         }
@@ -170,7 +213,7 @@ public class OperationController
     {
         if (OutputCount + (InputEmpty ? 0 : 1) >= 2)
         {
-            Rational rightOperand = InputEmpty ? LastOutput.Rational : new Rational(input.ToString());
+            Rational rightOperand = InputEmpty ? LastOutput.Rational : new Rational(inputBuf.ToString());
             if (!rightOperand.IsInvalid)
             {
                 Rational leftOperand = InputEmpty ? SecondLastOutput.Rational : LastOutput.Rational;
@@ -179,4 +222,7 @@ public class OperationController
         }
         return (false, Rational.Invalid, Rational.Invalid);
     }
+
+
+
 }

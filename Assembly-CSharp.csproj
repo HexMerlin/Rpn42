@@ -64,6 +64,7 @@
     <Compile Include="Assets\Scripts\Calc\Rational.ToString.cs" />
     <Compile Include="Assets\Scripts\Calc\Rational.Operations.cs" />
     <Compile Include="Assets\Scripts\UI\Change.cs" />
+    <Compile Include="Assets\Scripts\UI\Change.Helpers.cs" />
     <Compile Include="Assets\Scripts\Calc\BigIntegerExtensions.cs" />
     <Compile Include="Assets\Scripts\Calc\Rational.cs" />
     <Compile Include="Assets\Scripts\UI\OperationController.cs" />

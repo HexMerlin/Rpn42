@@ -55,6 +55,10 @@ Label {
     color: rgb(0, 0, 0);
 }
 
+.button:disabled {
+    color: rgb(159, 159, 159);
+}
+
 .button.mode-button {
     font-size: 32px;
 }
