@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 
@@ -31,7 +32,6 @@ public class MainViewController : MonoBehaviour
 
     void OnEnable()
     {
-        Input.backButtonLeavesApp = true;
         const string outputElementName = "output";
         const string inputElementName = "input";
         const string buttonGridName = "button-grid";
@@ -39,6 +39,15 @@ public class MainViewController : MonoBehaviour
         this.OperationController = new(OnInputUpdate, OnOutputUpdate);
 
         VisualElement root = UIDocument.rootVisualElement;
+
+        root.RegisterCallbackOnce<KeyDownEvent>(KeyDownEvent =>
+        {
+            if (KeyDownEvent.keyCode == KeyCode.Escape) 
+                Application.Quit();
+
+        }, TrickleDown.TrickleDown);
+
+
         this.inputLabel = root.Q<Label>(inputElementName) ?? throw new NullReferenceException($"{inputElementName} not found in the UIDocument.");
 
         this.output = root.Q<MultiColumnListView>(outputElementName) ?? throw new NullReferenceException("output not found in the UIDocument.");
@@ -87,6 +96,8 @@ public class MainViewController : MonoBehaviour
 
 
     }
+
+
     private void OnInputUpdate(string text) => this.inputLabel.text = text;
 
 
