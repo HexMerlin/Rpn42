@@ -67,3 +67,8 @@ Label {
     color: rgb(0, 255, 0);
     -unity-font-style: bold;
 }
+
+#container > #output > .unity-scroll-view--vertical-horizontal > #unity-content-and-vertical-scroll-container > #unity-content-viewport > #unity-content-container {
+    justify-content: flex-end;
+    flex-direction: column-reverse;
+}

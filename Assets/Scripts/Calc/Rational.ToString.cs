@@ -15,7 +15,7 @@ public partial struct Rational
         _ => null
     };
 
-    public string ToStringNormal() => Denominator == 1 ? Numerator.ToString() : $"{Numerator}/{Denominator}";
+    public string ToStringFraction() => Denominator == 1 ? Numerator.ToString() : $"{Numerator}/{Denominator}";
 
 
     public string ToStringPartition() => $"{string.Join(" ", Partition.Select(r => r.ToString()))}";
@@ -73,9 +73,35 @@ public partial struct Rational
 
     }
 
+
+    public string ToStringDecimal(int maxDecimalDigits = 50)
+    {
+        // Handle the integer part
+        BigInteger integerPart = BigInteger.Divide(Numerator, Denominator);
+        BigInteger remainder = BigInteger.Remainder(Numerator, Denominator);
+
+        // Handle the fractional part
+        StringBuilder result = new StringBuilder();
+        result.Append(integerPart);
+        result.Append('.');
+
+        for (int i = 0; i < maxDecimalDigits; i++)
+        {
+            remainder *= 10;
+            BigInteger digit = BigInteger.Divide(remainder, Denominator);
+            result.Append(digit);
+            remainder = BigInteger.Remainder(remainder, Denominator);
+
+            // If the remainder is zero, we can stop early
+            if (remainder == 0)
+                break;
+        }
+
+        return result.ToString();
+    }
+
     public string ToStringRepInfo()
     {
-
         return $"P={Period}";
     }
 
