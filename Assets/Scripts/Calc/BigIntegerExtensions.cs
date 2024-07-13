@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Numerics;
+using Unity.VisualScripting;
 
 public static class BigIntegerExtensions
 {
     public static bool IsOdd(this BigInteger value) => !value.IsEven;
+
+    public static BigInteger Abs(this BigInteger value) => BigInteger.Abs(value);
 
     public static long GetBitLength(this BigInteger value)
     {

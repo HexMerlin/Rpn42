@@ -76,13 +76,17 @@ public partial struct Rational
 
     public string ToStringDecimal(int maxDecimalDigits = 50)
     {
-        // Handle the integer part
-        BigInteger integerPart = BigInteger.Divide(Numerator, Denominator);
-        BigInteger remainder = BigInteger.Remainder(Numerator, Denominator);
-
+      
+        BigInteger integerPart = BigInteger.DivRem(Numerator.Abs(), Denominator, out BigInteger remainder);
+        
         // Handle the fractional part
         StringBuilder result = new StringBuilder();
+        if (Numerator < 0) result.Append("-");
+
         result.Append(integerPart);
+        if (remainder.IsZero)
+            return result.ToString();
+
         result.Append('.');
 
         for (int i = 0; i < maxDecimalDigits; i++)
@@ -91,7 +95,6 @@ public partial struct Rational
             BigInteger digit = BigInteger.Divide(remainder, Denominator);
             result.Append(digit);
             remainder = BigInteger.Remainder(remainder, Denominator);
-
             // If the remainder is zero, we can stop early
             if (remainder == 0)
                 break;
