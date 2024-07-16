@@ -21,7 +21,7 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
     public bool IsSpecialDelimiter => Denominator < 0;
     public bool IsInvalid => Denominator == 0;
 
-    private const int uninitializedInt = int.MinValue + 1;
+    private const int UninitializedInt = int.MinValue + 1;
 
     //public Rational() : this(0, 1, false) { }   //use when there is support for C# 10 
 
@@ -31,8 +31,8 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
     {
         Numerator = numerator;
         Denominator = denominator;
-        computedLength = uninitializedInt;
-        computedPeriod = uninitializedInt;
+        computedLength = UninitializedInt;
+        computedPeriod = UninitializedInt;
 
         if (checkAndNormalize)
         {
@@ -62,8 +62,8 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
 
     public Rational(string input)
     {
-        computedLength = uninitializedInt;
-        computedPeriod = uninitializedInt;
+        computedLength = UninitializedInt;
+        computedPeriod = UninitializedInt;
         Denominator = 1;
 
         int pointIndex = input.IndexOf('.');
@@ -209,7 +209,7 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
 
     private void ComputeLengthAndPeriod()
     {
-        if (computedPeriod != uninitializedInt)
+        if (computedPeriod != UninitializedInt)
             return;
 
         computedLength = 0;

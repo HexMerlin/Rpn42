@@ -74,7 +74,7 @@ public partial struct Rational
     }
 
 
-    public string ToStringDecimal(int maxDecimalDigits = 50)
+    public readonly string ToStringDecimal(int maxDecimalDigits = 50)
     {
       
         BigInteger integerPart = BigInteger.DivRem(Numerator.Abs(), Denominator, out BigInteger remainder);
@@ -103,12 +103,9 @@ public partial struct Rational
         return result.ToString();
     }
 
-    public string ToStringRepInfo()
-    {
-        return $"P={Period}";
-    }
+    public string ToStringRepInfo() => $"P={Period}";
 
-    public override string ToString() => Denominator == 1 ? Numerator.ToString() : $"{Numerator}/{Denominator}";
+    public override readonly string ToString() => Denominator == 1 ? Numerator.ToString() : $"{Numerator}/{Denominator}";
 
 
 }

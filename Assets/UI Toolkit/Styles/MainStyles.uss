@@ -9,6 +9,11 @@ Label {
     flex-grow: 1;
 }
 
+.unity-multi-column-header__column__default-content {
+    background-color: rgb(2, 0, 47);
+    color: rgb(255, 255, 255);
+}
+
 .button {
     -unity-font-definition: resource('Fonts & Materials/CascadiaCodeNF SDF');
     background-color: rgb(10, 10, 10);

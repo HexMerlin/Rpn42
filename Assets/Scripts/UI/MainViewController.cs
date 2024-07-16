@@ -22,11 +22,7 @@ public class MainViewController : MonoBehaviour
     private Format NumberFormat
     {
         get => numberFormat;
-        set
-        {
-            if (numberFormat != value)
-                SetNumberFormat(value);
-        }
+        set => SetNumberFormat(value);
     }
 
     void OnEnable()
@@ -132,10 +128,12 @@ public class MainViewController : MonoBehaviour
 
     private void SetNumberFormat(Format format)
     {
-        numberFormat = format;
+        if (this.numberFormat == format)
+            return;
+        this.numberFormat = format;
       
         const string selectedClass = "selected";
-
+     
         for (int i = 0; i < numberFormatButtons.Length; i++)
         {
             Button button = numberFormatButtons[i];

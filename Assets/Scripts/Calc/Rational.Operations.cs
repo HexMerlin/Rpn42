@@ -76,9 +76,9 @@ public partial struct Rational
         return new(a.Numerator << shift, a.Denominator, normalizeNeeded);
     }
 
-    public Rational Abs => new Rational(BigInteger.Abs(Numerator), Denominator, false);
+    public readonly Rational Abs => new(BigInteger.Abs(Numerator), Denominator, false);
 
-    public Rational DivideByMersenneCeiling()
+    public readonly Rational DivideByMersenneCeiling()
     {
         BigInteger div = MersenneCeiling(Numerator);
         return this / div;
