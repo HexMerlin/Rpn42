@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Globalization;
+using System.Xml;
 using UnityEngine;
 using UnityEngine.UIElements;
-
 
 [RequireComponent(typeof(UIDocument))]
 public class MainViewController : MonoBehaviour
@@ -16,13 +17,17 @@ public class MainViewController : MonoBehaviour
 
     private VisualElement buttonGrid;
 
-    private readonly Button[] numberFormatButtons = new Button[Enum.GetValues(typeof(Format)).Length];
+    private CalcButtons calcButtons;
 
-    private Format numberFormat = Format.Normal;
+     private Format numberFormat = Format.Normal;
+   
     private Format NumberFormat
     {
         get => numberFormat;
-        set => SetNumberFormat(value);
+        set
+        {
+            if (numberFormat != value) SetNumberFormat(value);
+        }
     }
 
     void OnEnable()
@@ -47,7 +52,7 @@ public class MainViewController : MonoBehaviour
 
         this.output = root.Q<MultiColumnListView>(outputElementName) ?? throw new NullReferenceException("output not found in the UIDocument.");
 
-        output.itemsSource = (System.Collections.IList) OperationController.OutputEntries;
+        this.output.itemsSource = (System.Collections.IList) OperationController.OutputEntries;
 
         static VisualElement makeCell() => new Label();
         Debug.Assert(output.columns.Count == 3, $"Expected column count 3, but actual was {output.columns.Count}");
@@ -57,38 +62,23 @@ public class MainViewController : MonoBehaviour
             output.columns[columnIndex].makeCell = makeCell;
           
         }
-        output.columns[0].bindCell = (e, row) => (e as Label).text = OperationController[row].ColumnData(0, NumberFormat);
-        output.columns[1].bindCell = (e, row) => (e as Label).text = OperationController[row].ColumnData(1, NumberFormat);
-        output.columns[2].bindCell = (e, row) => (e as Label).text = OperationController[row].ColumnData(2, NumberFormat);
+        this.output.columns[0].bindCell = (e, row) => (e as Label).text = OperationController[row].ColumnData(0, NumberFormat);
+        this.output.columns[1].bindCell = (e, row) => (e as Label).text = OperationController[row].ColumnData(1, NumberFormat);
+        this.output.columns[2].bindCell = (e, row) => (e as Label).text = OperationController[row].ColumnData(2, NumberFormat);
+       
+        this.output.makeNoneElement = () => new Label(""); //avoid message "List is empty"
+       
+        this.buttonGrid = root.Q<VisualElement>(buttonGridName) ?? throw new NullReferenceException($"{buttonGridName} not found in the UIDocument.");
 
-        output.makeNoneElement = () => new Label(""); //avoid message "List is empty"
-  
-        buttonGrid = root.Q<VisualElement>(buttonGridName) ?? throw new NullReferenceException($"{buttonGridName} not found in the UIDocument.");
-        
-        buttonGrid.RegisterCallback<ClickEvent>(OnButtonGridClick);
-        buttonGrid.RegisterCallback<GeometryChangedEvent>(OnButtonGridGeometryChanged);
+        this.buttonGrid.RegisterCallback<ClickEvent>(OnButtonGridClick);
+        this.buttonGrid.RegisterCallback<GeometryChangedEvent>(OnButtonGridGeometryChanged);
 
-        foreach (Format format in Enum.GetValues(typeof(Format)))
-        {
-            numberFormatButtons[(int)format] = format switch
-            {
-                Format.Normal => buttonGrid.Q<Button>("button-format-normal"),
-                Format.Bin => buttonGrid.Q<Button>("button-format-bin"),
-                Format.BalBin => buttonGrid.Q<Button>("button-format-balbin"),
-                Format.RotationsBin => buttonGrid.Q<Button>("button-format-rotbin"),
-                Format.RotationsBalBin => buttonGrid.Q<Button>("button-format-rotbalbin"),
-                Format.Partition => buttonGrid.Q<Button>("button-format-partition"),
-                _ => throw new ArgumentOutOfRangeException(nameof(format), format, "Unknown format")
-            };
-            if (numberFormatButtons[(int)format] == null)
-                Debug.LogWarning($"Button for format {format} not found");
-        }
-        
+        this.calcButtons = new CalcButtons(buttonGrid);
+   
         SetNumberFormat(Format.Normal); //call method (instead of property) to force update of the buttons
 
         OnInputUpdate(string.Empty);
         OnOutputUpdate();
-
 
     }
 
@@ -98,75 +88,66 @@ public class MainViewController : MonoBehaviour
 
     private void OnOutputUpdate()
     {
-      
-        output.Rebuild();
-   
-        if (output.itemsSource.Count > 0)
-        {
-            output.ScrollToItem(output.itemsSource.Count - 1);
-            AssertColumnWidths();
-        }
+        
+        this.output.Rebuild();   
 
+        AssertColumnWidths();
+
+        if (this.output.itemsSource.Count > 0)
+            this.output.ScrollToItem(this.output.itemsSource.Count - 1);
+        
         void AssertColumnWidths()
         {
-            for (int column = 0; column < output.columns.Count; column++)
+            for (int column = 0; column < this.output.columns.Count; column++)
             {
-                int maxCharCount = 8;
-                for (int row = 0; row < OperationController.OutputCount; row++)
+                int maxCharCount = this.output.columns[column].title.Length;
+           
+                for (int row = 0; row < this.OperationController.OutputCount; row++)
                 {
-                    NumberEntry entry = OperationController[row];
+                    NumberEntry entry = this.OperationController[row];
                     int charCount = entry.ColumnData(column, NumberFormat).Length;
                     if (charCount > maxCharCount)
                     {
                         maxCharCount = charCount;
                     }
                 }
-                output.columns[column].width = maxCharCount * 24;
+                this.output.columns[column].width = maxCharCount * 24;
             }
         }
     }
 
     private void SetNumberFormat(Format format)
     {
-        if (this.numberFormat == format)
-            return;
+       calcButtons.GetNumberFormatButton(this.numberFormat).Deselect(); //deselect previous selected button
+
         this.numberFormat = format;
-      
-        const string selectedClass = "selected";
-     
-        for (int i = 0; i < numberFormatButtons.Length; i++)
-        {
-            Button button = numberFormatButtons[i];
-            if (i == (int)format)
-                button.AddToClassList(selectedClass);
-            else
-                button.RemoveFromClassList(selectedClass);
-        }
+
+        calcButtons.GetNumberFormatButton(this.numberFormat).Select(); //select new button
+
+        SetColumnTitles();
 
         OnOutputUpdate();
     }
 
     private void OnButtonGridClick(ClickEvent evt)
     {
-        if (evt.target is not Button button)
+        if (evt.target is not Button unityButton)
             return;
+
+        if (calcButtons.TryGetButton(unityButton.name) is not CalcButton button)
+        {
+            Debug.LogWarning($"Unhandled button: {unityButton.name}");
+            return;
+        }
 
         SuspendUserInterface();
 
-        // Check if a number-format button was clicked
-        int numberFormatButtonIndex = Array.IndexOf(numberFormatButtons, button);
-        if (numberFormatButtonIndex >= 0)
-        {
-            NumberFormat = (Format)numberFormatButtonIndex;
-        }
+        if (calcButtons.IsNumberFormatButton(button.Name) is Format numberFormat)
+            NumberFormat = numberFormat;
+        
         else
-        {
-            const string buttonPrefix = "button-";
-
-            string buttonValue = button.name.Length > buttonPrefix.Length ? button.name[buttonPrefix.Length..] : button.name;
-
-            OperationController.InputButtonPressed(buttonValue);
-        }
+            OperationController.InputButtonPressed(button);
+        
         ResumeUserInterface();
     }
 
@@ -182,6 +163,24 @@ public class MainViewController : MonoBehaviour
         {
             buttonGrid.style.height = width / ratio;
         }
+
+    }
+
+    private void SetColumnTitles()
+    {
+        this.output.columns[0].title = "Fraction";
+        this.output.columns[1].title = "Attr";
+        this.output.columns[2].title = this.NumberFormat switch
+        {
+            Format.Normal => "Decimal",
+            Format.Bin => "Binary",
+            Format.BalBin => "Bal Binary",
+            Format.RotationsBin => "Rotations",
+            Format.RotationsBalBin => "Rotations",
+            Format.Partition => "Partitions",
+            _ => throw new ArgumentException($"Unhandled format '{NumberFormat}'"),
+        };
+            
 
     }
 
@@ -208,9 +207,9 @@ public class MainViewController : MonoBehaviour
 
     private void SetUserInterfaceEnabled(bool enabled)
     {
-        inputLabel.SetEnabled(enabled);
-        output.SetEnabled(enabled);
-        buttonGrid.SetEnabled(enabled);
+        this.inputLabel.SetEnabled(enabled);
+        this.output.SetEnabled(enabled);
+        this.buttonGrid.SetEnabled(enabled);
     }
 
 }

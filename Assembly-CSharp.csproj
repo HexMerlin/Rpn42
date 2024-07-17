@@ -71,6 +71,8 @@
     <Compile Include="Assets\Scripts\UI\MainViewController.cs" />
     <Compile Include="Assets\Scripts\UI\NumberEntry.cs" />
     <Compile Include="Assets\Scripts\Calc\Separator.cs" />
+    <Compile Include="Assets\Scripts\UI\CalcButton.cs" />
+    <Compile Include="Assets\Scripts\UI\CalcButtons.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\UI Toolkit\Styles\MainStyles.uss" />

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using UnityEngine;
 
 public class OperationController
 {
@@ -18,117 +17,117 @@ public class OperationController
 
     public OperationController(Action<string> onInputUpdate, Action onOutputUpdate)
     {
-        outputEntries = new List<NumberEntry>();
-        OnInputUpdate = onInputUpdate;
-        OnOutputUpdate = onOutputUpdate;
+        this.outputEntries = new List<NumberEntry>();
+        this.OnInputUpdate = onInputUpdate;
+        this.OnOutputUpdate = onOutputUpdate;
     }
 
-    public NumberEntry this[int index] => outputEntries[index];
+    public NumberEntry this[int index] => this.outputEntries[index];
 
-    public int OutputCount => outputEntries.Count;
+    public int OutputCount => this.outputEntries.Count;
 
-    private bool OutputEmpty => outputEntries.Count == 0;
+    private bool OutputEmpty => this.outputEntries.Count == 0;
     
-    private bool InputEmpty => inputBuf.Length == 0;
+    private bool InputEmpty => this.inputBuf.Length == 0;
      
-    private NumberEntry LastOutput => outputEntries[^1];
+    private NumberEntry LastOutput => this.outputEntries[^1];
 
-    private NumberEntry SecondLastOutput => outputEntries[^2];
+    private NumberEntry SecondLastOutput => this.outputEntries[^2];
 
-    public void InputButtonPressed(string buttonValue)
+    public void InputButtonPressed(CalcButton calcButton)
     {
         bool outputChanged = true;
 
-        switch (buttonValue)
+        switch (calcButton.Name)
         {
-            case "0":
-            case "1":
-            case "2":
-            case "3":
-            case "4":
-            case "5":
-            case "6":
-            case "7":
-            case "8":
-            case "9":
-                CurrentChange = CurrentChange.AddInput(buttonValue, inputBuf);
+            case CalcButtons.Zero:
+            case CalcButtons.One:
+            case CalcButtons.Two:
+            case CalcButtons.Three:
+            case CalcButtons.Four:
+            case CalcButtons.Five:
+            case CalcButtons.Six:
+            case CalcButtons.Seven:
+            case CalcButtons.Eight:
+            case CalcButtons.Nine:
+                string digit = calcButton.UnityButton.text; //note: text on digit buttons maps verbatim to input strings
+                this.CurrentChange = this.CurrentChange.AddInput(digit, inputBuf); 
                 outputChanged = false;
                 break;
 
-            case "enter":
+            case CalcButtons.Enter:
 
                 if (InputEmpty)
                 {
                     if (OutputEmpty)
                         return;
                     else
-                        CurrentChange = CurrentChange.AddOutput(LastOutput, outputEntries); //add a copy of last output
+                        this.CurrentChange = this.CurrentChange.AddOutput(LastOutput, outputEntries); //add a copy of last output
                 }
                 else
                     PerformUnaryOperation((a) => a);
 
                 break;
-            case "back-drop":
+            case CalcButtons.BackDrop:
                 if (InputEmpty)
                 {
                     if (OutputEmpty) return;
-                        CurrentChange = CurrentChange.RemoveOutput(outputEntries);
+                    this.CurrentChange = this.CurrentChange.RemoveOutput(outputEntries);
                 }
                 else
                 {
-                    CurrentChange = CurrentChange.RemoveInputChar(inputBuf);
+                    this.CurrentChange = this.CurrentChange.RemoveInputChar(inputBuf);
                 }
                 break;
-            case "swap":
+            case CalcButtons.Swap:
                 //implement this
                 break;
-            case "neg":
+            case CalcButtons.Neg:
                 PerformUnaryOperation((a) => -a);
                 break;
-            case "reciprocal":
+            case CalcButtons.Reciprocal:
                 PerformUnaryOperation((a) => a.Reciprocal);
                 break;
-            case "square":
+            case CalcButtons.Square:
                 PerformUnaryOperation((a) => a * a);
                 break;
-            case "sum":
+            case CalcButtons.Sum:
                 PerformBinaryOperation((a, b) => a + b);
                 break;
-            case "diff":
+            case CalcButtons.Diff:
                 PerformBinaryOperation((a, b) => a - b);
                 break;
-            case "prod":
+            case CalcButtons.Prod:
                 PerformBinaryOperation((a, b) => a * b);
                 break;
-            case "quotient":
+            case CalcButtons.Quotient:
                 PerformBinaryOperation((a, b) => a / b);
                 break;
-            case "clear":
+            case CalcButtons.Clear:
                 if (!InputEmpty)
-                    CurrentChange = CurrentChange.ClearInput(inputBuf);
+                    this.CurrentChange = this.CurrentChange.ClearInput(inputBuf);
                 if (!OutputEmpty)
-                    CurrentChange = CurrentChange.ClearAllOutputs(outputEntries);
+                    this.CurrentChange = this.CurrentChange.ClearAllOutputs(outputEntries);
                 break;
-            case "mod":
+            case CalcButtons.Mod:
                 PerformBinaryOperation((a, b) => a % b);
                 break;
-            case "div-ones":
+            case CalcButtons.DivOnes:
                 PerformUnaryOperation((a) => a.DivideByMersenneCeiling());
                 break;
-            case "undo":
+            case CalcButtons.Undo:
                 PerformUndoOperation();
                 break;
 
-            case "redo":
+            case CalcButtons.Redo:
                 PerformRedoOperation();
                 break;
             default:
-                Debug.LogWarning($"Unhandled button: {buttonValue}");
-                return;
-        }
-        CurrentChange.IsCheckPoint = true;
-        OnInputUpdate(inputBuf.ToString());
-        if (outputChanged) OnOutputUpdate();
+                throw new ArgumentException($"Unhandled button name: {calcButton.Name}");
+            }
+        this.CurrentChange.IsCheckPoint = true;
+        this.OnInputUpdate(this.inputBuf.ToString());
+        if (outputChanged) this.OnOutputUpdate();
     }
 
 
@@ -141,9 +140,9 @@ public class OperationController
 
         if (result.IsInvalid) return;
 
-        CurrentChange = InputEmpty ?
-            CurrentChange.ReplaceOutput(new NumberEntry(result), outputEntries) :
-            CurrentChange.ClearInput(inputBuf).AddOutput(new NumberEntry(result), outputEntries);
+        this.CurrentChange = InputEmpty ?
+            this.CurrentChange.ReplaceOutput(new NumberEntry(result), outputEntries) :
+            this.CurrentChange.ClearInput(inputBuf).AddOutput(new NumberEntry(result), outputEntries);
     }
 
     private void PerformBinaryOperation(Func<Rational, Rational, Rational> operation)
@@ -155,25 +154,25 @@ public class OperationController
 
         if (result.IsInvalid) return;
 
-        CurrentChange = InputEmpty ?
-            CurrentChange.RemoveOutput(outputEntries).ReplaceOutput(new NumberEntry(result), outputEntries) :
-            CurrentChange.ClearInput(inputBuf).ReplaceOutput(new NumberEntry(result), outputEntries);
+        this.CurrentChange = InputEmpty ?
+            this.CurrentChange.RemoveOutput(outputEntries).ReplaceOutput(new NumberEntry(result), outputEntries) :
+            this.CurrentChange.ClearInput(inputBuf).ReplaceOutput(new NumberEntry(result), outputEntries);
     }
 
     public void PerformUndoOperation()
     {
-        if (CurrentChange is NoChange)
+        if (this.CurrentChange is NoChange)
             return;
 
         while (true)
         {
-            CurrentChange = CurrentChange switch
+            this.CurrentChange = this.CurrentChange switch
             {
                 InputChange inputChange => inputChange.Rollback(inputBuf).Previous,
                 OutputChange outputChange => outputChange.Rollback(outputEntries).Previous,
                 _ => throw new ArgumentOutOfRangeException($"Unknown ChangeType {CurrentChange.GetType().Name}")
             };
-            if (CurrentChange.IsCheckPoint)
+            if (this.CurrentChange.IsCheckPoint)
                 return;
         }
     }
@@ -183,17 +182,17 @@ public class OperationController
              
         while (true)
         {
-            if (CurrentChange.Next is null)
+            if (this.CurrentChange.Next is null)
                 return;
-            CurrentChange = CurrentChange.Next;
+            this.CurrentChange = this.CurrentChange.Next;
 
-            CurrentChange = CurrentChange switch
+            this.CurrentChange = this.CurrentChange switch
             {
-                InputChange inputChange => inputChange.Execute(inputBuf),
-                OutputChange outputChange => outputChange.Execute(outputEntries),
-                _ => throw new ArgumentOutOfRangeException($"Unknown ChangeType {CurrentChange.GetType().Name}")
+                InputChange inputChange => inputChange.Execute(this.inputBuf),
+                OutputChange outputChange => outputChange.Execute(this.outputEntries),
+                _ => throw new ArgumentOutOfRangeException($"Unknown ChangeType {this.CurrentChange.GetType().Name}")
             };
-            if (CurrentChange.IsCheckPoint)
+            if (this.CurrentChange.IsCheckPoint)
                 return;
         }
     }
@@ -202,7 +201,7 @@ public class OperationController
     {
         if (OutputCount + (InputEmpty ? 0 : 1) >= 1)
         {
-            Rational operand = InputEmpty ? LastOutput.Rational : new Rational(inputBuf.ToString());
+            Rational operand = InputEmpty ? LastOutput.Rational : new Rational(this.inputBuf.ToString());
             if (!operand.IsInvalid)
                 return (true, operand);
         }
@@ -213,7 +212,7 @@ public class OperationController
     {
         if (OutputCount + (InputEmpty ? 0 : 1) >= 2)
         {
-            Rational rightOperand = InputEmpty ? LastOutput.Rational : new Rational(inputBuf.ToString());
+            Rational rightOperand = InputEmpty ? LastOutput.Rational : new Rational(this.inputBuf.ToString());
             if (!rightOperand.IsInvalid)
             {
                 Rational leftOperand = InputEmpty ? SecondLastOutput.Rational : LastOutput.Rational;

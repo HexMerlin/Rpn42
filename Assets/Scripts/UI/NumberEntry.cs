@@ -33,8 +33,7 @@ public class NumberEntry
         0 => Col0Data(format),
         1 => Col1Data(format),
         2 => Col2Data(format),
-        _ => $"{columnIndex} unexpected column",
-        //_ =>  throw new ArgumentOutOfRangeException(nameof(columnIndex), columnIndex, "Unknown column"),
+        _ =>  throw new ArgumentOutOfRangeException(nameof(columnIndex), columnIndex, "Unknown column"),
     };
 
     private string Col0Data(Format format) => format switch

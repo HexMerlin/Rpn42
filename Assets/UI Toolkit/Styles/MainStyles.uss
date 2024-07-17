@@ -14,6 +14,11 @@ Label {
     color: rgb(255, 255, 255);
 }
 
+.unity-multi-column-header {
+    background-color: rgb(2, 0, 47);
+    color: rgb(255, 255, 255);
+}
+
 .button {
     -unity-font-definition: resource('Fonts & Materials/CascadiaCodeNF SDF');
     background-color: rgb(10, 10, 10);
