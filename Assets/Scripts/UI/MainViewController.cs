@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Globalization;
-using System.Xml;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -88,10 +86,9 @@ public class MainViewController : MonoBehaviour
 
     private void OnOutputUpdate()
     {
-        
-        this.output.Rebuild();   
-
         AssertColumnWidths();
+
+        this.output.Rebuild();   
 
         if (this.output.itemsSource.Count > 0)
             this.output.ScrollToItem(this.output.itemsSource.Count - 1);
@@ -100,7 +97,7 @@ public class MainViewController : MonoBehaviour
         {
             for (int column = 0; column < this.output.columns.Count; column++)
             {
-                int maxCharCount = this.output.columns[column].title.Length;
+                int maxCharCount = this.output.columns[column].title.Length * 2;
            
                 for (int row = 0; row < this.OperationController.OutputCount; row++)
                 {

@@ -13,13 +13,30 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
       
 
     public static Rational Invalid => new Rational(0, 0, false);
+
+    public static Rational RadixPoint => new Rational(0, -1, false);
+
+    public static Rational RepetendStart => new Rational(0, -2, false);
+
+    public static Rational RepetendEnd => new Rational(0, -3, false);
+
     public static Rational Zero => new Rational(0, 1, false);
     public static Rational One => new Rational(1, 1, false);
 
     public static Rational Half => new Rational(1, 2, false);
 
-    public bool IsSpecialDelimiter => Denominator < 0;
-    public bool IsInvalid => Denominator == 0;
+    public readonly bool IsInteger => Denominator == 1;
+
+    public readonly bool IsTerminating => Denominator >= 1 && Denominator.IsPowerOfTwo;
+
+    public readonly bool IsRadixPoint => Denominator == RadixPoint.Denominator;
+
+    public readonly bool IsRepetendStart => Denominator == RepetendStart.Denominator;
+
+    public readonly bool IsRepetendEnd => Denominator == RepetendEnd.Denominator;
+
+    public readonly bool IsSpecialDelimiter => Denominator < 0;
+    public readonly bool IsInvalid => Denominator == 0;
 
     private const int UninitializedInt = int.MinValue + 1;
 
@@ -104,17 +121,9 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
     }
    
 
-    public IEnumerable<(Rational, Separator)> RotationsBalBin
-    {
-        get
-        {
-            Rational r = (this << 1).FractionalPart;
-            return r.RotationsBin;        
 
-        }
-    }
    
-    public IEnumerable<(Rational rational, Separator separator)> RotationsBin
+    public IEnumerable<Rational> RotationsBin
     {
         get
         {            
@@ -122,26 +131,42 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
             Rational firstInRepetend = Invalid;
             
             int integerLength = this.IntegerLength;
-            bool InFractionPart(int i) => i >= integerLength;
+            int radixPointIndex = IsInteger ? -1 : integerLength; //do not output radix point for integers
 
             for (int i = 0; ; i++)
             {
                 Rational r = this[i];
 
-                if (InFractionPart(i) && (r == firstInRepetend || r.IsZero))
-                    break;
-                bool emitRadixPoint = i == integerLength;
-                bool emitRepetendBegin = firstInRepetend.IsInvalid && r.Denominator.IsOdd();
-                Separator separator = emitRepetendBegin && emitRadixPoint ? Separator.RadixPointAndRepetendBegin : emitRepetendBegin ? Separator.RepetendBegin : emitRadixPoint ? Separator.RadixPoint : Separator.None;
-                if (emitRepetendBegin)
-                    firstInRepetend = r;
+                if (i == radixPointIndex)
+                    yield return RadixPoint;
 
-                yield return (r, separator);
+                if ((r == firstInRepetend || r.IsZero) && i >= integerLength)
+                    break;
+
+                if (firstInRepetend.IsInvalid && r.Denominator.IsOdd() && r.Denominator > 1)
+                {
+                    firstInRepetend = r;
+                    yield return RepetendStart;
+                }
+             
+
+                yield return r;
+
             }
-         
+            if (!firstInRepetend.IsInvalid)
+                yield return RepetendEnd;
         }
     }
 
+    public IEnumerable<Rational> RotationsBalBin
+    {
+        get
+        {
+            Rational r = (this << 1).FractionalPart;
+            return r.RotationsBin;
+
+        }
+    }
     public IEnumerable<Rational> Partition
     {
         get
@@ -214,14 +239,18 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
 
         computedLength = 0;
         computedPeriod = 0;
-        foreach ((_, Separator separator) in RotationsBin)
+        foreach (Rational r in RotationsBin)
         {
-            if (computedPeriod >= 1)
-                computedPeriod++;
-            else if (separator == Separator.RepetendBegin || separator == Separator.RadixPointAndRepetendBegin)
+            if (!r.IsSpecialDelimiter)
+            {
+                computedLength++;
+                if (computedPeriod >= 1)
+                    computedPeriod++;
+            }
+            else if (r == RepetendStart)
                 computedPeriod = 1;
 
-            computedLength++;
+            
         }
     }
 

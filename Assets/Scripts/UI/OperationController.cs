@@ -11,7 +11,7 @@ public class OperationController
     public IReadOnlyList<NumberEntry> OutputEntries => outputEntries;
 
     Action<string> OnInputUpdate;
-    Action OnOutputUpdate;
+    readonly Action OnOutputUpdate;
     
     private Change CurrentChange = Change.CreateStart();
 

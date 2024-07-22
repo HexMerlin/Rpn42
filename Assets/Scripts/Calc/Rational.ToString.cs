@@ -6,73 +6,84 @@ using System.Text;
 
 public partial struct Rational
 {
-    private static char? ToSeparatorChar(Separator separator) => separator switch
+
+    public const char RadixPointChar = '.';
+
+    private static bool AddDelimiterChars(Rational r, StringBuilder sb)
     {
-        Separator.RadixPoint => '⠄',
-        Separator.RepetendBegin => '⠁',
-        Separator.RadixPointAndRepetendBegin => '⠅',
-        //Separator.RepetendEnd => '…',
-        _ => null
-    };
+        if (r.IsRadixPoint)
+            sb.Append(RadixPointChar);
+        else if (r.IsRepetendStart)
+            sb.Append("<color=lightBlue>");
+        else if (r.IsRepetendEnd)
+            sb.Append("</color>");
+        
+        return r.IsSpecialDelimiter;
+    }
 
     public string ToStringFraction() => Denominator == 1 ? Numerator.ToString() : $"{Numerator}/{Denominator}";
 
 
     public string ToStringPartition() => $"{string.Join(" ", Partition.Select(r => r.ToString()))}";
 
+    public string ToStringRotationsBin()
+    {
+        StringBuilder sb = new StringBuilder();
+        foreach (Rational r in RotationsBin)
+        {
+            if (!AddDelimiterChars(r, sb))
+            {
+                sb.Append(r.Denominator == Denominator ? (r.Numerator + "/") : r.ToString());
+                sb.Append(' ');
+            }
+        }
+  
+        return sb.ToString();
+
+    }
+
+    public string ToStringRotationsBalBin()
+    {
+        StringBuilder sb = new StringBuilder();
+        foreach (Rational r in RotationsBalBin)
+        {
+            if (!AddDelimiterChars(r, sb))
+            {
+                sb.Append(r.Denominator == Denominator ? (r.Numerator + "/") : r.ToString());
+                sb.Append(' ');
+            }
+        }
+      
+        return sb.ToString();
+
+    }
+
     public string ToStringBin()
     {
         StringBuilder sb = new StringBuilder();
-        foreach ((Rational r, Separator s) in RotationsBin)
+        foreach (Rational r in RotationsBin)
         {
-            if (s != Separator.None)
-                sb.Append(ToSeparatorChar(s));
-            sb.Append(r >= Half ? '1' : '0');
+            if (!AddDelimiterChars(r, sb))
+                sb.Append(r >= Half ? '1' : '0');
         }
+
         return sb.ToString();
     }
 
     public string ToStringBalBin()
     {
         StringBuilder sb = new StringBuilder();
-        foreach ((Rational r, Separator s) in RotationsBalBin)
+        foreach (Rational r in RotationsBalBin)
         {
-            if (s != Separator.None)
-                sb.Append(ToSeparatorChar(s));
-            sb.Append(r.Numerator.IsOdd() ? '1' : '0');
+            if (!AddDelimiterChars(r, sb))
+            {
+                sb.Append(r.Denominator == Denominator ? (r.Numerator + "/") : r.ToString());
+                sb.Append(' ');
+            }
         }
+
         return sb.ToString();
     }
-
-    public string ToStringRotationsBin()
-    {
-        StringBuilder sb = new StringBuilder();
-        foreach ((Rational r, Separator s) in RotationsBin)
-        {
-            if (s != Separator.None)
-                sb.Append(ToSeparatorChar(s));
-            sb.Append(r.Denominator == Denominator ? (r.Numerator + "/") : r.ToString());
-            sb.Append(' ');
-        }
-        return sb.ToString();
-
-    }
-
-
-    public string ToStringRotationsBalBin()
-    {
-        StringBuilder sb = new StringBuilder();
-        foreach ((Rational r, Separator s) in RotationsBalBin)
-        {
-            if (s != Separator.None)
-                sb.Append(ToSeparatorChar(s));
-            sb.Append(r.Denominator == Denominator ? (r.Numerator + "/") : r.ToString());
-            sb.Append(' ');
-        }
-        return sb.ToString();
-
-    }
-
 
     public readonly string ToStringDecimal(int maxDecimalDigits = 50)
     {
@@ -87,7 +98,7 @@ public partial struct Rational
         if (remainder.IsZero)
             return result.ToString();
 
-        result.Append('.');
+        result.Append(RadixPointChar);
 
         for (int i = 0; i < maxDecimalDigits; i++)
         {

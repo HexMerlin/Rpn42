@@ -58,9 +58,7 @@ public class CalcButtons
     }
 
     public CalcButton this[string buttonName] =>
-       allButtons.TryGetValue(buttonName, out CalcButton button)
-           ? button
-           : throw new ArgumentException($"Unknown button '{buttonName}'");
+       TryGetButton(buttonName) ?? throw new ArgumentException($"Unknown button '{buttonName}'");
 
     public CalcButton? TryGetButton(string buttonName) 
         => allButtons.TryGetValue(buttonName, out CalcButton button) ? button : null;
