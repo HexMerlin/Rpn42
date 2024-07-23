@@ -4,7 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 
-public partial struct Rational
+public partial class Rational
 {
 
     public const char RadixPointChar = '.';
@@ -85,7 +85,7 @@ public partial struct Rational
         return sb.ToString();
     }
 
-    public readonly string ToStringDecimal(int maxDecimalDigits = 50)
+    public string ToStringDecimal(int maxDecimalDigits = 50)
     {
       
         BigInteger integerPart = BigInteger.DivRem(Numerator.Abs(), Denominator, out BigInteger remainder);
@@ -116,7 +116,9 @@ public partial struct Rational
 
     public string ToStringRepInfo() => $"P={Period}";
 
-    public override readonly string ToString() => Denominator == 1 ? Numerator.ToString() : $"{Numerator}/{Denominator}";
+    public string ToStringRepetendAsInteger() => RepetendAsInteger.ToString();
+
+    public override string ToString() => Denominator == 1 ? Numerator.ToString() : $"{Numerator}/{Denominator}";
 
 
 }

@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.UIElements;
 
 public class CalcButtons
@@ -40,6 +41,8 @@ public class CalcButtons
 
     private readonly Dictionary<string, CalcButton> allButtons;
 
+    public readonly (CalcButton Button, Format NumberFormat)[] ModeButtons;
+
     public CalcButtons(VisualElement buttonGrid)
     {
         this.allButtons = new Dictionary<string, CalcButton>();
@@ -51,10 +54,22 @@ public class CalcButtons
             FormatNormal, FormatBin, FormatBalBin, FormatRotationsBin, FormatRotationsBalBin, FormatPartition
         );
 
-        void AddAll(params string[] buttonNames) {
+        void AddAll(params string[] buttonNames)
+        {
             foreach (string buttonName in buttonNames)
                 allButtons.Add(buttonName, new CalcButton(buttonName, buttonGrid));
         }
+
+        this.ModeButtons = new (CalcButton, Format)[]
+        {
+            (this[FormatNormal], Format.Normal),
+            (this[FormatBin], Format.Bin),
+            (this[FormatBalBin], Format.BalBin),
+            (this[FormatRotationsBin], Format.RotationsBin),
+            (this[FormatRotationsBalBin], Format.RotationsBalBin),
+            (this[FormatPartition], Format.Partition)
+        };
+       
     }
 
     public CalcButton this[string buttonName] =>
@@ -63,28 +78,15 @@ public class CalcButtons
     public CalcButton? TryGetButton(string buttonName) 
         => allButtons.TryGetValue(buttonName, out CalcButton button) ? button : null;
 
-    public CalcButton GetNumberFormatButton(Format format) => format switch
-    {
-        Format.Normal => this[FormatNormal],
-        Format.Bin => this[FormatBin],
-        Format.BalBin => this[FormatBalBin],
-        Format.RotationsBin => this[FormatRotationsBin],
-        Format.RotationsBalBin => this[FormatRotationsBalBin],
-        Format.Partition => this[FormatPartition],
-        _ => throw new ArgumentException($"Button for format {format} not found")
-    };
-
-
-    public Format? IsNumberFormatButton(string buttonName) => buttonName switch
-    {
-        FormatNormal => Format.Normal,
-        FormatBin => Format.Bin,
-        FormatBalBin => Format.BalBin,
-        FormatRotationsBin => Format.RotationsBin,
-        FormatRotationsBalBin => Format.RotationsBalBin,
-        FormatPartition => Format.Partition,
-        _ => null,
-    };
+    public Format? IsNumberFormatButton(CalcButton calcButton) 
+    {       
+        foreach ((CalcButton button, Format numberFormat) in ModeButtons)
+        {
+            if (button == calcButton)
+                return numberFormat;
+        }
+        return null;
+    }
 
 }
 

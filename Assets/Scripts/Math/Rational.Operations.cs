@@ -2,7 +2,7 @@
 using System;
 using System.Numerics;
 
-public partial struct Rational
+public partial class Rational
 {
     public bool IsZero => Numerator.IsZero;
 
@@ -76,9 +76,9 @@ public partial struct Rational
         return new(a.Numerator << shift, a.Denominator, normalizeNeeded);
     }
 
-    public readonly Rational Abs => new(BigInteger.Abs(Numerator), Denominator, false);
+    public Rational Abs => new(BigInteger.Abs(Numerator), Denominator, false);
 
-    public readonly Rational DivideByMersenneCeiling()
+    public Rational DivideByMersenneCeiling()
     {
         BigInteger div = MersenneCeiling(Numerator);
         return this / div;

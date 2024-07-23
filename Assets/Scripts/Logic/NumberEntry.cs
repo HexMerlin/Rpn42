@@ -1,15 +1,18 @@
 ﻿
+using Newtonsoft.Json;
 using System;
 using System.Numerics;
 
-public enum Format { Normal, Bin, BalBin, RotationsBin, RotationsBalBin, Partition }
+[JsonObject(MemberSerialization.OptIn)]
 public class NumberEntry
 {
 
+    public NumberEntry() : this(0) { }
     public NumberEntry(BigInteger number) : this(new Rational(number))
     {
     }
 
+    [JsonConstructor]
     public NumberEntry(Rational rational)
     {
         this.Rational = rational;
@@ -21,12 +24,26 @@ public class NumberEntry
         StringRotationsBalBin = new Lazy<string>(() => rational.ToStringRotationsBalBin());
         StringPartition = new Lazy<string>(() => rational.ToStringPartition());
         StringRepInfo = new Lazy<string>(() => rational.ToStringRepInfo());
+        StringRepetendAsInteger = new Lazy<string>(() => rational.ToStringRepetendAsInteger());
     }
 
 
+    [JsonProperty]
     public Rational Rational { get; }
 
     public static readonly NumberEntry Invalid = new NumberEntry(Rational.Invalid);
+
+
+
+
+    public static string ColumnTitle(int columnIndex, Format format) => columnIndex switch
+    {
+        0 => Col0Title(format),
+        1 => Col1Title(format),
+        2 => Col2Title(format),
+        _ => throw new ArgumentOutOfRangeException(nameof(columnIndex), columnIndex, "Unknown column"),
+    };
+
 
     public string ColumnData(int columnIndex, Format format) => columnIndex switch
     {
@@ -35,6 +52,9 @@ public class NumberEntry
         2 => Col2Data(format),
         _ =>  throw new ArgumentOutOfRangeException(nameof(columnIndex), columnIndex, "Unknown column"),
     };
+
+    private static string Col0Title(Format _) => "Fraction";
+
 
     private string Col0Data(Format format) => format switch
     {
@@ -47,15 +67,33 @@ public class NumberEntry
         _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown format"),
     };
 
+    private static string Col1Title(Format numberFormat) => numberFormat switch
+    {
+        Format.Bin => "RepetendInt",
+        _ => "Attr",
+    };
+
     private string Col1Data(Format format) => format switch
     {
         Format.Normal => string.Empty,
-        Format.Bin => StringRepInfo.Value,
+        Format.Bin => StringRepetendAsInteger.Value,
         Format.BalBin => StringRepInfo.Value,
         Format.RotationsBin => StringRepInfo.Value,
         Format.RotationsBalBin => StringRepInfo.Value,
         Format.Partition => string.Empty,
         _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown format"),
+    };
+
+
+    private static string Col2Title(Format numberFormat) => numberFormat switch
+    {
+        Format.Normal => "Decimal",
+        Format.Bin => "Binary",
+        Format.BalBin => "Bal Binary",
+        Format.RotationsBin => "Rotations",
+        Format.RotationsBalBin => "Rotations",
+        Format.Partition => "Partitions",
+        _ => throw new ArgumentException($"Unhandled format '{numberFormat}'"),
     };
 
     private string Col2Data(Format format) => format switch
@@ -85,7 +123,8 @@ public class NumberEntry
 
     private Lazy<string> StringRepInfo { get; }
 
-
+    private Lazy<string> StringRepetendAsInteger { get; }
+    
     public override string ToString() => StringFraction.Value;
 
 }

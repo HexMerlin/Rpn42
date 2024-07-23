@@ -1,8 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using UnityEngine.UIElements;
 
 
-public class CalcButton
+public class CalcButton : IEquatable<CalcButton>
 {
     private const string selectedKeyword = "selected";
 
@@ -18,10 +19,16 @@ public class CalcButton
         Debug.Assert(UnityButton != null);
     }
 
-    public void Select() => UnityButton.AddToClassList(selectedKeyword);
+    public void SetSelected(bool selected)
+    {
+        if (selected) UnityButton.AddToClassList(selectedKeyword);
+        else UnityButton.RemoveFromClassList(selectedKeyword);
+    }
 
-    public void Deselect() => UnityButton.RemoveFromClassList(selectedKeyword);
+    public bool Equals(CalcButton other) => Name == other.Name;  
 
+    public override int GetHashCode() => Name.GetHashCode();
+ 
 }
 
 

@@ -1,25 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Text;
+using UnityEngine.UIElements;
 
 public class OperationController
 {
-    private List<NumberEntry> outputEntries;
+   
+    private readonly List<NumberEntry> outputEntries;
 
     private readonly StringBuilder inputBuf = new StringBuilder();
 
-    public IReadOnlyList<NumberEntry> OutputEntries => outputEntries;
+    public readonly CalcButtons CalcButtons;
 
-    Action<string> OnInputUpdate;
-    readonly Action OnOutputUpdate;
-    
     private Change CurrentChange = Change.CreateStart();
 
-    public OperationController(Action<string> onInputUpdate, Action onOutputUpdate)
+    public IReadOnlyList<NumberEntry> OutputEntries => outputEntries;
+
+    private Format _numberFormat = Format.Normal;
+
+    public Format NumberFormat
+    {
+
+        get => _numberFormat;
+        private set
+        {
+            this._numberFormat = value;
+            foreach ((CalcButton button, Format buttonFormat) in CalcButtons.ModeButtons)
+            {
+                button.SetSelected(buttonFormat == value);
+            }
+
+        }
+    }
+    //Action<string> OnInputUpdate;
+    //readonly Action OnOutputUpdate;
+
+    
+    //public OperationController(Action<string> onInputUpdate, Action onOutputUpdate)
+    //{
+    //    this.outputEntries = new List<NumberEntry>();
+    //    this.OnInputUpdate = onInputUpdate;
+    //    this.OnOutputUpdate = onOutputUpdate;
+    //}
+
+    public OperationController(VisualElement buttonGrid)
     {
         this.outputEntries = new List<NumberEntry>();
-        this.OnInputUpdate = onInputUpdate;
-        this.OnOutputUpdate = onOutputUpdate;
+        this.CalcButtons = new CalcButtons(buttonGrid);
+        //this.OnInputUpdate = onInputUpdate;
+        //this.OnOutputUpdate = onOutputUpdate;
     }
 
     public NumberEntry this[int index] => this.outputEntries[index];
@@ -28,15 +59,39 @@ public class OperationController
 
     private bool OutputEmpty => this.outputEntries.Count == 0;
     
+    public string Input => this.inputBuf.ToString();
+
     private bool InputEmpty => this.inputBuf.Length == 0;
      
     private NumberEntry LastOutput => this.outputEntries[^1];
 
     private NumberEntry SecondLastOutput => this.outputEntries[^2];
 
+    public void ReadFrom(SavedData savedData)
+    {
+        this.NumberFormat = savedData.numberFormat;
+        this.outputEntries.Clear();
+        this.outputEntries.AddRange(savedData.numberEntries);
+        this.inputBuf.Clear();
+        this.inputBuf.Append(savedData.input);
+    }
+
+    public void WriteTo(SavedData savedData)
+    {
+        savedData.numberFormat = this.NumberFormat;
+        savedData.numberEntries = this.OutputEntries.ToArray();
+        savedData.input = this.Input;
+    }
+
     public void InputButtonPressed(CalcButton calcButton)
     {
-        bool outputChanged = true;
+        if (CalcButtons.IsNumberFormatButton(calcButton) is Format numberFormat)
+        {
+            NumberFormat = numberFormat;
+            return;
+
+        }
+        //bool outputChanged = true;
 
         switch (calcButton.Name)
         {
@@ -52,7 +107,7 @@ public class OperationController
             case CalcButtons.Nine:
                 string digit = calcButton.UnityButton.text; //note: text on digit buttons maps verbatim to input strings
                 this.CurrentChange = this.CurrentChange.AddInput(digit, inputBuf); 
-                outputChanged = false;
+               // outputChanged = false;
                 break;
 
             case CalcButtons.Enter:
@@ -126,8 +181,8 @@ public class OperationController
                 throw new ArgumentException($"Unhandled button name: {calcButton.Name}");
             }
         this.CurrentChange.IsCheckPoint = true;
-        this.OnInputUpdate(this.inputBuf.ToString());
-        if (outputChanged) this.OnOutputUpdate();
+        //this.OnInputUpdate(this.inputBuf.ToString());
+        //if (outputChanged) this.OnOutputUpdate();
     }
 
 

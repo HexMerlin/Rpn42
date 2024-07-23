@@ -1,11 +1,18 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Text;
+using Newtonsoft.Json;
 
-public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
+[JsonObject(MemberSerialization.OptIn)]
+public partial class Rational : IEquatable<Rational>, IComparable<Rational>
 {
-    public readonly BigInteger Numerator { get; }
-    public readonly BigInteger Denominator { get; }
+    [JsonProperty]
+    public BigInteger Numerator { get; } 
+    
+    [JsonProperty]
+    public BigInteger Denominator { get; }
 
     private int computedLength;
 
@@ -25,23 +32,25 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
 
     public static Rational Half => new Rational(1, 2, false);
 
-    public readonly bool IsInteger => Denominator == 1;
+    public bool IsInteger => Denominator == 1;
 
-    public readonly bool IsTerminating => Denominator >= 1 && Denominator.IsPowerOfTwo;
+    public bool IsTerminating => Denominator >= 1 && Denominator.IsPowerOfTwo;
 
-    public readonly bool IsRadixPoint => Denominator == RadixPoint.Denominator;
+    public bool IsRadixPoint => Denominator == RadixPoint.Denominator;
 
-    public readonly bool IsRepetendStart => Denominator == RepetendStart.Denominator;
+    public bool IsRepetendStart => Denominator == RepetendStart.Denominator;
 
-    public readonly bool IsRepetendEnd => Denominator == RepetendEnd.Denominator;
+    public bool IsRepetendEnd => Denominator == RepetendEnd.Denominator;
 
-    public readonly bool IsSpecialDelimiter => Denominator < 0;
-    public readonly bool IsInvalid => Denominator == 0;
+    public bool IsSpecialDelimiter => Denominator < 0;
+    public bool IsInvalid => Denominator == 0;
 
-    private const int UninitializedInt = int.MinValue + 1;
+    private const int UninitializedInt = 0;
 
-    //public Rational() : this(0, 1, false) { }   //use when there is support for C# 10 
+   
+    public Rational() : this(0, 1, false) { }
 
+    [JsonConstructor]
     public Rational(BigInteger numerator, BigInteger denominator) : this(numerator, denominator, true) { }
 
     private Rational(BigInteger numerator, BigInteger denominator, bool checkAndNormalize)
@@ -119,10 +128,7 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
             return bit ? (Weight(index) << Period) / ((BigInteger.One << Period) - BigInteger.One) : Rational.Zero;
          
     }
-   
 
-
-   
     public IEnumerable<Rational> RotationsBin
     {
         get
@@ -234,7 +240,7 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
 
     private void ComputeLengthAndPeriod()
     {
-        if (computedPeriod != UninitializedInt)
+        if (computedLength != UninitializedInt)
             return;
 
         computedLength = 0;
@@ -263,6 +269,34 @@ public partial struct Rational : IEquatable<Rational>, IComparable<Rational>
             while (w < this.Abs)
                 w <<= 1;
             return w >> 1;
+        }
+    }
+
+    public BigInteger RepetendAsInteger
+    {
+        get
+        {
+            BigInteger repInt = 0;
+            bool inRepetend = false;
+
+            foreach (Rational r in RotationsBin)
+            {
+                if (r.IsRepetendStart)
+                {
+                    inRepetend = true;
+                    continue;
+                }
+                if (!inRepetend)
+                    continue;
+                if (r.IsSpecialDelimiter)
+                    continue;
+              
+                repInt <<= 1;
+                if (r >= Half)
+                    repInt++;
+            }
+
+            return repInt;
         }
     }
 }
