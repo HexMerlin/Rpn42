@@ -4,15 +4,19 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using UnityEngine.UIElements;
+using UnityEditor;
+using UnityEngine;
+using Unity.VisualScripting;
 
-public class OperationController
+
+public class OperationController 
 {
    
-    private readonly List<NumberEntry> outputEntries;
+    private List<NumberEntry> outputEntries;
 
-    private readonly StringBuilder inputBuf = new StringBuilder();
+    private StringBuilder inputBuf = new StringBuilder();
 
-    public readonly CalcButtons CalcButtons;
+    public CalcButtons CalcButtons;
 
     private Change CurrentChange = Change.CreateStart();
 
@@ -34,31 +38,20 @@ public class OperationController
 
         }
     }
-    //Action<string> OnInputUpdate;
-    //readonly Action OnOutputUpdate;
 
-    
-    //public OperationController(Action<string> onInputUpdate, Action onOutputUpdate)
-    //{
-    //    this.outputEntries = new List<NumberEntry>();
-    //    this.OnInputUpdate = onInputUpdate;
-    //    this.OnOutputUpdate = onOutputUpdate;
-    //}
-
+  
     public OperationController(VisualElement buttonGrid)
     {
         this.outputEntries = new List<NumberEntry>();
         this.CalcButtons = new CalcButtons(buttonGrid);
-        //this.OnInputUpdate = onInputUpdate;
-        //this.OnOutputUpdate = onOutputUpdate;
+   
     }
-
     public NumberEntry this[int index] => this.outputEntries[index];
 
     public int OutputCount => this.outputEntries.Count;
 
     private bool OutputEmpty => this.outputEntries.Count == 0;
-    
+
     public string Input => this.inputBuf.ToString();
 
     private bool InputEmpty => this.inputBuf.Length == 0;
@@ -176,6 +169,9 @@ public class OperationController
 
             case CalcButtons.Redo:
                 PerformRedoOperation();
+                break;
+            case CalcButtons.AsRepetend:
+                throw new NotImplementedException();
                 break;
             default:
                 throw new ArgumentException($"Unhandled button name: {calcButton.Name}");

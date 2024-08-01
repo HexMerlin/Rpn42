@@ -20,24 +20,24 @@ public partial class MainViewController
         this.inputLabel = root.Q<Label>(inputElementName) ?? throw new NullReferenceException($"{inputElementName} not found in the UIDocument.");
 
         this.output = root.Q<MultiColumnListView>(outputElementName) ?? throw new NullReferenceException("output not found in the UIDocument.");
-
         this.output.itemsSource = (System.Collections.IList)OperationController.OutputEntries;
 
-        static VisualElement makeCell() => new Label();
         Debug.Assert(output.columns.Count == 3, $"Expected column count 3, but actual was {output.columns.Count}");
-
+        
+        static VisualElement makeCell() => new Label();
         for (int columnIndex = 0; columnIndex < 3; columnIndex++)
         {
             output.columns[columnIndex].makeCell = makeCell;
 
         }
+
         this.output.columns[0].bindCell = (e, row) => (e as Label).text = OperationController[row].ColumnData(0, this.OperationController.NumberFormat);
         this.output.columns[1].bindCell = (e, row) => (e as Label).text = OperationController[row].ColumnData(1, this.OperationController.NumberFormat);
         this.output.columns[2].bindCell = (e, row) => (e as Label).text = OperationController[row].ColumnData(2, this.OperationController.NumberFormat);
 
         this.output.makeNoneElement = () => new Label(""); //avoid message "List is empty"
 
-    
+       
         root.RegisterCallbackOnce<KeyDownEvent>(KeyDownEvent =>
         {
             if (KeyDownEvent.keyCode == KeyCode.Escape)
@@ -49,7 +49,7 @@ public partial class MainViewController
  
         LoadSavedData();
         RefreshGUI();
-
+        
 
     }
 

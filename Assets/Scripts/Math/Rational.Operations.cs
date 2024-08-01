@@ -96,6 +96,11 @@ public partial class Rational
         return ceiling;
     }
 
+    //public static Rational IntegerToRepetend(BigInteger integer)
+    //{
+
+    //}
+
     public override bool Equals(object obj) => obj is Rational other && Equals(other);
     public override int GetHashCode() => HashCode.Combine(Numerator, Denominator);
 

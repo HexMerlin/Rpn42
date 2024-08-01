@@ -38,7 +38,7 @@
                 <ui:Button class="button" />
                 <ui:Button class="button" />
                 <ui:Button class="button" />
-                <ui:Button class="button" />
+                <ui:Button name="button-as-repetend" text="→ REP" class="button" />
                 <ui:Button name="button-div-ones" text="x/111" class="button" />
                 <ui:Button text="-" name="button-diff" class="button" />
                 <ui:Button text="1" name="button-1" class="button" />

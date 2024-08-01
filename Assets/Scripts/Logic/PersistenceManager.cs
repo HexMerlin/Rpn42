@@ -20,8 +20,6 @@ public static class PersistenceManager
 
             SavedData savedData = JsonConvert.DeserializeObject<SavedData>(jsonString, settings);
 
-            //Debug.Log("Data loaded from: " + DataFilePath);
-            //Debug.Log("First element: " + savedData.numberEntries[0].Rational.Numerator.ToString());
             return savedData;
 
         }
@@ -30,7 +28,7 @@ public static class PersistenceManager
             Debug.Log($"Could not read {DataFilePath}. {e.Message}");
         }
 
-        return new SavedData(); //failed load: return default object
+        return new SavedData(); //failed load: return a new default object
     }
 
     public static void SaveData(SavedData savedData)

@@ -32,6 +32,7 @@ public class CalcButtons
     public const string DivOnes = "button-div-ones";
     public const string Undo = "button-undo";
     public const string Redo = "button-redo";
+    public const string AsRepetend = "button-as-repetend";
     public const string FormatNormal = "button-format-normal";
     public const string FormatBin = "button-format-bin";
     public const string FormatBalBin = "button-format-balbin";
@@ -50,7 +51,7 @@ public class CalcButtons
         AddAll(
             Zero, One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Enter,
             BackDrop, Swap, Neg, Reciprocal, Square, Sum, Diff, Prod, Quotient,
-            Clear, Mod, DivOnes, Undo, Redo,
+            Clear, Mod, DivOnes, Undo, Redo, AsRepetend,
             FormatNormal, FormatBin, FormatBalBin, FormatRotationsBin, FormatRotationsBalBin, FormatPartition
         );
 

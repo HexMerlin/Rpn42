@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UIElements;
 
 [RequireComponent(typeof(UIDocument))]
@@ -78,12 +76,13 @@ public partial class MainViewController : MonoBehaviour
             this.output.columns[column].width = maxCharCount * 24;
         }
 
-        this.output.Rebuild();   
+        this.output.RefreshItems();
 
         if (this.output.itemsSource.Count > 0)
             this.output.ScrollToItem(this.output.itemsSource.Count - 1);
         GuiEnable = true;
     }
+
 
 
 }
