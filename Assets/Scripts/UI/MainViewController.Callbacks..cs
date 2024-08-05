@@ -5,6 +5,11 @@ using UnityEngine.UIElements;
 
 public partial class MainViewController
 {
+
+    void OnAwake()
+    {
+
+    }
     void OnEnable()
     {
         const string outputElementName = "output";

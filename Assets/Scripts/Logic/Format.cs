@@ -1,2 +1,2 @@
 ﻿
-public enum Format { Normal, Bin, BalBin, RotationsBin, RotationsBalBin, Partition }
+public enum Format { Normal, Bin, Repetend, RotationsBin, RotationsBalBin, Partition }

@@ -55,52 +55,52 @@ public class NumberEntry
 
     private static string Col0Title(Format _) => "Fraction";
 
-
-    private string Col0Data(Format format) => format switch
-    {
-        Format.Normal => StringFraction.Value,
-        Format.Bin => StringFraction.Value,
-        Format.BalBin => StringFraction.Value,
-        Format.RotationsBin => StringFraction.Value,
-        Format.RotationsBalBin => StringFraction.Value,
-        Format.Partition => StringFraction.Value,
-        _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown format"),
-    };
-
     private static string Col1Title(Format numberFormat) => numberFormat switch
     {
-        Format.Bin => "RepetendInt",
+        Format.Bin => "Repetend Int",
+        Format.Repetend => "Repetend Int",
         _ => "Attr",
     };
-
-    private string Col1Data(Format format) => format switch
-    {
-        Format.Normal => string.Empty,
-        Format.Bin => StringRepetendAsInteger.Value,
-        Format.BalBin => StringRepInfo.Value,
-        Format.RotationsBin => StringRepInfo.Value,
-        Format.RotationsBalBin => StringRepInfo.Value,
-        Format.Partition => string.Empty,
-        _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown format"),
-    };
-
 
     private static string Col2Title(Format numberFormat) => numberFormat switch
     {
         Format.Normal => "Decimal",
         Format.Bin => "Binary",
-        Format.BalBin => "Bal Binary",
+        Format.Repetend => "Repetend",
         Format.RotationsBin => "Rotations",
         Format.RotationsBalBin => "Rotations",
         Format.Partition => "Partitions",
         _ => throw new ArgumentException($"Unhandled format '{numberFormat}'"),
     };
 
+
+    private string Col0Data(Format format) => format switch
+    {
+        Format.Normal => StringFraction.Value,
+        Format.Bin => StringFraction.Value,
+        Format.Repetend => StringFraction.Value,
+        Format.RotationsBin => StringFraction.Value,
+        Format.RotationsBalBin => StringFraction.Value,
+        Format.Partition => StringFraction.Value,
+        _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown format"),
+    };
+
+    private string Col1Data(Format format) => format switch
+    {
+        Format.Normal => string.Empty,
+        Format.Bin => StringRepetendAsInteger.Value,
+        Format.Repetend => StringRepInfo.Value,
+        Format.RotationsBin => StringRepInfo.Value,
+        Format.RotationsBalBin => StringRepInfo.Value,
+        Format.Partition => string.Empty,
+        _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown format"),
+    };
+
     private string Col2Data(Format format) => format switch
     {
         Format.Normal => StringDecimal.Value,
         Format.Bin => StringBin.Value,
-        Format.BalBin => StringBalBin.Value,
+        Format.Repetend => StringBalBin.Value,
         Format.RotationsBin => StringRotationsBin.Value,
         Format.RotationsBalBin => StringRotationsBalBin.Value,
         Format.Partition => StringPartition.Value,

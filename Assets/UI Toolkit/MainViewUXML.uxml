@@ -13,7 +13,7 @@
             <ui:VisualElement name="row-1" style="flex-grow: 1; flex-direction: row; justify-content: center;">
                 <ui:Button name="button-format-normal" text="Normal" class="button mode-button" />
                 <ui:Button name="button-format-bin" text="Bin" class="button mode-button" />
-                <ui:Button name="button-format-balbin" text="BalBin" class="button mode-button" />
+                <ui:Button name="button-format-repetend" text="Repetend&#10;" class="button mode-button" />
                 <ui:Button class="button" />
                 <ui:Button name="button-square" text="x²" class="button" />
                 <ui:Button text="÷" name="button-quotient" class="button" />

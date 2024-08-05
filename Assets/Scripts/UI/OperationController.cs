@@ -171,7 +171,7 @@ public class OperationController
                 PerformRedoOperation();
                 break;
             case CalcButtons.AsRepetend:
-                throw new NotImplementedException();
+                //not implemented
                 break;
             default:
                 throw new ArgumentException($"Unhandled button name: {calcButton.Name}");

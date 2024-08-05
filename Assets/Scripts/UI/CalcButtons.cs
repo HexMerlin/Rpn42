@@ -35,7 +35,7 @@ public class CalcButtons
     public const string AsRepetend = "button-as-repetend";
     public const string FormatNormal = "button-format-normal";
     public const string FormatBin = "button-format-bin";
-    public const string FormatBalBin = "button-format-balbin";
+    public const string FormatRepetend = "button-format-repetend";
     public const string FormatRotationsBin = "button-format-rotbin";
     public const string FormatRotationsBalBin = "button-format-rotbalbin";
     public const string FormatPartition = "button-format-partition";
@@ -52,7 +52,7 @@ public class CalcButtons
             Zero, One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Enter,
             BackDrop, Swap, Neg, Reciprocal, Square, Sum, Diff, Prod, Quotient,
             Clear, Mod, DivOnes, Undo, Redo, AsRepetend,
-            FormatNormal, FormatBin, FormatBalBin, FormatRotationsBin, FormatRotationsBalBin, FormatPartition
+            FormatNormal, FormatBin, FormatRepetend, FormatRotationsBin, FormatRotationsBalBin, FormatPartition
         );
 
         void AddAll(params string[] buttonNames)
@@ -65,7 +65,7 @@ public class CalcButtons
         {
             (this[FormatNormal], Format.Normal),
             (this[FormatBin], Format.Bin),
-            (this[FormatBalBin], Format.BalBin),
+            (this[FormatRepetend], Format.Repetend),
             (this[FormatRotationsBin], Format.RotationsBin),
             (this[FormatRotationsBalBin], Format.RotationsBalBin),
             (this[FormatPartition], Format.Partition)
