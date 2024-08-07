@@ -1,4 +1,4 @@
-﻿
+﻿#nullable enable
 using System;
 using System.Numerics;
 
@@ -78,28 +78,22 @@ public partial class Rational
 
     public Rational Abs => new(BigInteger.Abs(Numerator), Denominator, false);
 
-    public Rational DivideByMersenneCeiling()
-    {
-        BigInteger div = MersenneCeiling(Numerator);
-        return this / div;
+    public Rational DivideByNextMersenneNumber(bool mustBeCoprime = false) => this / NextMersenneNumber(Numerator, mustBeCoprime);
 
-    }
-
-    public static BigInteger MersenneCeiling(BigInteger num)
+    public static BigInteger NextMersenneNumber(BigInteger num, bool mustBeCoprime)
     {
         num = BigInteger.Abs(num);
-        BigInteger ceiling = 1;
+        
+        BigInteger mersenne = 1;
+        while (mersenne <= num + 1)
+            mersenne <<= 1;
+        
+        if (mustBeCoprime)
+            while (!BigInteger.GreatestCommonDivisor(num, mersenne - 1).IsOne)
+                mersenne <<= 1;
 
-        while (ceiling <= num)
-            ceiling = (ceiling << 1) + 1;
-
-        return ceiling;
+        return mersenne - 1;
     }
-
-    //public static Rational IntegerToRepetend(BigInteger integer)
-    //{
-
-    //}
 
     public override bool Equals(object obj) => obj is Rational other && Equals(other);
     public override int GetHashCode() => HashCode.Combine(Numerator, Denominator);

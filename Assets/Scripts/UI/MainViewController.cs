@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 [RequireComponent(typeof(UIDocument))]
@@ -14,10 +15,12 @@ public partial class MainViewController : MonoBehaviour
 
     private VisualElement buttonGrid;
 
-  
+    private volatile bool uiRefreshDemanded;
+    private readonly object uiRefreshLock = new object();
+
     private bool _guiEnabled = true;
 
-   
+       
     private bool GuiEnable
     {
         set
@@ -39,7 +42,7 @@ public partial class MainViewController : MonoBehaviour
         SavedData savedData = PersistenceManager.LoadData();
      
         this.OperationController.ReadFrom(savedData);
-        RefreshGUI();
+        DemandUIRefresh();
     }
 
 
@@ -52,35 +55,49 @@ public partial class MainViewController : MonoBehaviour
 
     }
 
-    private void RefreshGUI()
+    public void DemandUIRefresh()
     {
-        GuiEnable = false;
-        this.inputLabel.text = OperationController.Input;
+        uiRefreshDemanded = true;
+    }
 
-        for (int column = 0; column < this.output.columns.Count; column++)
+    private void PerformUIRefresh()
+    {
+        
+        lock (uiRefreshLock)
         {
-            string columnTitle = NumberEntry.ColumnTitle(column, this.OperationController.NumberFormat);
-            this.output.columns[column].title = columnTitle;
+            GuiEnable = false;
+            this.inputLabel.text = OperationController.Input;
 
-            int maxCharCount = columnTitle.Length * 2;
-
-            for (int row = 0; row < this.OperationController.OutputCount; row++)
+            for (int column = 0; column < this.output.columns.Count; column++)
             {
-                NumberEntry entry = this.OperationController[row];
-                int charCount = entry.ColumnData(column, OperationController.NumberFormat).Length;
-                if (charCount > maxCharCount)
+                string columnTitle = NumberEntry.ColumnTitle(column, this.OperationController.NumberFormat);
+                this.output.columns[column].title = columnTitle;
+
+                int maxCharCount = columnTitle.Length * 2;
+
+                for (int row = 0; row < this.OperationController.OutputCount; row++)
                 {
-                    maxCharCount = charCount;
+                    NumberEntry entry = this.OperationController[row];
+                    int charCount = entry.ColumnData(column, OperationController.NumberFormat).Length;
+                    if (charCount > maxCharCount)
+                    {
+                        maxCharCount = charCount;
+                    }
                 }
+                this.output.columns[column].width = maxCharCount * 24;
             }
-            this.output.columns[column].width = maxCharCount * 24;
+
+            this.output.RefreshItems();
+
+            if (this.output.itemsSource.Count > 0)
+                this.output.ScrollToItem(this.output.itemsSource.Count - 1);
+            GuiEnable = true;
+            
+            this.OperationController.CalcButtons.ButtonFormatFactor.SetEnabled(Primes.IsReady);
+            this.OperationController.CalcButtons.ButtonFormatRepetend.SetEnabled(Primes.IsReady);
+
+            uiRefreshDemanded = false;
         }
-
-        this.output.RefreshItems();
-
-        if (this.output.itemsSource.Count > 0)
-            this.output.ScrollToItem(this.output.itemsSource.Count - 1);
-        GuiEnable = true;
     }
 
 

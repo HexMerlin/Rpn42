@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 public class SavedData
 {
-    public Format numberFormat;
+    //public Format numberFormat;
 
     public NumberEntry[] numberEntries;
 
@@ -12,7 +12,7 @@ public class SavedData
 
     public SavedData()
     {
-        this.numberFormat = Format.Normal;
+        //this.numberFormat = Format.Normal;
         this.numberEntries = new NumberEntry[0];
         this.input = string.Empty;
        

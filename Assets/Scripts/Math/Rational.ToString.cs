@@ -1,4 +1,4 @@
-﻿
+﻿#nullable enable
 using System;
 using System.Linq;
 using System.Numerics;
@@ -41,23 +41,6 @@ public partial class Rational
         return sb.ToString();
 
     }
-
-    public string ToStringRotationsBalBin()
-    {
-        StringBuilder sb = new StringBuilder();
-        foreach (Rational r in RotationsBalBin)
-        {
-            if (!AddDelimiterChars(r, sb))
-            {
-                sb.Append(r.Denominator == Denominator ? (r.Numerator + "/") : r.ToString());
-                sb.Append(' ');
-            }
-        }
-      
-        return sb.ToString();
-
-    }
-
     public string ToStringBin()
     {
         StringBuilder sb = new StringBuilder();
@@ -69,22 +52,6 @@ public partial class Rational
 
         return sb.ToString();
     }
-
-    public string ToStringBalBin()
-    {
-        StringBuilder sb = new StringBuilder();
-        foreach (Rational r in RotationsBalBin)
-        {
-            if (!AddDelimiterChars(r, sb))
-            {
-                sb.Append(r.Denominator == Denominator ? (r.Numerator + "/") : r.ToString());
-                sb.Append(' ');
-            }
-        }
-
-        return sb.ToString();
-    }
-
     public string ToStringDecimal(int maxDecimalDigits = 50)
     {
       
@@ -117,6 +84,17 @@ public partial class Rational
     public string ToStringRepInfo() => $"P={Period}";
 
     public string ToStringRepetendAsInteger() => RepetendAsInteger.ToString();
+
+    public string ToStringFactorization()
+    {
+        string str = Primes.Factorization(Numerator).ToString();
+        if (!IsInteger)
+        {
+            Factorization denFact = Primes.Factorization(Denominator);
+            str += denFact.FactorCount == 1 ? $" / {denFact}" : $" / ({denFact})";
+        }
+        return str;
+    }
 
     public override string ToString() => Denominator == 1 ? Numerator.ToString() : $"{Numerator}/{Denominator}";
 

@@ -1,4 +1,4 @@
-﻿
+﻿#nullable enable
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -8,30 +8,25 @@ using System.Threading.Tasks;
 
 public class Primes
 {
-    private static Primes instance = new Primes();
+    private static readonly Lazy<Primes> instance = new Lazy<Primes>(() => new Primes(MaxSupportedPrime), LazyThreadSafetyMode.ExecutionAndPublication);
 
-    private static readonly object instanceLock = new object();
+    // Lock to enforce only one factorization method running at a time
+    private static readonly object factorizationLock = new object();
 
     private readonly int[][] primeArrays;
 
-    public const int MaxSupportedPrime = 2000000000;
-
-    private Primes()
-    {
-        this.primeArrays = Array.Empty<int[]>();
-
-    }
-
-    private int CurrentMaxPrime => primeArrays.Length == 0 ? 0 : primeArrays.Max(primeArray => primeArray.LastOrDefault());
-
+    private const int MaxSupportedPrime = 2000000000; //2000000000;
+        
     private Primes(int maxPrime, int threadCount = -1)
     {
         if (threadCount <= 0) 
             threadCount = Environment.ProcessorCount;
         maxPrime = Math.Min(maxPrime, MaxSupportedPrime);
-      
+     
         this.primeArrays = PrimeArrayChunks(maxPrime, threadCount);
     }
+
+    public static bool IsReady => instance.IsValueCreated;
 
     private static int[][] PrimeArrayChunks(int maxPrime, int chunkCount)
     {
@@ -52,26 +47,23 @@ public class Primes
             primeArrays[i] = primeLists[i].ToArray();
         return primeArrays;
     }
+    public static void Prepare(Action? instanceReadyCallback = null)
+    {
+        if (instance.IsValueCreated)
+            instanceReadyCallback?.Invoke();
+        else
+            _ = Task.Run(() => {
+            Primes _ = instance.Value; // Force creation of the instance
+            instanceReadyCallback?.Invoke(); // Signal that creation is complete
+            });
+    }
 
     public static Factorization Factorization(BigInteger integer)
     {
-        lock (instanceLock)
+        lock (factorizationLock)
         {
-            Factorization factorization = instance.InstanceFactorization(integer);
-            if (factorization.IsComplete)
-                return factorization;
-
-            
-            int maxPrime = (int) BigInteger.Min(MaxSupportedPrime, factorization.RemainderFactor.Abs());
-            if (maxPrime <= instance.CurrentMaxPrime) //maxPrime is already calculated, return the partial factorization
-                return factorization;
-
-            instance = new Primes(maxPrime);  
-
-            Factorization remFact = instance.InstanceFactorization(factorization.RemainderFactor); //redo factorization of the remainder
-
-            return new Factorization(factorization.PrimeFactors.Concat(remFact.PrimeFactors).ToArray(), remFact.RemainderFactor);
-
+            Factorization factorization = instance.Value.InstanceFactorization(integer);
+            return factorization;
         }
     }
 
@@ -127,3 +119,19 @@ public class Primes
         return new Factorization(primeFactors.OrderBy(p => p).ToArray(), dividend * sign);
     }
 }
+
+//private int CurrentMaxPrime => primeArrays.Length == 0 ? 0 : primeArrays.Max(primeArray => primeArray.LastOrDefault());
+
+//if (factorization.IsComplete)
+//    return factorization;
+
+
+//int maxPrime = (int) BigInteger.Min(MaxSupportedPrime, factorization.RemainderFactor.Abs());
+//if (maxPrime <= instance.CurrentMaxPrime) //maxPrime is already calculated, return the partial factorization
+//    return factorization;
+
+//instance = new Primes(maxPrime);  
+
+//Factorization remFact = instance.InstanceFactorization(factorization.RemainderFactor); //redo factorization of the remainder
+
+//return new Factorization(factorization.PrimeFactors.Concat(remFact.PrimeFactors).ToArray(), remFact.RemainderFactor);

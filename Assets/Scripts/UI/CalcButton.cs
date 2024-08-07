@@ -7,8 +7,11 @@ public class CalcButton : IEquatable<CalcButton>
 {
     private const string selectedKeyword = "selected";
 
-
     public string Name { get; }
+
+    public string Text { get; }
+
+    public string DisabledText { get; set; }
 
     public UnityEngine.UIElements.Button UnityButton { get; }
 
@@ -16,7 +19,16 @@ public class CalcButton : IEquatable<CalcButton>
     {
         this.Name = name;
         this.UnityButton = buttonGrid.Q<Button>(name);
+        this.Text = UnityButton.text;
+        this.DisabledText = this.Text;
         Debug.Assert(UnityButton != null);
+    }
+
+    public void SetEnabled(bool enabled)
+    {
+        UnityButton.SetEnabled(enabled);
+        UnityButton.pickingMode = enabled ? PickingMode.Position : PickingMode.Ignore;
+        UnityButton.text = enabled ? Text : DisabledText;
     }
 
     public void SetSelected(bool selected)

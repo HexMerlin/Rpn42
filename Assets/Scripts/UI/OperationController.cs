@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Text;
 using UnityEngine.UIElements;
-using UnityEditor;
-using UnityEngine;
-using Unity.VisualScripting;
 
 
 public class OperationController 
@@ -32,10 +28,7 @@ public class OperationController
         {
             this._numberFormat = value;
             foreach ((CalcButton button, Format buttonFormat) in CalcButtons.ModeButtons)
-            {
                 button.SetSelected(buttonFormat == value);
-            }
-
         }
     }
 
@@ -44,7 +37,8 @@ public class OperationController
     {
         this.outputEntries = new List<NumberEntry>();
         this.CalcButtons = new CalcButtons(buttonGrid);
-   
+        this.NumberFormat = Format.Normal;
+
     }
     public NumberEntry this[int index] => this.outputEntries[index];
 
@@ -62,7 +56,6 @@ public class OperationController
 
     public void ReadFrom(SavedData savedData)
     {
-        this.NumberFormat = savedData.numberFormat;
         this.outputEntries.Clear();
         this.outputEntries.AddRange(savedData.numberEntries);
         this.inputBuf.Clear();
@@ -71,7 +64,6 @@ public class OperationController
 
     public void WriteTo(SavedData savedData)
     {
-        savedData.numberFormat = this.NumberFormat;
         savedData.numberEntries = this.OutputEntries.ToArray();
         savedData.input = this.Input;
     }
@@ -161,7 +153,7 @@ public class OperationController
                 PerformBinaryOperation((a, b) => a % b);
                 break;
             case CalcButtons.DivOnes:
-                PerformUnaryOperation((a) => a.DivideByMersenneCeiling());
+                PerformUnaryOperation((a) => a.DivideByNextMersenneNumber(mustBeCoprime: false));
                 break;
             case CalcButtons.Undo:
                 PerformUndoOperation();
@@ -171,14 +163,12 @@ public class OperationController
                 PerformRedoOperation();
                 break;
             case CalcButtons.AsRepetend:
-                //not implemented
-                break;
+                PerformUnaryOperation((a) => a.DivideByNextMersenneNumber(mustBeCoprime: true));
+                break;                
             default:
                 throw new ArgumentException($"Unhandled button name: {calcButton.Name}");
             }
         this.CurrentChange.IsCheckPoint = true;
-        //this.OnInputUpdate(this.inputBuf.ToString());
-        //if (outputChanged) this.OnOutputUpdate();
     }
 
 

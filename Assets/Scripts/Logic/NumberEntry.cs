@@ -19,12 +19,12 @@ public class NumberEntry
         StringFraction = new Lazy<string>(() => rational.ToStringFraction());
         StringDecimal = new Lazy<string>(() => rational.ToStringDecimal());
         StringBin = new Lazy<string>(() => rational.ToStringBin());
-        StringBalBin = new Lazy<string>(() => rational.ToStringBalBin());
         StringRotationsBin = new Lazy<string>(() => rational.ToStringRotationsBin());
-        StringRotationsBalBin = new Lazy<string>(() => rational.ToStringRotationsBalBin());
         StringPartition = new Lazy<string>(() => rational.ToStringPartition());
         StringRepInfo = new Lazy<string>(() => rational.ToStringRepInfo());
         StringRepetendAsInteger = new Lazy<string>(() => rational.ToStringRepetendAsInteger());
+        StringFactorization = new Lazy<string>(() => rational.ToStringFactorization());
+        StringRepetendFactorization = new Lazy<string>(() => Primes.Factorization(rational.RepetendAsInteger).ToString());
     }
 
 
@@ -32,8 +32,6 @@ public class NumberEntry
     public Rational Rational { get; }
 
     public static readonly NumberEntry Invalid = new NumberEntry(Rational.Invalid);
-
-
 
 
     public static string ColumnTitle(int columnIndex, Format format) => columnIndex switch
@@ -59,6 +57,7 @@ public class NumberEntry
     {
         Format.Bin => "Repetend Int",
         Format.Repetend => "Repetend Int",
+        Format.Factor => "Repetend Int",
         _ => "Attr",
     };
 
@@ -66,9 +65,9 @@ public class NumberEntry
     {
         Format.Normal => "Decimal",
         Format.Bin => "Binary",
-        Format.Repetend => "Repetend",
+        Format.Repetend => "Repetend factors",
         Format.RotationsBin => "Rotations",
-        Format.RotationsBalBin => "Rotations",
+        Format.Factor => "Factors",
         Format.Partition => "Partitions",
         _ => throw new ArgumentException($"Unhandled format '{numberFormat}'"),
     };
@@ -80,7 +79,7 @@ public class NumberEntry
         Format.Bin => StringFraction.Value,
         Format.Repetend => StringFraction.Value,
         Format.RotationsBin => StringFraction.Value,
-        Format.RotationsBalBin => StringFraction.Value,
+        Format.Factor => StringFraction.Value,
         Format.Partition => StringFraction.Value,
         _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown format"),
     };
@@ -89,9 +88,9 @@ public class NumberEntry
     {
         Format.Normal => string.Empty,
         Format.Bin => StringRepetendAsInteger.Value,
-        Format.Repetend => StringRepInfo.Value,
+        Format.Repetend => StringRepetendAsInteger.Value,
         Format.RotationsBin => StringRepInfo.Value,
-        Format.RotationsBalBin => StringRepInfo.Value,
+        Format.Factor => StringRepetendAsInteger.Value,
         Format.Partition => string.Empty,
         _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown format"),
     };
@@ -100,9 +99,9 @@ public class NumberEntry
     {
         Format.Normal => StringDecimal.Value,
         Format.Bin => StringBin.Value,
-        Format.Repetend => StringBalBin.Value,
+        Format.Repetend => StringRepetendFactorization.Value,
         Format.RotationsBin => StringRotationsBin.Value,
-        Format.RotationsBalBin => StringRotationsBalBin.Value,
+        Format.Factor => StringFactorization.Value,
         Format.Partition => StringPartition.Value,
         _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown format"),
     };
@@ -113,11 +112,7 @@ public class NumberEntry
 
     private Lazy<string> StringBin { get; }
 
-    private Lazy<string> StringBalBin { get; }
-
     private Lazy<string> StringRotationsBin { get; }
-
-    private Lazy<string> StringRotationsBalBin { get; }
 
     private Lazy<string> StringPartition { get; }
 
@@ -125,6 +120,10 @@ public class NumberEntry
 
     private Lazy<string> StringRepetendAsInteger { get; }
     
+    private Lazy<string> StringFactorization { get; }
+    
+    private Lazy<string> StringRepetendFactorization { get; }
+
     public override string ToString() => StringFraction.Value;
 
 }

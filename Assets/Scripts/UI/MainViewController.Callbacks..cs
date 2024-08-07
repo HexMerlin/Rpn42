@@ -6,21 +6,18 @@ using UnityEngine.UIElements;
 public partial class MainViewController
 {
 
-    void OnAwake()
-    {
-
-    }
-    void OnEnable()
+    void Awake()
     {
         const string outputElementName = "output";
         const string inputElementName = "input";
         const string buttonGridName = "button-grid";
 
         VisualElement root = UIDocument.rootVisualElement;
-
         this.buttonGrid = root.Q<VisualElement>(buttonGridName) ?? throw new NullReferenceException($"{buttonGridName} not found in the UIDocument.");
 
         this.OperationController = new(buttonGrid);
+
+        Primes.Prepare(OnPrimesInstanceCompleted); //start preparing the prime factoring capability in the background
 
         this.inputLabel = root.Q<Label>(inputElementName) ?? throw new NullReferenceException($"{inputElementName} not found in the UIDocument.");
 
@@ -28,7 +25,7 @@ public partial class MainViewController
         this.output.itemsSource = (System.Collections.IList)OperationController.OutputEntries;
 
         Debug.Assert(output.columns.Count == 3, $"Expected column count 3, but actual was {output.columns.Count}");
-        
+
         static VisualElement makeCell() => new Label();
         for (int columnIndex = 0; columnIndex < 3; columnIndex++)
         {
@@ -42,7 +39,7 @@ public partial class MainViewController
 
         this.output.makeNoneElement = () => new Label(""); //avoid message "List is empty"
 
-       
+
         root.RegisterCallbackOnce<KeyDownEvent>(KeyDownEvent =>
         {
             if (KeyDownEvent.keyCode == KeyCode.Escape)
@@ -51,12 +48,20 @@ public partial class MainViewController
         }, TrickleDown.TrickleDown);
         this.buttonGrid.RegisterCallback<ClickEvent>(OnButtonGridClick);
         this.buttonGrid.RegisterCallback<GeometryChangedEvent>(OnButtonGridGeometryChanged);
- 
-        LoadSavedData();
-        RefreshGUI();
-        
 
+        LoadSavedData();
+        DemandUIRefresh();
+         
+     }
+
+    public void Update()
+    {
+        if (uiRefreshDemanded)
+            PerformUIRefresh();
     }
+
+
+    private void OnPrimesInstanceCompleted() => DemandUIRefresh();
 
     private void OnApplicationPause(bool pauseStatus)
     {
@@ -87,7 +92,7 @@ public partial class MainViewController
 
         OperationController.InputButtonPressed(button);
 
-        RefreshGUI();
+        DemandUIRefresh();
         GuiEnable = true;
     }
 

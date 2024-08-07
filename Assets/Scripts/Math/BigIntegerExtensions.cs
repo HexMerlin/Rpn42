@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Numerics;
 
 public static class BigIntegerExtensions

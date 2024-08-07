@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using System;
 using System.Linq;
 using System.Numerics;
 
@@ -25,7 +26,22 @@ public sealed class Factorization
     /// Returns true if the factorization is complete, meaning there is no remainder factor other than 1.
     /// Returns false if the factorization is partial, meaning there is a remainder factor that could be potentially composite.
     /// </summary>
-    public bool IsComplete => BigInteger.Abs(RemainderFactor).IsOne;
+    public bool IsComplete => RemainderFactor.IsZero || RemainderFactor.Abs().IsOne;
+
+    /// <summary>
+    /// Gets a value indicating whether the factored number is 0.
+    /// </summary>
+    public bool IsZero => RemainderFactor.IsZero;
+    
+    /// <summary>
+    /// Gets a value indicating whether the factored number is 1.
+    /// </summary>
+    public bool IsOne => PrimeFactors.Length == 0 && RemainderFactor.IsOne;
+
+    /// <summary>
+    /// The count of factors in the factorization.
+    /// </summary>
+    public int FactorCount => Math.Max(1, PrimeFactors.Length + (RemainderFactor.IsOne ? 0 : 1));
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Factorization"/> class.
@@ -87,8 +103,8 @@ public sealed class Factorization
                 ? string.Empty
                 : " · " + RemainderFactor;
         if (!IsComplete)
-            remainderString += " (Partial)";
-    
+            remainderString += '?';
+
         return string.Join(" · ", PrimeFactors) + remainderString;
     }
 }
