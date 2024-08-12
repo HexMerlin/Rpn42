@@ -78,10 +78,11 @@
     <Compile Include="Assets\Scripts\Logic\DeferredResult.cs" />
     <Compile Include="Assets\Scripts\UI\CalcButton.cs" />
     <Compile Include="Assets\Scripts\Logic\NumberEntry.cs" />
-    <Compile Include="Assets\Scripts\UI\MainViewController.Callbacks..cs" />
+    <Compile Include="Assets\Scripts\UI\MainViewController.Callbacks.cs" />
     <Compile Include="Assets\Scripts\UI\CalcButtons.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\UI Toolkit\NumberDialogUXML.uxml" />
     <None Include="Assets\UI Toolkit\Styles\MainStyles.uss" />
     <None Include="Assets\UI Toolkit\MainViewUXML.uxml" />
   </ItemGroup>
