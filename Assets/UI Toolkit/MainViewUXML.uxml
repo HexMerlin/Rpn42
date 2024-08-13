@@ -36,8 +36,8 @@
             </ui:VisualElement>
             <ui:VisualElement name="row-3" style="flex-grow: 1; flex-direction: row; justify-content: center;">
                 <ui:Button class="button" />
-                <ui:Button class="button" />
-                <ui:Button class="button" />
+                <ui:Button name="button-rep-shift-left" text="&lt;&lt; Rep" class="button" />
+                <ui:Button name="button-rep-shift-right" text="Rep &gt;&gt;" class="button" />
                 <ui:Button name="button-as-repetend" text="→ Rep" class="button" />
                 <ui:Button name="button-div-ones" text="x/111" class="button" />
                 <ui:Button text="-" name="button-diff" class="button" />
