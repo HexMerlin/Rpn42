@@ -74,16 +74,18 @@ public partial class MainViewController
         if (evt.target is Label cellLabel)
         {
             BigInteger[] integers = Tokenizer.TokenizeDistinctIntegers(cellLabel.text);
-            if (integers.Length == 1)
+            if (integers.Length == 0)
+                return;
+            else if (integers.Length == 1)
             {
-                Debug.Log("Cell clicked: " + integers[0]);
+                //Debug.Log("Cell clicked: " + integers[0]);
                 NumberEntry numberEntry = new NumberEntry(integers[0]);
                 OperationController.AddOutput(numberEntry, isUndoPoint: true);
                 DemandUIRefresh();
             }
             else
             {
-                Debug.Log($"Multiple cell value clicked: {string.Join(", ", integers)}");
+                //Debug.Log($"Multiple cell value clicked: {string.Join(", ", integers)}");
                 GuiEnable = false;
                 numberDialog.SetItems(integers.Select(i => i.ToString()));
                 numberDialog.Show();
