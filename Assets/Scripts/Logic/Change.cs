@@ -6,7 +6,7 @@ using System.Text;
 
 public abstract class Change
 {
-    public bool IsCheckPoint { get; set; } = false;
+    public bool IsUndoPoint { get; set; } = false;
 
     public Change? Previous { get; private set; } = null;
 

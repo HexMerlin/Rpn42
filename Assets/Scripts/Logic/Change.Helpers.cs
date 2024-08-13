@@ -94,5 +94,5 @@ public abstract class OutputChange : Change
 
 public class NoChange : Change
 {
-    public NoChange() : base() { IsCheckPoint = true; }
+    public NoChange() : base() { IsUndoPoint = true; }
 }

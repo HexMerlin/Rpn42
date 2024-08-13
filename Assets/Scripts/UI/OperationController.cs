@@ -68,6 +68,12 @@ public class OperationController
         savedData.input = this.Input;
     }
 
+    public void AddOutput(NumberEntry numberEntry, bool isUndoPoint)
+    {
+        this.CurrentChange = this.CurrentChange.AddOutput(numberEntry, outputEntries);
+        this.CurrentChange.IsUndoPoint = isUndoPoint;
+    }
+
     public void InputButtonPressed(CalcButton calcButton)
     {
         if (CalcButtons.IsNumberFormatButton(calcButton) is Format numberFormat)
@@ -76,8 +82,7 @@ public class OperationController
             return;
 
         }
-        //bool outputChanged = true;
-
+       
         switch (calcButton.Name)
         {
             case CalcButtons.Zero:
@@ -92,7 +97,7 @@ public class OperationController
             case CalcButtons.Nine:
                 string digit = calcButton.UnityButton.text; //note: text on digit buttons maps verbatim to input strings
                 this.CurrentChange = this.CurrentChange.AddInput(digit, inputBuf); 
-               // outputChanged = false;
+       
                 break;
 
             case CalcButtons.Enter:
@@ -168,7 +173,7 @@ public class OperationController
             default:
                 throw new ArgumentException($"Unhandled button name: {calcButton.Name}");
             }
-        this.CurrentChange.IsCheckPoint = true;
+        this.CurrentChange.IsUndoPoint = true;
     }
 
 
@@ -213,7 +218,7 @@ public class OperationController
                 OutputChange outputChange => outputChange.Rollback(outputEntries).Previous,
                 _ => throw new ArgumentOutOfRangeException($"Unknown ChangeType {CurrentChange.GetType().Name}")
             };
-            if (this.CurrentChange.IsCheckPoint)
+            if (this.CurrentChange.IsUndoPoint)
                 return;
         }
     }
@@ -233,7 +238,7 @@ public class OperationController
                 OutputChange outputChange => outputChange.Execute(this.outputEntries),
                 _ => throw new ArgumentOutOfRangeException($"Unknown ChangeType {this.CurrentChange.GetType().Name}")
             };
-            if (this.CurrentChange.IsCheckPoint)
+            if (this.CurrentChange.IsUndoPoint)
                 return;
         }
     }

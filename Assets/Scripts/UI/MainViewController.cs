@@ -5,8 +5,8 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(UIDocument))]
 public partial class MainViewController : MonoBehaviour
 {
-    public UIDocument UIDocument;
-
+    [SerializeField] private UIDocument uiDocument;
+ 
     private OperationController OperationController;
 
     private Label inputLabel;
@@ -15,12 +15,13 @@ public partial class MainViewController : MonoBehaviour
 
     private VisualElement buttonGrid;
 
+    private NumberDialog numberDialog;
+  
     private volatile bool uiRefreshDemanded;
     private readonly object uiRefreshLock = new object();
 
     private bool _guiEnabled = true;
 
-       
     private bool GuiEnable
     {
         set
@@ -52,7 +53,6 @@ public partial class MainViewController : MonoBehaviour
     
         this.OperationController.WriteTo(savedData);
         PersistenceManager.SaveData(savedData);
-
     }
 
     public void DemandUIRefresh()
@@ -65,6 +65,8 @@ public partial class MainViewController : MonoBehaviour
         
         lock (uiRefreshLock)
         {
+            bool storedGuiEnableState = GuiEnable;
+            
             GuiEnable = false;
             this.inputLabel.text = OperationController.Input;
 
@@ -89,17 +91,17 @@ public partial class MainViewController : MonoBehaviour
 
             this.output.RefreshItems();
 
-            if (this.output.itemsSource.Count > 0)
-                this.output.ScrollToItem(this.output.itemsSource.Count - 1);
-            GuiEnable = true;
-            
             this.OperationController.CalcButtons.ButtonFormatFactor.SetEnabled(Primes.IsReady);
             this.OperationController.CalcButtons.ButtonFormatRepetend.SetEnabled(Primes.IsReady);
+                      
 
+            GuiEnable = storedGuiEnableState;
+
+            if (this.OperationController.OutputCount > 0)
+                this.output.schedule.Execute(() => this.output.ScrollToItem(this.OperationController.OutputCount - 1));
+            
             uiRefreshDemanded = false;
         }
     }
-
-
 
 }

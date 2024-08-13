@@ -1,6 +1,10 @@
 ﻿
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 public partial class MainViewController
@@ -8,29 +12,34 @@ public partial class MainViewController
 
     void Awake()
     {
+        T Control<T>(string componentName) where T : VisualElement => uiDocument.rootVisualElement.Q<T>(componentName) ?? throw new NullReferenceException($"{componentName} not found in the UIDocument.");
+
         const string outputElementName = "output";
         const string inputElementName = "input";
         const string buttonGridName = "button-grid";
+        const string numberDialogName = "number-dialog";
 
-        VisualElement root = UIDocument.rootVisualElement;
-        this.buttonGrid = root.Q<VisualElement>(buttonGridName) ?? throw new NullReferenceException($"{buttonGridName} not found in the UIDocument.");
+        VisualElement root = uiDocument.rootVisualElement;
+        this.buttonGrid = Control<VisualElement>(buttonGridName);
 
         this.OperationController = new(buttonGrid);
 
         Primes.Prepare(OnPrimesInstanceCompleted); //start preparing the prime factoring capability in the background
 
-        this.inputLabel = root.Q<Label>(inputElementName) ?? throw new NullReferenceException($"{inputElementName} not found in the UIDocument.");
+        this.numberDialog = Control<NumberDialog>(numberDialogName);
 
-        this.output = root.Q<MultiColumnListView>(outputElementName) ?? throw new NullReferenceException("output not found in the UIDocument.");
+        this.inputLabel = Control<Label>(inputElementName);
+
+        this.output = Control<MultiColumnListView>(outputElementName);
+
         this.output.itemsSource = (System.Collections.IList)OperationController.OutputEntries;
 
         Debug.Assert(output.columns.Count == 3, $"Expected column count 3, but actual was {output.columns.Count}");
 
         static VisualElement makeCell() => new Label();
-        for (int columnIndex = 0; columnIndex < 3; columnIndex++)
+        for (int columnIndex = 0; columnIndex < output.columns.Count; columnIndex++)
         {
             output.columns[columnIndex].makeCell = makeCell;
-
         }
 
         this.output.columns[0].bindCell = (e, row) => (e as Label).text = OperationController[row].ColumnData(0, this.OperationController.NumberFormat);
@@ -38,7 +47,6 @@ public partial class MainViewController
         this.output.columns[2].bindCell = (e, row) => (e as Label).text = OperationController[row].ColumnData(2, this.OperationController.NumberFormat);
 
         this.output.makeNoneElement = () => new Label(""); //avoid message "List is empty"
-
 
         root.RegisterCallbackOnce<KeyDownEvent>(KeyDownEvent =>
         {
@@ -49,10 +57,55 @@ public partial class MainViewController
         this.buttonGrid.RegisterCallback<ClickEvent>(OnButtonGridClick);
         this.buttonGrid.RegisterCallback<GeometryChangedEvent>(OnButtonGridGeometryChanged);
 
+       
+        this.numberDialog.ItemSelected += OnNumberDialogItemSelected;
+
+        this.output.RegisterCallback<ClickEvent>(OnCellClick);
+        
+        this.numberDialog.Hide();
         LoadSavedData();
         DemandUIRefresh();
-         
-     }
+
+    }
+
+ 
+    private void OnCellClick(ClickEvent evt)
+    {
+        if (evt.target is Label cellLabel)
+        {
+            BigInteger[] integers = Tokenizer.TokenizeDistinctIntegers(cellLabel.text);
+            if (integers.Length == 1)
+            {
+                Debug.Log("Cell clicked: " + integers[0]);
+                NumberEntry numberEntry = new NumberEntry(integers[0]);
+                OperationController.AddOutput(numberEntry, isUndoPoint: true);
+                DemandUIRefresh();
+            }
+            else
+            {
+                Debug.Log($"Multiple cell value clicked: {string.Join(", ", integers)}");
+                GuiEnable = false;
+                numberDialog.SetItems(integers.Select(i => i.ToString()));
+                numberDialog.Show();
+            }
+        }
+    }
+
+    private void OnNumberDialogItemSelected(string selectedItem, bool cancelled)
+    {
+        Debug.Log("User selected: " + selectedItem);
+
+        if (cancelled)
+        {
+            GuiEnable = true;
+            return;
+        }
+        NumberEntry numberEntry = new NumberEntry(BigInteger.Parse(selectedItem));
+        OperationController.AddOutput(numberEntry, isUndoPoint: true);
+        GuiEnable = true;
+        DemandUIRefresh();
+    }
+
 
     public void Update()
     {
@@ -92,8 +145,10 @@ public partial class MainViewController
 
         OperationController.InputButtonPressed(button);
 
+      
         DemandUIRefresh();
         GuiEnable = true;
+       
     }
 
     private void OnButtonGridGeometryChanged(GeometryChangedEvent evt)

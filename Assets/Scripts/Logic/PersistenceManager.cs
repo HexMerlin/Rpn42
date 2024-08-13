@@ -36,7 +36,5 @@ public static class PersistenceManager
 
         string jsonString = JsonConvert.SerializeObject(savedData, Formatting.Indented);
         File.WriteAllText(DataFilePath, jsonString);
-        Debug.Log("Data saved to: " + DataFilePath);
-
     }
 }
