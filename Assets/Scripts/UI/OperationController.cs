@@ -173,7 +173,13 @@ public class OperationController
                 break;
             case CalcButtons.AsRepetend:
                 PerformUnaryOperation((a) => a.DivideByNextMersenneNumber(mustBeCoprime: true));
-                break;                
+                break;  
+            case CalcButtons.RepShiftLeft:
+                PerformUnaryOperation((a) => a.RepetendShiftLeft());
+                break;
+            case CalcButtons.RepShiftRight:
+                PerformUnaryOperation((a) => a.RepetendShiftRight()); 
+                break;
             default:
                 throw new ArgumentException($"Unhandled button name: {calcButton.Name}");
             }
