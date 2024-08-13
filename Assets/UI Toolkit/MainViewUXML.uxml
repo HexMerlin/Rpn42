@@ -32,7 +32,7 @@
                 <ui:Button text="4" name="button-4" class="button" />
                 <ui:Button text="5" name="button-5" class="button" />
                 <ui:Button text="6" name="button-6" class="button" />
-                <ui:Button text="Swap" name="button-swap" enabled="false" class="button" />
+                <ui:Button text="Copy 2" name="button-copy-2" enabled="true" class="button" />
             </ui:VisualElement>
             <ui:VisualElement name="row-3" style="flex-grow: 1; flex-direction: row; justify-content: center;">
                 <ui:Button class="button" />
