@@ -124,8 +124,12 @@ public class OperationController
                     this.CurrentChange = this.CurrentChange.RemoveInputChar(inputBuf);
                 }
                 break;
-            case CalcButtons.Swap:
-                //implement this
+            case CalcButtons.Copy2:
+                if (OutputCount < 2) return;
+                NumberEntry secondLastOutput = this.SecondLastOutput;
+                NumberEntry lastOutput = this.LastOutput;
+                this.CurrentChange = this.CurrentChange.AddOutput(secondLastOutput, outputEntries);
+                this.CurrentChange = this.CurrentChange.AddOutput(lastOutput, outputEntries);
                 break;
             case CalcButtons.Neg:
                 PerformUnaryOperation((a) => -a);
