@@ -33,6 +33,8 @@ public class CalcButtons
     public const string Undo = "button-undo";
     public const string Redo = "button-redo";
     public const string AsRepetend = "button-as-repetend";
+    public const string RepShiftLeft = "button-rep-shift-left";
+    public const string RepShiftRight = "button-rep-shift-right";
     public const string FormatNormal = "button-format-normal";
     public const string FormatBin = "button-format-bin";
     public const string FormatRepetend = "button-format-repetend";
@@ -54,7 +56,7 @@ public class CalcButtons
         AddAll(
             Zero, One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Enter,
             BackDrop, Copy2, Neg, Reciprocal, Square, Sum, Diff, Prod, Quotient,
-            Clear, Mod, DivOnes, Undo, Redo, AsRepetend,
+            Clear, Mod, DivOnes, Undo, Redo, AsRepetend, RepShiftLeft, RepShiftRight,
             FormatNormal, FormatBin, FormatRepetend, FormatRotationsBin, FormatFactor, FormatPartition
         );
 

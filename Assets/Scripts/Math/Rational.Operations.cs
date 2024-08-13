@@ -95,6 +95,22 @@ public partial class Rational
         return mersenne - 1;
     }
 
+    public Rational RepetendShiftLeft()
+    {
+        int period = Period;  
+        BigInteger x = (BigInteger.One << (period - 1)) - 1;
+        BigInteger y = (BigInteger.One << (period - 2)) - 1;
+        return this * x / y;
+    }
+
+    public Rational RepetendShiftRight()
+    {
+        int period = Period;
+        BigInteger x = (BigInteger.One << period) - 1;
+        BigInteger y = (BigInteger.One << (period - 1)) - 1;
+        return this * y / x;
+    }
+
     public override bool Equals(object obj) => obj is Rational other && Equals(other);
     public override int GetHashCode() => HashCode.Combine(Numerator, Denominator);
 
