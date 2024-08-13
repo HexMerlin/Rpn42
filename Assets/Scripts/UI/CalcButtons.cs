@@ -19,7 +19,7 @@ public class CalcButtons
     public const string Nine = "button-9";
     public const string Enter = "button-enter";
     public const string BackDrop = "button-back-drop";
-    public const string Swap = "button-swap";
+    public const string Copy2 = "button-copy-2";
     public const string Neg = "button-neg";
     public const string Reciprocal = "button-reciprocal";
     public const string Square = "button-square";
@@ -53,7 +53,7 @@ public class CalcButtons
 
         AddAll(
             Zero, One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Enter,
-            BackDrop, Swap, Neg, Reciprocal, Square, Sum, Diff, Prod, Quotient,
+            BackDrop, Copy2, Neg, Reciprocal, Square, Sum, Diff, Prod, Quotient,
             Clear, Mod, DivOnes, Undo, Redo, AsRepetend,
             FormatNormal, FormatBin, FormatRepetend, FormatRotationsBin, FormatFactor, FormatPartition
         );
