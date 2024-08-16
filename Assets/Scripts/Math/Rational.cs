@@ -244,17 +244,17 @@ public partial class Rational : IEquatable<Rational>, IComparable<Rational>
             return;
 
         computedLength = 0;
-        computedPeriod = 0;
+        computedPeriod = -1;
         foreach (Rational r in RotationsBin)
         {
             if (!r.IsSpecialDelimiter)
             {
                 computedLength++;
-                if (computedPeriod >= 1)
+                if (computedPeriod >= 0)
                     computedPeriod++;
             }
             else if (r == RepetendStart)
-                computedPeriod = 1;
+                computedPeriod = 0;
 
             
         }

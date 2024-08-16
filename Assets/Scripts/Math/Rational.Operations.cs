@@ -111,6 +111,24 @@ public partial class Rational
         return this * y / x;
     }
 
+    public static Rational FindUnitFractionWithRepetendFactor(Rational repetendFactor)
+    {
+        if (!repetendFactor.IsInteger)
+            return Invalid;
+
+        BigInteger repetendFactorToFind = repetendFactor.Numerator;
+        for (int i = 3; i < 20000; i += 2)
+        {
+            Rational r = new(1, i);
+            BigInteger repetendAsInt = r.RepetendAsInteger;
+            if (repetendAsInt.IsZero)
+                continue;
+            if (repetendAsInt % repetendFactorToFind == 0)
+                return r;
+        }
+        return Invalid;
+    }
+
     public override bool Equals(object obj) => obj is Rational other && Equals(other);
     public override int GetHashCode() => HashCode.Combine(Numerator, Denominator);
 

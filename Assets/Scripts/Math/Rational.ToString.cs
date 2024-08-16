@@ -81,7 +81,7 @@ public partial class Rational
         return result.ToString();
     }
 
-    public string ToStringRepInfo() => $"P={Period}";
+    public string ToStringPeriod() => Period.ToString();
 
     public string ToStringRepetendAsInteger() => RepetendAsInteger.ToString();
 

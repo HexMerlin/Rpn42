@@ -93,7 +93,7 @@ public partial class MainViewController : MonoBehaviour
 
             this.OperationController.CalcButtons.ButtonFormatFactor.SetEnabled(Primes.IsReady);
             this.OperationController.CalcButtons.ButtonFormatRepetend.SetEnabled(Primes.IsReady);
-                      
+            this.OperationController.CalcButtons.ButtonFormatPeriod.SetEnabled(Primes.IsReady);
 
             GuiEnable = storedGuiEnableState;
 

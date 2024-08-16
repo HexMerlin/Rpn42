@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using UnityEngine.UIElements;
@@ -179,6 +180,9 @@ public class OperationController
                 break;
             case CalcButtons.RepShiftRight:
                 PerformUnaryOperation((a) => a.RepetendShiftRight()); 
+                break;
+            case CalcButtons.RepFactor:
+                PerformUnaryOperation((a) => Rational.FindUnitFractionWithRepetendFactor(a));
                 break;
             default:
                 throw new ArgumentException($"Unhandled button name: {calcButton.Name}");

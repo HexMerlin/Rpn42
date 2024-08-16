@@ -21,10 +21,11 @@ public class NumberEntry
         StringBin = new Lazy<string>(() => rational.ToStringBin());
         StringRotationsBin = new Lazy<string>(() => rational.ToStringRotationsBin());
         StringPartition = new Lazy<string>(() => rational.ToStringPartition());
-        StringRepInfo = new Lazy<string>(() => rational.ToStringRepInfo());
+        StringPeriod = new Lazy<string>(() => rational.ToStringPeriod());
         StringRepetendAsInteger = new Lazy<string>(() => rational.ToStringRepetendAsInteger());
         StringFactorization = new Lazy<string>(() => rational.ToStringFactorization());
         StringRepetendFactorization = new Lazy<string>(() => Primes.Factorization(rational.RepetendAsInteger).ToString());
+        StringPeriodFactorization = new Lazy<string>(() => Primes.Factorization(rational.Period).ToString());
     }
 
 
@@ -53,12 +54,20 @@ public class NumberEntry
 
     private static string Col0Title(Format _) => "Fraction";
 
+    private string Col0Data(Format _) => StringFraction.Value;
+
     private static string Col1Title(Format numberFormat) => numberFormat switch
+    {  
+        Format.Bin or Format.Repetend or Format.Factor => "Repetend Int",
+        Format.Period or Format.Partition => "Period",
+        _ => "",
+    };
+
+    private string Col1Data(Format format) => format switch
     {
-        Format.Bin => "Repetend Int",
-        Format.Repetend => "Repetend Int",
-        Format.Factor => "Repetend Int",
-        _ => "Attr",
+        Format.Bin or Format.Repetend or Format.Factor => StringRepetendAsInteger.Value,
+        Format.Period or Format.Partition => StringPeriod.Value,
+        _ => "",
     };
 
     private static string Col2Title(Format numberFormat) => numberFormat switch
@@ -68,32 +77,11 @@ public class NumberEntry
         Format.Repetend => "Repetend factors",
         Format.RotationsBin => "Rotations",
         Format.Factor => "Factors",
+        Format.Period => "Period factors",
         Format.Partition => "Partitions",
-        _ => throw new ArgumentException($"Unhandled format '{numberFormat}'"),
+        _ => $"Unhandled format '{numberFormat}'",
     };
 
-
-    private string Col0Data(Format format) => format switch
-    {
-        Format.Normal => StringFraction.Value,
-        Format.Bin => StringFraction.Value,
-        Format.Repetend => StringFraction.Value,
-        Format.RotationsBin => StringFraction.Value,
-        Format.Factor => StringFraction.Value,
-        Format.Partition => StringFraction.Value,
-        _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown format"),
-    };
-
-    private string Col1Data(Format format) => format switch
-    {
-        Format.Normal => string.Empty,
-        Format.Bin => StringRepetendAsInteger.Value,
-        Format.Repetend => StringRepetendAsInteger.Value,
-        Format.RotationsBin => StringRepInfo.Value,
-        Format.Factor => StringRepetendAsInteger.Value,
-        Format.Partition => string.Empty,
-        _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown format"),
-    };
 
     private string Col2Data(Format format) => format switch
     {
@@ -102,6 +90,7 @@ public class NumberEntry
         Format.Repetend => StringRepetendFactorization.Value,
         Format.RotationsBin => StringRotationsBin.Value,
         Format.Factor => StringFactorization.Value,
+        Format.Period => StringPeriodFactorization.Value,
         Format.Partition => StringPartition.Value,
         _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown format"),
     };
@@ -116,13 +105,15 @@ public class NumberEntry
 
     private Lazy<string> StringPartition { get; }
 
-    private Lazy<string> StringRepInfo { get; }
+    private Lazy<string> StringPeriod { get; }
 
     private Lazy<string> StringRepetendAsInteger { get; }
     
     private Lazy<string> StringFactorization { get; }
     
     private Lazy<string> StringRepetendFactorization { get; }
+    
+    private Lazy<string> StringPeriodFactorization { get; }
 
     public override string ToString() => StringFraction.Value;
 

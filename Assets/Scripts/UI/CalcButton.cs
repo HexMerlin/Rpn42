@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 public class CalcButton : IEquatable<CalcButton>
 {
     private const string selectedKeyword = "selected";
+    private const string modeButtonClass = "mode-button";
 
     public string Name { get; }
 
@@ -36,6 +37,8 @@ public class CalcButton : IEquatable<CalcButton>
         if (selected) UnityButton.AddToClassList(selectedKeyword);
         else UnityButton.RemoveFromClassList(selectedKeyword);
     }
+
+    public bool IsModeButton => UnityButton.ClassListContains(modeButtonClass);
 
     public bool Equals(CalcButton other) => Name == other.Name;  
 

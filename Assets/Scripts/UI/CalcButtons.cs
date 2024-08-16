@@ -32,6 +32,7 @@ public class CalcButtons
     public const string DivOnes = "button-div-ones";
     public const string Undo = "button-undo";
     public const string Redo = "button-redo";
+    public const string RepFactor = "button-rep-factor";
     public const string AsRepetend = "button-as-repetend";
     public const string RepShiftLeft = "button-rep-shift-left";
     public const string RepShiftRight = "button-rep-shift-right";
@@ -41,6 +42,7 @@ public class CalcButtons
     public const string FormatRotationsBin = "button-format-rotbin";
     public const string FormatFactor = "button-format-factor";
     public const string FormatPartition = "button-format-partition";
+    public const string FormatPeriod = "button-format-period";
 
     private readonly Dictionary<string, CalcButton> allButtons;
 
@@ -48,6 +50,7 @@ public class CalcButtons
 
     public readonly CalcButton ButtonFormatRepetend;
     public readonly CalcButton ButtonFormatFactor;
+    public readonly CalcButton ButtonFormatPeriod;
 
     public CalcButtons(VisualElement buttonGrid)
     {
@@ -56,10 +59,11 @@ public class CalcButtons
         AddAll(
             Zero, One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Enter,
             BackDrop, Copy2, Neg, Reciprocal, Square, Sum, Diff, Prod, Quotient,
-            Clear, Mod, DivOnes, Undo, Redo, AsRepetend, RepShiftLeft, RepShiftRight,
-            FormatNormal, FormatBin, FormatRepetend, FormatRotationsBin, FormatFactor, FormatPartition
+            Clear, Mod, DivOnes, Undo, Redo, AsRepetend, RepShiftLeft, RepShiftRight, RepFactor,
+            FormatNormal, FormatBin, FormatRepetend, FormatRotationsBin, FormatFactor, FormatPeriod, FormatPartition
         );
 
+       
         void AddAll(params string[] buttonNames)
         {
             foreach (string buttonName in buttonNames)
@@ -73,13 +77,16 @@ public class CalcButtons
             (this[FormatRepetend], Format.Repetend),
             (this[FormatRotationsBin], Format.RotationsBin),
             (this[FormatFactor], Format.Factor),
+            (this[FormatPeriod], Format.Period),
             (this[FormatPartition], Format.Partition)
         };
 
         this.ButtonFormatFactor = this[FormatFactor];
         this.ButtonFormatRepetend = this[FormatRepetend];
+        this.ButtonFormatPeriod = this[FormatPeriod];
         this.ButtonFormatFactor.DisabledText = "Pending…";
         this.ButtonFormatRepetend.DisabledText = "Pending…";
+        this.ButtonFormatPeriod.DisabledText = "Pending…";
     }
 
     public CalcButton this[string buttonName] =>
