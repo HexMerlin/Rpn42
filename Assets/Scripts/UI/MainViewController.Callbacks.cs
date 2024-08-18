@@ -1,10 +1,7 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Numerics;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 public partial class MainViewController

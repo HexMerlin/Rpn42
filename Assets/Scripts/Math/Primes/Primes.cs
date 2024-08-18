@@ -120,18 +120,3 @@ public class Primes
     }
 }
 
-//private int CurrentMaxPrime => primeArrays.Length == 0 ? 0 : primeArrays.Max(primeArray => primeArray.LastOrDefault());
-
-//if (factorization.IsComplete)
-//    return factorization;
-
-
-//int maxPrime = (int) BigInteger.Min(MaxSupportedPrime, factorization.RemainderFactor.Abs());
-//if (maxPrime <= instance.CurrentMaxPrime) //maxPrime is already calculated, return the partial factorization
-//    return factorization;
-
-//instance = new Primes(maxPrime);  
-
-//Factorization remFact = instance.InstanceFactorization(factorization.RemainderFactor); //redo factorization of the remainder
-
-//return new Factorization(factorization.PrimeFactors.Concat(remFact.PrimeFactors).ToArray(), remFact.RemainderFactor);

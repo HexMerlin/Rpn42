@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 
@@ -49,7 +50,7 @@ public class OperationController
 
     public string Input => this.inputBuf.ToString();
 
-    private bool InputEmpty => this.inputBuf.Length == 0;
+    public bool InputEmpty => this.inputBuf.Length == 0;
      
     private NumberEntry LastOutput => this.outputEntries[^1];
 
@@ -77,12 +78,12 @@ public class OperationController
 
     public void InputButtonPressed(CalcButton calcButton)
     {
-        if (CalcButtons.IsNumberFormatButton(calcButton) is Format numberFormat)
-        {
-            NumberFormat = numberFormat;
-            return;
+        //if (CalcButtons.IsNumberFormatButton(calcButton) is Format numberFormat)
+        //{
+        //    NumberFormat = numberFormat;
+        //    return;
 
-        }
+        //}
 
         //(this[FormatNormal], Format.Normal),
         //(this[FormatBin], Format.Bin),
@@ -94,13 +95,13 @@ public class OperationController
 
         switch (calcButton.Name)
         {
-            //case CalcButtons.FormatNormal: NumberFormat = Format.Normal; return;
-            //case CalcButtons.FormatBin: NumberFormat = Format.Bin; return;
-            //case CalcButtons.FormatRepetend: NumberFormat = Format.Repetend; return;
-            //case CalcButtons.FormatRotationsBin: NumberFormat = Format.RotationsBin; return;
-            //case CalcButtons.FormatPeriod: NumberFormat = Format.Period; return;
-            //case CalcButtons.FormatPartition: NumberFormat = Format.Partition; return;
-            //case CalcButtons.FormatFactor: NumberFormat = Format.Factor; return;
+            case CalcButtons.FormatNormal: NumberFormat = Format.Normal; return;
+            case CalcButtons.FormatBin: NumberFormat = Format.Bin; return;
+            case CalcButtons.FormatRepetend: NumberFormat = Format.Repetend; return;
+            case CalcButtons.FormatRotationsBin: NumberFormat = Format.RotationsBin; return;
+            case CalcButtons.FormatPeriod: NumberFormat = Format.Period; return;
+            case CalcButtons.FormatPartition: NumberFormat = Format.Partition; return;
+            case CalcButtons.FormatFactor: NumberFormat = Format.Factor; return;
 
             case CalcButtons.Zero:
             case CalcButtons.One:
@@ -112,41 +113,17 @@ public class OperationController
             case CalcButtons.Seven:
             case CalcButtons.Eight:
             case CalcButtons.Nine:
-                string digit = calcButton.UnityButton.text; //note: text on digit buttons maps verbatim to input strings
-                this.CurrentChange = this.CurrentChange.AddInput(digit, inputBuf); 
-       
+                PerformAddInput(calcButton.UnityButton.text); //note: text on digit buttons maps verbatim to input strings
                 break;
 
             case CalcButtons.Enter:
-
-                if (InputEmpty)
-                {
-                    if (OutputEmpty)
-                        return;
-                    else
-                        this.CurrentChange = this.CurrentChange.AddOutput(LastOutput, outputEntries); //add a copy of last output
-                }
-                else
-                    PerformUnaryOperation((a) => a);
-
+                PerformUnaryOperation((a) => a, InputEmpty);
                 break;
             case CalcButtons.BackDrop:
-                if (InputEmpty)
-                {
-                    if (OutputEmpty) return;
-                    this.CurrentChange = this.CurrentChange.RemoveOutput(outputEntries);
-                }
-                else
-                {
-                    this.CurrentChange = this.CurrentChange.RemoveInputChar(inputBuf);
-                }
+                PerformBackDrop();
                 break;
             case CalcButtons.Copy2:
-                if (OutputCount < 2) return;
-                NumberEntry secondLastOutput = this.SecondLastOutput;
-                NumberEntry lastOutput = this.LastOutput;
-                this.CurrentChange = this.CurrentChange.AddOutput(secondLastOutput, outputEntries);
-                this.CurrentChange = this.CurrentChange.AddOutput(lastOutput, outputEntries);
+                PerformCopy2();
                 break;
             case CalcButtons.Neg:
                 PerformUnaryOperation((a) => -a);
@@ -173,10 +150,7 @@ public class OperationController
                 PerformBinaryOperation((a, b) => a / b);
                 break;
             case CalcButtons.Clear:
-                if (!InputEmpty)
-                    this.CurrentChange = this.CurrentChange.ClearInput(inputBuf);
-                if (!OutputEmpty)
-                    this.CurrentChange = this.CurrentChange.ClearAllOutputs(outputEntries);
+                PerformClear();
                 break;
             case CalcButtons.Mod:
                 PerformBinaryOperation((a, b) => a % b);
@@ -185,11 +159,10 @@ public class OperationController
                 PerformUnaryOperation((a) => a.DivideByNextMersenneNumber(mustBeCoprime: false));
                 break;
             case CalcButtons.Undo:
-                PerformUndoOperation();
+                PerformUndo();
                 break;
-
             case CalcButtons.Redo:
-                PerformRedoOperation();
+                PerformRedo();
                 break;
             case CalcButtons.AsRepetend:
                 PerformUnaryOperation((a) => a.DivideByNextMersenneNumber(mustBeCoprime: true));
@@ -212,8 +185,9 @@ public class OperationController
         this.CurrentChange.IsUndoPoint = true;
     }
 
+    public void PerformAddInput(string input) => this.CurrentChange = this.CurrentChange.AddInput(input, inputBuf);
 
-    private void PerformUnaryOperation(Func<Rational, Rational> operation)
+    public void PerformUnaryOperation(Func<Rational, Rational> operation, bool retainOperand = false)
     {
         (bool success, Rational operand) = PeekOperand();
         if (!success) return; //need 1 operand to perform operation: abort operation
@@ -222,17 +196,22 @@ public class OperationController
 
         if (result.IsInvalid) return;
 
+        if (retainOperand)
+        {
+            this.CurrentChange = this.CurrentChange.AddOutput(new NumberEntry(result), outputEntries);
+        } 
+        else 
         this.CurrentChange = InputEmpty ?
             this.CurrentChange.ReplaceOutput(new NumberEntry(result), outputEntries) :
             this.CurrentChange.ClearInput(inputBuf).AddOutput(new NumberEntry(result), outputEntries);
     }
 
-    private void PerformBinaryOperation(Func<Rational, Rational, Rational> operation)
+    public void PerformBinaryOperation(Func<Rational, Rational, Rational> operation)
     {
-        (bool success, Rational leftOperand, Rational RightOperand) = PeekOperands();
+        (bool success, Rational leftOperand, Rational rightOperand) = PeekOperands();
         if (!success) return; //need 2 operands to perform operation: abort operation
 
-        Rational result = operation(leftOperand, RightOperand);
+        Rational result = operation(leftOperand, rightOperand);
 
         if (result.IsInvalid) return;
 
@@ -241,7 +220,37 @@ public class OperationController
             this.CurrentChange.ClearInput(inputBuf).ReplaceOutput(new NumberEntry(result), outputEntries);
     }
 
-    public void PerformUndoOperation()
+    public void PerformBackDrop()
+    {
+        if (InputEmpty)
+        {
+            if (OutputEmpty) return;
+            this.CurrentChange = this.CurrentChange.RemoveOutput(outputEntries);
+        }
+        else
+        {
+            this.CurrentChange = this.CurrentChange.RemoveInputChar(inputBuf);
+        }
+    }
+
+    public void PerformClear()
+    {
+        if (!InputEmpty)
+            this.CurrentChange = this.CurrentChange.ClearInput(inputBuf);
+        if (!OutputEmpty)
+            this.CurrentChange = this.CurrentChange.ClearAllOutputs(outputEntries);
+    }
+
+    public void PerformCopy2()
+    {
+        if (OutputCount < 2) return;
+        NumberEntry secondLastOutput = this.SecondLastOutput;
+        NumberEntry lastOutput = this.LastOutput;
+        this.CurrentChange = this.CurrentChange.AddOutput(secondLastOutput, outputEntries);
+        this.CurrentChange = this.CurrentChange.AddOutput(lastOutput, outputEntries);
+    }
+
+    public void PerformUndo()
     {
         if (this.CurrentChange is NoChange)
             return;
@@ -259,7 +268,7 @@ public class OperationController
         }
     }
 
-    public void PerformRedoOperation()
+    public void PerformRedo()
     {
              
         while (true)
@@ -290,7 +299,7 @@ public class OperationController
         return (false, Rational.Invalid);
     }
 
-    private (bool success, Rational leftOperand, Rational rightOperand) PeekOperands()
+    public (bool success, Rational leftOperand, Rational rightOperand) PeekOperands()
     {
         if (OutputCount + (InputEmpty ? 0 : 1) >= 2)
         {

@@ -1,29 +1,27 @@
 ﻿using System;
-using System.Diagnostics;
 using UnityEngine.UIElements;
-
+using UnityButton = UnityEngine.UIElements.Button;
 
 public class CalcButton : IEquatable<CalcButton>
 {
     private const string selectedKeyword = "selected";
     private const string modeButtonClass = "mode-button";
 
-    public string Name { get; }
+    public string Name => UnityButton.name;
 
     public string Text { get; }
 
     public string DisabledText { get; set; }
 
-    public UnityEngine.UIElements.Button UnityButton { get; }
+    public UnityButton UnityButton { get; }
 
-    public CalcButton(string name, VisualElement buttonGrid)
+    public CalcButton(UnityButton unityButton)
     {
-        this.Name = name;
-        this.UnityButton = buttonGrid.Q<Button>(name);
+        this.UnityButton = unityButton;
         this.Text = UnityButton.text;
         this.DisabledText = this.Text;
-        Debug.Assert(UnityButton != null);
     }
+    public bool IsEnabled() => UnityButton.enabledSelf;
 
     public void SetEnabled(bool enabled)
     {
@@ -43,6 +41,7 @@ public class CalcButton : IEquatable<CalcButton>
     public bool Equals(CalcButton other) => Name == other.Name;  
 
     public override int GetHashCode() => Name.GetHashCode();
+   
  
 }
 

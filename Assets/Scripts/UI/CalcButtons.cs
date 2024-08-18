@@ -1,8 +1,9 @@
 ﻿#nullable enable
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using UnityEngine.UIElements;
+using UnityButton = UnityEngine.UIElements.Button;
 
 public class CalcButtons
 {
@@ -58,18 +59,20 @@ public class CalcButtons
     {
         this.allButtons = new Dictionary<string, CalcButton>();
 
-        AddAll(
+        AddNormalButtons(
             Zero, One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Enter,
             BackDrop, Copy2, Neg, Reciprocal, Square, Power, Sum, Diff, Prod, Quotient,
             Clear, Mod, DivOnes, Undo, Redo, AsRepetend, AsBalanced, RepShiftLeft, RepShiftRight, RepFactor,
             FormatNormal, FormatBin, FormatRepetend, FormatRotationsBin, FormatFactor, FormatPeriod, FormatPartition
         );
-
-       
-        void AddAll(params string[] buttonNames)
+      
+        void AddNormalButtons(params string[] buttonNames)
         {
             foreach (string buttonName in buttonNames)
-                allButtons.Add(buttonName, new CalcButton(buttonName, buttonGrid));
+            {
+                UnityButton unityButton = buttonGrid.Q<UnityButton>(buttonName) ?? throw new ArgumentNullException($"Cannot find a button {buttonName}");
+                allButtons.Add(buttonName, new CalcButton(unityButton));
+            }
         }
 
         this.ModeButtons = new (CalcButton, Format)[]
@@ -97,15 +100,15 @@ public class CalcButtons
     public CalcButton? TryGetButton(string buttonName) 
         => allButtons.TryGetValue(buttonName, out CalcButton button) ? button : null;
 
-    public Format? IsNumberFormatButton(CalcButton calcButton) 
-    {       
-        foreach ((CalcButton button, Format numberFormat) in ModeButtons)
-        {
-            if (button == calcButton)
-                return numberFormat;
-        }
-        return null;
-    }
+    //public Format? IsNumberFormatButton(CalcButton calcButton) 
+    //{       
+    //    foreach ((CalcButton button, Format numberFormat) in ModeButtons)
+    //    {
+    //        if (button == calcButton)
+    //            return numberFormat;
+    //    }
+    //    return null;
+    //}
 
 }
 
