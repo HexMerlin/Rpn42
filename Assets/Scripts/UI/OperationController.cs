@@ -14,31 +14,17 @@ public class OperationController
 
     private StringBuilder inputBuf = new StringBuilder();
 
-    public CalcButtons CalcButtons;
+   // public ButtonCollection Buttons;
 
-    private Change CurrentChange = Change.CreateStart();
+    public Change CurrentChange = Change.CreateStart();
 
     public IReadOnlyList<NumberEntry> OutputEntries => outputEntries;
 
-    private Format _numberFormat = Format.Normal;
+    public Format NumberFormat { get; set; } = Format.Normal;
 
-    public Format NumberFormat
-    {
-
-        get => _numberFormat;
-        private set
-        {
-            this._numberFormat = value;
-            foreach ((CalcButton button, Format buttonFormat) in CalcButtons.ModeButtons)
-                button.SetSelected(buttonFormat == value);
-        }
-    }
-
-  
-    public OperationController(VisualElement buttonGrid)
+    public OperationController()
     {
         this.outputEntries = new List<NumberEntry>();
-        this.CalcButtons = new CalcButtons(buttonGrid);
         this.NumberFormat = Format.Normal;
 
     }
@@ -76,121 +62,12 @@ public class OperationController
         this.CurrentChange.IsUndoPoint = isUndoPoint;
     }
 
-    public void InputButtonPressed(CalcButton calcButton)
-    {
-        //if (CalcButtons.IsNumberFormatButton(calcButton) is Format numberFormat)
-        //{
-        //    NumberFormat = numberFormat;
-        //    return;
-
-        //}
-
-        //(this[FormatNormal], Format.Normal),
-        //(this[FormatBin], Format.Bin),
-        //    (this[FormatRepetend], Format.Repetend),
-        //    (this[FormatRotationsBin], Format.RotationsBin),
-        //    (this[FormatFactor], Format.Factor),
-        //    (this[FormatPeriod], Format.Period),
-        //    (this[FormatPartition], Format.Partition)
-
-        switch (calcButton.Name)
-        {
-            case CalcButtons.FormatNormal: NumberFormat = Format.Normal; return;
-            case CalcButtons.FormatBin: NumberFormat = Format.Bin; return;
-            case CalcButtons.FormatRepetend: NumberFormat = Format.Repetend; return;
-            case CalcButtons.FormatRotationsBin: NumberFormat = Format.RotationsBin; return;
-            case CalcButtons.FormatPeriod: NumberFormat = Format.Period; return;
-            case CalcButtons.FormatPartition: NumberFormat = Format.Partition; return;
-            case CalcButtons.FormatFactor: NumberFormat = Format.Factor; return;
-
-            case CalcButtons.Zero:
-            case CalcButtons.One:
-            case CalcButtons.Two:
-            case CalcButtons.Three:
-            case CalcButtons.Four:
-            case CalcButtons.Five:
-            case CalcButtons.Six:
-            case CalcButtons.Seven:
-            case CalcButtons.Eight:
-            case CalcButtons.Nine:
-                PerformAddInput(calcButton.UnityButton.text); //note: text on digit buttons maps verbatim to input strings
-                break;
-
-            case CalcButtons.Enter:
-                PerformUnaryOperation((a) => a, InputEmpty);
-                break;
-            case CalcButtons.BackDrop:
-                PerformBackDrop();
-                break;
-            case CalcButtons.Copy2:
-                PerformCopy2();
-                break;
-            case CalcButtons.Neg:
-                PerformUnaryOperation((a) => -a);
-                break;
-            case CalcButtons.Reciprocal:
-                PerformUnaryOperation((a) => a.Reciprocal);
-                break;
-            case CalcButtons.Square:
-                PerformUnaryOperation((a) => a.Square());
-                break;
-            case CalcButtons.Power:
-                PerformBinaryOperation((a, b) => a.Pow(b));
-                break;
-            case CalcButtons.Sum:
-                PerformBinaryOperation((a, b) => a + b);
-                break;
-            case CalcButtons.Diff:
-                PerformBinaryOperation((a, b) => a - b);
-                break;
-            case CalcButtons.Prod:
-                PerformBinaryOperation((a, b) => a * b);
-                break;
-            case CalcButtons.Quotient:
-                PerformBinaryOperation((a, b) => a / b);
-                break;
-            case CalcButtons.Clear:
-                PerformClear();
-                break;
-            case CalcButtons.Mod:
-                PerformBinaryOperation((a, b) => a % b);
-                break;
-            case CalcButtons.DivOnes:
-                PerformUnaryOperation((a) => a.DivideByNextMersenneNumber(mustBeCoprime: false));
-                break;
-            case CalcButtons.Undo:
-                PerformUndo();
-                break;
-            case CalcButtons.Redo:
-                PerformRedo();
-                break;
-            case CalcButtons.AsRepetend:
-                PerformUnaryOperation((a) => a.DivideByNextMersenneNumber(mustBeCoprime: true));
-                break;
-            case CalcButtons.AsBalanced:
-                PerformUnaryOperation((a) => a.AsBalanced());
-                break;
-            case CalcButtons.RepShiftLeft:
-                PerformUnaryOperation((a) => a.RepetendShiftLeft());
-                break;
-            case CalcButtons.RepShiftRight:
-                PerformUnaryOperation((a) => a.RepetendShiftRight()); 
-                break;
-            case CalcButtons.RepFactor:
-                PerformUnaryOperation((a) => Rational.FindUnitFractionWithRepetendFactor(a));
-                break;
-            default:
-                throw new ArgumentException($"Unhandled button name: {calcButton.Name}");
-            }
-        this.CurrentChange.IsUndoPoint = true;
-    }
-
     public void PerformAddInput(string input) => this.CurrentChange = this.CurrentChange.AddInput(input, inputBuf);
 
     public void PerformUnaryOperation(Func<Rational, Rational> operation, bool retainOperand = false)
-    {
-        (bool success, Rational operand) = PeekOperand();
-        if (!success) return; //need 1 operand to perform operation: abort operation
+    { 
+        (Rational _, Rational operand) = PeekOperands();
+        if (operand.IsInvalid) return; //need 1 operand to perform operation: abort operation
 
         Rational result = operation(operand);
 
@@ -208,8 +85,8 @@ public class OperationController
 
     public void PerformBinaryOperation(Func<Rational, Rational, Rational> operation)
     {
-        (bool success, Rational leftOperand, Rational rightOperand) = PeekOperands();
-        if (!success) return; //need 2 operands to perform operation: abort operation
+        (Rational leftOperand, Rational rightOperand) = PeekOperands();
+        if (leftOperand.IsInvalid || rightOperand.IsInvalid) return; //need 2 operands to perform operation: abort operation
 
         Rational result = operation(leftOperand, rightOperand);
 
@@ -288,31 +165,14 @@ public class OperationController
         }
     }
 
-    private (bool success, Rational operand) PeekOperand()
+
+    public (Rational leftOperand, Rational rightOperand) PeekOperands()
     {
-        if (OutputCount + (InputEmpty ? 0 : 1) >= 1)
-        {
-            Rational operand = InputEmpty ? LastOutput.Rational : new Rational(this.inputBuf.ToString());
-            if (!operand.IsInvalid)
-                return (true, operand);
-        }
-        return (false, Rational.Invalid);
+        Rational lastOutput = OutputCount > 0 ? LastOutput.Rational : Rational.Invalid;
+      
+        return InputEmpty ?
+            (OutputCount > 1 ? SecondLastOutput.Rational : Rational.Invalid, lastOutput)
+            : (lastOutput, new Rational(this.inputBuf.ToString()));
     }
-
-    public (bool success, Rational leftOperand, Rational rightOperand) PeekOperands()
-    {
-        if (OutputCount + (InputEmpty ? 0 : 1) >= 2)
-        {
-            Rational rightOperand = InputEmpty ? LastOutput.Rational : new Rational(this.inputBuf.ToString());
-            if (!rightOperand.IsInvalid)
-            {
-                Rational leftOperand = InputEmpty ? SecondLastOutput.Rational : LastOutput.Rational;
-                return (true, leftOperand, rightOperand);
-            }
-        }
-        return (false, Rational.Invalid, Rational.Invalid);
-    }
-
-
 
 }

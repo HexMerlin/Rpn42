@@ -1,8 +1,10 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Linq;
 using System.Numerics;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityButton = UnityEngine.UIElements.Button;
 
 public partial class MainViewController
 {
@@ -19,7 +21,9 @@ public partial class MainViewController
         VisualElement root = uiDocument.rootVisualElement;
         this.buttonGrid = Control<VisualElement>(buttonGridName);
 
-        this.OperationController = new(buttonGrid);
+        this.Buttons = new ButtonCollection(buttonGrid);
+
+        this.OperationController = new();
 
         Primes.Prepare(OnPrimesInstanceCompleted); //start preparing the prime factoring capability in the background
 
@@ -75,14 +79,12 @@ public partial class MainViewController
                 return;
             else if (integers.Length == 1)
             {
-                //Debug.Log("Cell clicked: " + integers[0]);
                 NumberEntry numberEntry = new NumberEntry(integers[0]);
                 OperationController.AddOutput(numberEntry, isUndoPoint: true);
                 DemandUIRefresh();
             }
             else
             {
-                //Debug.Log($"Multiple cell value clicked: {string.Join(", ", integers)}");
                 GuiEnable = false;
                 numberDialog.SetItems(integers.Select(i => i.ToString()));
                 numberDialog.Show();
@@ -92,8 +94,6 @@ public partial class MainViewController
 
     private void OnNumberDialogItemSelected(string selectedItem, bool cancelled)
     {
-        Debug.Log("User selected: " + selectedItem);
-
         if (cancelled)
         {
             GuiEnable = true;
@@ -131,20 +131,17 @@ public partial class MainViewController
 
     private void OnButtonGridClick(ClickEvent evt)
     {
-        if (evt.target is not Button unityButton)
+        if (evt.target is not UnityButton unityButton)
             return;
 
-        if (OperationController.CalcButtons.TryGetButton(unityButton.name) is not CalcButton button)
-        {
-            Debug.LogWarning($"Unhandled button: {unityButton.name}");
-            return;
-        }
+        ButtonBase? button = ButtonBase.Button(unityButton);
+        if (button is null) return; //button not assigned
 
         GuiEnable = false;
 
-        OperationController.InputButtonPressed(button);
+        button.Execute(OperationController);
+        OperationController.CurrentChange.IsUndoPoint = true;
 
-      
         DemandUIRefresh();
         GuiEnable = true;
        

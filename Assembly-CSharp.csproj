@@ -62,30 +62,50 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Math\Primes\Primes.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonClear.cs" />
     <Compile Include="Assets\Scripts\Math\Rational.Operations.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonPow.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonAsRepetend.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonRedo.cs" />
     <Compile Include="Assets\Scripts\Math\Rational.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonReciprocal.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonUndo.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonBackDrop.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\ButtonDigit.cs" />
     <Compile Include="Assets\Scripts\Math\BigIntegerExtensions.cs" />
     <Compile Include="Assets\Scripts\Math\Primes\Factorization.cs" />
     <Compile Include="Assets\Scripts\Logic\PersistenceManager.cs" />
     <Compile Include="Assets\Scripts\Logic\Change.Helpers.cs" />
     <Compile Include="Assets\Scripts\Logic\Format.cs" />
-    <Compile Include="Assets\Scripts\UI\ButtonEnter.cs" />
     <Compile Include="Assets\Scripts\Logic\SavedData.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonDiff.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonProd.cs" />
     <Compile Include="Assets\Scripts\Math\Primes\PrimeGenerator.cs" />
     <Compile Include="Assets\Scripts\UI\NumberDialog.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonRepFactor.cs" />
     <Compile Include="Assets\Scripts\Math\Rational.ToString.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonRepetendShiftRight.cs" />
     <Compile Include="Assets\Scripts\UI\OperationController.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonSum.cs" />
     <Compile Include="Assets\Scripts\Logic\Change.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\ButtonBase.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonRepetendShiftLeft.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonQuotient.cs" />
     <Compile Include="Assets\Scripts\UI\MainViewController.cs" />
     <Compile Include="Assets\Scripts\Logic\DeferredResult.cs" />
-    <Compile Include="Assets\Scripts\UI\ButtonQuotient.cs" />
+    <Compile Include="Assets\Scripts\UI\ButtonCollection.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonEnter.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonCopy2.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonMod.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonSquare.cs" />
     <Compile Include="Assets\Scripts\Logic\Tokenizer.cs" />
-    <Compile Include="Assets\Scripts\UI\CalcButton.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonAsBalanced.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\ButtonNumberFormatMode.cs" />
     <Compile Include="Assets\Scripts\Logic\NumberEntry.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonNeg.cs" />
     <Compile Include="Assets\Scripts\UI\MainViewController.Callbacks.cs" />
-    <Compile Include="Assets\Scripts\UI\CalcButtons.cs" />
-    <Compile Include="Assets\Scripts\UI\NumberFormatModeButton.cs" />
     <Compile Include="Assets\Scripts\Math\Rational.Experimental.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonDivMersenne.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\UI Toolkit\Styles\MainStyles.uss" />

@@ -6,7 +6,9 @@ using UnityEngine.UIElements;
 public partial class MainViewController : MonoBehaviour
 {
     [SerializeField] private UIDocument uiDocument;
- 
+
+    private ButtonCollection Buttons;
+
     private OperationController OperationController;
 
     private Label inputLabel;
@@ -91,12 +93,12 @@ public partial class MainViewController : MonoBehaviour
 
             this.output.RefreshItems();
 
-            this.OperationController.CalcButtons.ButtonFormatFactor.SetEnabled(Primes.IsReady);
-            this.OperationController.CalcButtons.ButtonFormatRepetend.SetEnabled(Primes.IsReady);
-            this.OperationController.CalcButtons.ButtonFormatPeriod.SetEnabled(Primes.IsReady);
+            this.Buttons.UpdateButtons(OperationController);
 
+         
             GuiEnable = storedGuiEnableState;
-
+            
+            this.output.selectedIndex = -1;
             if (this.OperationController.OutputCount > 0)
                 this.output.schedule.Execute(() => this.output.ScrollToItem(this.OperationController.OutputCount - 1));
             

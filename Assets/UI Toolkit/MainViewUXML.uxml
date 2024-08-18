@@ -1,7 +1,7 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <Style src="project://database/Assets/UI%20Toolkit/Styles/MainStyles.uss?fileID=7433441132597879392&amp;guid=c26ea74634aa43e44ae802e2bf7b21c6&amp;type=3#MainStyles" />
     <ui:VisualElement name="container" style="flex-grow: 1; background-color: rgb(0, 0, 0);">
-        <ui:MultiColumnListView name="output" virtualization-method="FixedHeight" show-bound-collection-size="false" focusable="false" horizontal-scrolling="true" selection-type="Single" show-foldout-header="false" show-add-remove-footer="false" fixed-item-height="50" allow-add="false" allow-remove="false" show-border="false" style="flex-grow: 10; flex-basis: auto; background-color: rgb(0, 0, 0); height: 45%; top: auto; font-size: 30px; -unity-text-align: lower-left;">
+        <ui:MultiColumnListView name="output" virtualization-method="FixedHeight" show-bound-collection-size="false" focusable="false" horizontal-scrolling="true" selection-type="Single" show-foldout-header="false" show-add-remove-footer="false" fixed-item-height="50" allow-add="false" allow-remove="false" show-border="false" style="flex-grow: 10; flex-basis: auto; background-color: rgb(0, 0, 0); height: 35%; top: auto; font-size: 30px; -unity-text-align: lower-left;">
             <ui:Columns resize-preview="false" reorderable="false" stretch-mode="Grow" resizable="false">
                 <ui:Column name="Column0" width="15%" sortable="false" stretchable="true" resizable="true" optional="false" title="Title0" />
                 <ui:Column name="Column1" width="10%" sortable="false" stretchable="true" resizable="true" optional="false" title="Title1" />
@@ -9,12 +9,24 @@
             </ui:Columns>
         </ui:MultiColumnListView>
         <ui:Label text="Input" name="input" class="label" style="-unity-text-align: upper-left; flex-grow: 0; height: 5%; font-size: 40px; color: rgb(252, 255, 0); background-color: rgb(51, 51, 51);" />
-        <ui:VisualElement name="button-grid" style="flex-grow: 8; flex-direction: column; flex-wrap: nowrap; justify-content: center; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-shrink: 1; position: relative; bottom: auto; top: auto; left: auto; right: auto; align-self: auto; flex-basis: auto; height: 50%; max-height: none; min-height: auto;">
-            <ui:VisualElement name="row-1" style="flex-grow: 1; flex-direction: row; justify-content: center;">
+        <ui:VisualElement name="button-grid" style="flex-grow: 8; flex-direction: column; flex-wrap: nowrap; justify-content: center; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; flex-shrink: 1; position: relative; bottom: auto; top: auto; left: auto; right: auto; align-self: auto; flex-basis: auto; height: 60%; max-height: none; min-height: auto;">
+            <ui:VisualElement name="row-0" style="flex-grow: 1; flex-direction: row; justify-content: center;">
                 <ui:Button name="button-format-normal" text="Normal" class="button mode-button" />
                 <ui:Button name="button-format-bin" text="Bin" class="button mode-button" />
                 <ui:Button name="button-format-repetend" text="Repetend" class="button mode-button" />
                 <ui:Button name="button-format-period" text="Period" class="button mode-button" />
+                <ui:Button name="button-pow" text="xʸ" class="button" />
+                <ui:Button class="button" />
+                <ui:Button class="button" />
+                <ui:Button class="button" />
+                <ui:Button class="button" />
+                <ui:Button class="button" />
+            </ui:VisualElement>
+            <ui:VisualElement name="row-1" style="flex-grow: 1; flex-direction: row; justify-content: center;">
+                <ui:Button name="button-format-partition" text="Partition" class="button mode-button" />
+                <ui:Button name="button-format-rotbin" text="Rot Bin" class="button mode-button" />
+                <ui:Button name="button-format-factor" text="Factor" class="button mode-button" />
+                <ui:Button class="button mode-button" />
                 <ui:Button name="button-square" text="x²" class="button" />
                 <ui:Button text="÷" name="button-quotient" class="button" />
                 <ui:Button text="7" name="button-7" class="button" />
@@ -23,10 +35,10 @@
                 <ui:Button text="←" name="button-back-drop" class="button" />
             </ui:VisualElement>
             <ui:VisualElement name="row-2" style="flex-grow: 1; flex-direction: row; justify-content: center;">
-                <ui:Button name="button-format-partition" text="Partition" class="button mode-button" />
-                <ui:Button name="button-format-rotbin" text="Rot Bin" class="button mode-button" />
-                <ui:Button name="button-format-factor" text="Factor" class="button mode-button" />
-                <ui:Button text="xʸ" name="button-pow" class="button" />
+                <ui:Button class="button" />
+                <ui:Button class="button" />
+                <ui:Button class="button" />
+                <ui:Button name="button-pow" class="button" />
                 <ui:Button name="button-reciprocal" text="1/x" class="button" />
                 <ui:Button text="x" name="button-prod" class="button" />
                 <ui:Button text="4" name="button-4" class="button" />
