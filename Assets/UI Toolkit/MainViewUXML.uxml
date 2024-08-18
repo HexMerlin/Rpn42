@@ -26,7 +26,7 @@
                 <ui:Button name="button-format-partition" text="Partition" class="button mode-button" />
                 <ui:Button name="button-format-rotbin" text="Rot Bin" class="button mode-button" />
                 <ui:Button name="button-format-factor" text="Factor" class="button mode-button" />
-                <ui:Button class="button" />
+                <ui:Button text="xʸ" name="button-pow" class="button" />
                 <ui:Button name="button-reciprocal" text="1/x" class="button" />
                 <ui:Button text="x" name="button-prod" class="button" />
                 <ui:Button text="4" name="button-4" class="button" />
@@ -48,7 +48,7 @@
             </ui:VisualElement>
             <ui:VisualElement name="row-4" style="flex-grow: 1; flex-direction: row; justify-content: center;">
                 <ui:Button name="button-clear" text="Clear" class="button" />
-                <ui:Button class="button" />
+                <ui:Button text="AsBal" name="button-as-bal" class="button" />
                 <ui:Button name="button-undo" text="Undo" class="button" />
                 <ui:Button text="Redo" name="button-redo" class="button" />
                 <ui:Button name="button-mod" text="Mod" class="button" />

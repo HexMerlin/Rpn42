@@ -82,6 +82,7 @@
     <Compile Include="Assets\Scripts\Logic\NumberEntry.cs" />
     <Compile Include="Assets\Scripts\UI\MainViewController.Callbacks.cs" />
     <Compile Include="Assets\Scripts\UI\CalcButtons.cs" />
+    <Compile Include="Assets\Scripts\Math\Rational.Experimental.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\UI Toolkit\Styles\MainStyles.uss" />

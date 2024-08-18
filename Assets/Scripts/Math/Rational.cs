@@ -33,7 +33,7 @@ public partial class Rational : IEquatable<Rational>, IComparable<Rational>
     public static Rational Half => new Rational(1, 2, false);
 
     public bool IsInteger => Denominator == 1;
-
+   
     public bool IsTerminating => Denominator >= 1 && Denominator.IsPowerOfTwo;
 
     public bool IsRadixPoint => Denominator == RadixPoint.Denominator;
@@ -53,14 +53,14 @@ public partial class Rational : IEquatable<Rational>, IComparable<Rational>
     [JsonConstructor]
     public Rational(BigInteger numerator, BigInteger denominator) : this(numerator, denominator, true) { }
 
-    private Rational(BigInteger numerator, BigInteger denominator, bool checkAndNormalize)
+    private Rational(BigInteger numerator, BigInteger denominator, bool normalize)
     {
         Numerator = numerator;
         Denominator = denominator;
         computedLength = UninitializedInt;
         computedPeriod = UninitializedInt;
 
-        if (checkAndNormalize)
+        if (normalize)
         {
             if (Denominator <= 0)
             {
@@ -112,6 +112,17 @@ public partial class Rational : IEquatable<Rational>, IComparable<Rational>
     public Rational FractionalPart => this - IntegerPart;
 
     public int IntegerLength => (int)BigInteger.Abs(IntegerPart).GetBitLength();
+
+    public bool TryCastToInt32(out int result)
+    {
+        if (Denominator == 1 && Numerator <= int.MaxValue && Numerator >= int.MinValue)
+        {
+            result = (int)Numerator;
+            return true;
+        }
+        result = int.MinValue;
+        return false;
+    }
 
     public Rational this[int index] => (this << (index - IntegerLength)).FractionalPart;
 
@@ -258,6 +269,8 @@ public partial class Rational : IEquatable<Rational>, IComparable<Rational>
 
             
         }
+        if (computedPeriod == -1)
+            computedPeriod = 0;
     }
 
 

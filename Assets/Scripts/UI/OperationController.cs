@@ -83,9 +83,25 @@ public class OperationController
             return;
 
         }
-       
+
+        //(this[FormatNormal], Format.Normal),
+        //(this[FormatBin], Format.Bin),
+        //    (this[FormatRepetend], Format.Repetend),
+        //    (this[FormatRotationsBin], Format.RotationsBin),
+        //    (this[FormatFactor], Format.Factor),
+        //    (this[FormatPeriod], Format.Period),
+        //    (this[FormatPartition], Format.Partition)
+
         switch (calcButton.Name)
         {
+            //case CalcButtons.FormatNormal: NumberFormat = Format.Normal; return;
+            //case CalcButtons.FormatBin: NumberFormat = Format.Bin; return;
+            //case CalcButtons.FormatRepetend: NumberFormat = Format.Repetend; return;
+            //case CalcButtons.FormatRotationsBin: NumberFormat = Format.RotationsBin; return;
+            //case CalcButtons.FormatPeriod: NumberFormat = Format.Period; return;
+            //case CalcButtons.FormatPartition: NumberFormat = Format.Partition; return;
+            //case CalcButtons.FormatFactor: NumberFormat = Format.Factor; return;
+
             case CalcButtons.Zero:
             case CalcButtons.One:
             case CalcButtons.Two:
@@ -139,7 +155,10 @@ public class OperationController
                 PerformUnaryOperation((a) => a.Reciprocal);
                 break;
             case CalcButtons.Square:
-                PerformUnaryOperation((a) => a * a);
+                PerformUnaryOperation((a) => a.Square());
+                break;
+            case CalcButtons.Power:
+                PerformBinaryOperation((a, b) => a.Pow(b));
                 break;
             case CalcButtons.Sum:
                 PerformBinaryOperation((a, b) => a + b);
@@ -174,7 +193,10 @@ public class OperationController
                 break;
             case CalcButtons.AsRepetend:
                 PerformUnaryOperation((a) => a.DivideByNextMersenneNumber(mustBeCoprime: true));
-                break;  
+                break;
+            case CalcButtons.AsBalanced:
+                PerformUnaryOperation((a) => a.AsBalanced());
+                break;
             case CalcButtons.RepShiftLeft:
                 PerformUnaryOperation((a) => a.RepetendShiftLeft());
                 break;

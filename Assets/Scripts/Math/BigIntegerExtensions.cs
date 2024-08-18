@@ -1,6 +1,9 @@
 ﻿#nullable enable
 using System;
+using System.Collections.Generic;
 using System.Numerics;
+using System.Text;
+using Unity.Mathematics;
 
 public static class BigIntegerExtensions
 {
@@ -42,4 +45,5 @@ public static class BigIntegerExtensions
     }
 
     private static bool IsPowerOfTwo(byte b) => (b & (b - 1)) == 0;
+
 }

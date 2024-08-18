@@ -52,6 +52,7 @@ public partial class Rational
 
         return sb.ToString();
     }
+
     public string ToStringDecimal(int maxDecimalDigits = 50)
     {
       

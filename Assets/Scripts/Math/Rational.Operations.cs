@@ -37,7 +37,6 @@ public partial class Rational
 
     public static Rational operator +(Rational a, Rational b) => new(a.Numerator * b.Denominator + b.Numerator * a.Denominator, a.Denominator * b.Denominator);
 
-
     public static Rational operator -(Rational a, Rational b) => new(a.Numerator * b.Denominator - b.Numerator * a.Denominator, a.Denominator * b.Denominator);
 
     public static Rational operator *(Rational a, Rational b) => new(a.Numerator * b.Numerator, a.Denominator * b.Denominator);
@@ -61,73 +60,30 @@ public partial class Rational
 
         return new(newNumerator, newDenominator);
     }
-    public static Rational operator >>(Rational a, int shift)
-    {
-        if (shift <= 0) return shift == 0 ? a : a << -shift;
 
-        bool normalizeNeeded = a.Numerator.IsEven;
-        return new(a.Numerator, a.Denominator << shift, normalizeNeeded);
-    }
+    public static Rational operator <<(Rational a, int shift) =>
+     shift >= 0
+         ? new(a.Numerator << shift, a.Denominator, normalize: a.Numerator.IsEven)
+         : a >> -shift;
 
-    public static Rational operator <<(Rational a, int shift)
-    {
-        if (shift <= 0) return shift == 0 ? a : a >> -shift;
-        bool normalizeNeeded = a.Denominator.IsEven;
-        return new(a.Numerator << shift, a.Denominator, normalizeNeeded);
-    }
+    public static Rational operator >>(Rational a, int shift) =>
+        shift >= 0
+            ? new(a.Numerator, a.Denominator << shift, normalize: a.Denominator.IsEven)
+            : a << -shift;
+
+    public Rational Square() => new Rational(Numerator * Numerator, Denominator * Denominator, false);
 
     public Rational Abs => new(BigInteger.Abs(Numerator), Denominator, false);
 
-    public Rational DivideByNextMersenneNumber(bool mustBeCoprime = false) => this / NextMersenneNumber(Numerator, mustBeCoprime);
 
-    public static BigInteger NextMersenneNumber(BigInteger num, bool mustBeCoprime)
+    public Rational Pow(Rational exponent) => exponent.TryCastToInt32(out int exponentInt) ? Pow(exponentInt) : Invalid;
+
+    public Rational Pow(int exponent) => exponent switch
     {
-        num = BigInteger.Abs(num);
-        
-        BigInteger mersenne = 1;
-        while (mersenne <= num + 1)
-            mersenne <<= 1;
-        
-        if (mustBeCoprime)
-            while (!BigInteger.GreatestCommonDivisor(num, mersenne - 1).IsOne)
-                mersenne <<= 1;
-
-        return mersenne - 1;
-    }
-
-    public Rational RepetendShiftLeft()
-    {
-        int period = Period;  
-        BigInteger x = (BigInteger.One << (period - 1)) - 1;
-        BigInteger y = (BigInteger.One << (period - 2)) - 1;
-        return this * x / y;
-    }
-
-    public Rational RepetendShiftRight()
-    {
-        int period = Period;
-        BigInteger x = (BigInteger.One << period) - 1;
-        BigInteger y = (BigInteger.One << (period - 1)) - 1;
-        return this * y / x;
-    }
-
-    public static Rational FindUnitFractionWithRepetendFactor(Rational repetendFactor)
-    {
-        if (!repetendFactor.IsInteger)
-            return Invalid;
-
-        BigInteger repetendFactorToFind = repetendFactor.Numerator;
-        for (int i = 3; i < 20000; i += 2)
-        {
-            Rational r = new(1, i);
-            BigInteger repetendAsInt = r.RepetendAsInteger;
-            if (repetendAsInt.IsZero)
-                continue;
-            if (repetendAsInt % repetendFactorToFind == 0)
-                return r;
-        }
-        return Invalid;
-    }
+        > 0 => new Rational(BigInteger.Pow(Numerator, exponent), BigInteger.Pow(Denominator, exponent)),
+        < 0 => new Rational(BigInteger.Pow(Denominator, -exponent), BigInteger.Pow(Numerator, -exponent)), //Numerator and Denominator are flipped
+        _ => Rational.One,
+    };
 
     public override bool Equals(object obj) => obj is Rational other && Equals(other);
     public override int GetHashCode() => HashCode.Combine(Numerator, Denominator);

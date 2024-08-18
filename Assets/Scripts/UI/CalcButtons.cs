@@ -23,6 +23,7 @@ public class CalcButtons
     public const string Neg = "button-neg";
     public const string Reciprocal = "button-reciprocal";
     public const string Square = "button-square";
+    public const string Power = "button-pow";
     public const string Sum = "button-sum";
     public const string Diff = "button-diff";
     public const string Prod = "button-prod";
@@ -34,6 +35,7 @@ public class CalcButtons
     public const string Redo = "button-redo";
     public const string RepFactor = "button-rep-factor";
     public const string AsRepetend = "button-as-repetend";
+    public const string AsBalanced = "button-as-bal";
     public const string RepShiftLeft = "button-rep-shift-left";
     public const string RepShiftRight = "button-rep-shift-right";
     public const string FormatNormal = "button-format-normal";
@@ -58,8 +60,8 @@ public class CalcButtons
 
         AddAll(
             Zero, One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Enter,
-            BackDrop, Copy2, Neg, Reciprocal, Square, Sum, Diff, Prod, Quotient,
-            Clear, Mod, DivOnes, Undo, Redo, AsRepetend, RepShiftLeft, RepShiftRight, RepFactor,
+            BackDrop, Copy2, Neg, Reciprocal, Square, Power, Sum, Diff, Prod, Quotient,
+            Clear, Mod, DivOnes, Undo, Redo, AsRepetend, AsBalanced, RepShiftLeft, RepShiftRight, RepFactor,
             FormatNormal, FormatBin, FormatRepetend, FormatRotationsBin, FormatFactor, FormatPeriod, FormatPartition
         );
 
