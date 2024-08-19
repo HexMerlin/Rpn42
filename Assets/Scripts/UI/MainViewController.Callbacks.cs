@@ -43,9 +43,9 @@ public partial class MainViewController
             output.columns[columnIndex].makeCell = makeCell;
         }
 
-        this.output.columns[0].bindCell = (e, row) => (e as Label).text = OperationController[row].ColumnData(0, this.OperationController.NumberFormat);
-        this.output.columns[1].bindCell = (e, row) => (e as Label).text = OperationController[row].ColumnData(1, this.OperationController.NumberFormat);
-        this.output.columns[2].bindCell = (e, row) => (e as Label).text = OperationController[row].ColumnData(2, this.OperationController.NumberFormat);
+        this.output.columns[0].bindCell = (e, row) => ((Label) e).text = OperationController[row].ColumnData(0, this.OperationController.NumberFormat);
+        this.output.columns[1].bindCell = (e, row) => ((Label) e).text = OperationController[row].ColumnData(1, this.OperationController.NumberFormat);
+        this.output.columns[2].bindCell = (e, row) => ((Label) e).text = OperationController[row].ColumnData(2, this.OperationController.NumberFormat);
 
         this.output.makeNoneElement = () => new Label(""); //avoid message "List is empty"
 

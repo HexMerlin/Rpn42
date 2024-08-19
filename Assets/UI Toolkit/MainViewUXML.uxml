@@ -26,7 +26,7 @@
                 <ui:Button name="button-format-partition" text="Partition" class="button mode-button" />
                 <ui:Button name="button-format-rotbin" text="Rot Bin" class="button mode-button" />
                 <ui:Button name="button-format-factor" text="Factor" class="button mode-button" />
-                <ui:Button class="button mode-button" />
+                <ui:Button class="button" />
                 <ui:Button name="button-square" text="x²" class="button" />
                 <ui:Button text="÷" name="button-quotient" class="button" />
                 <ui:Button text="7" name="button-7" class="button" />
