@@ -4,86 +4,394 @@
         <name>MathLib</name>
     </assembly>
     <members>
+        <member name="T:MathLib.BigIntegerExtensions">
+            <summary>
+            Provides a set of extension methods for the <see cref="T:System.Numerics.BigInteger"/> struct, enabling additional functionality
+            such as determining whether a number is odd, computing its absolute value, and calculating its bit length.
+            </summary>
+        </member>
+        <member name="M:MathLib.BigIntegerExtensions.IsOdd(System.Numerics.BigInteger)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Numerics.BigInteger"/> value is odd.
+            </summary>
+            <param name="value">The <see cref="T:System.Numerics.BigInteger"/> value to check.</param>
+            <returns>true if the value is odd; otherwise, false.</returns>
+        </member>
+        <member name="M:MathLib.BigIntegerExtensions.Abs(System.Numerics.BigInteger)">
+            <summary>
+            Computes the absolute value of the specified <see cref="T:System.Numerics.BigInteger"/> value.
+            </summary>
+            <param name="value">The <see cref="T:System.Numerics.BigInteger"/> value whose absolute value is to be computed.</param>
+            <returns>A <see cref="T:System.Numerics.BigInteger"/> representing the absolute value of the input.</returns>
+        </member>
+        <member name="M:MathLib.BigIntegerExtensions.GetBitLength(System.Numerics.BigInteger)">
+            <summary>
+            Calculates the bit length of the specified <see cref="T:System.Numerics.BigInteger"/> value.
+            The bit length is defined as the number of bits required to represent the value in binary, excluding leading zeros.
+            </summary>
+            <param name="value">The <see cref="T:System.Numerics.BigInteger"/> value whose bit length is to be calculated.</param>
+            <returns>The bit length of the input <see cref="T:System.Numerics.BigInteger"/> value.</returns>
+            <remarks>
+            This method handles both positive and negative values, including special cases such as zero and powers of two.
+            For negative values, the bit length considers the two's complement representation.
+            </remarks>
+        </member>
+        <member name="M:MathLib.BigIntegerExtensions.GetLeadingBitIndex(System.Byte)">
+            <summary>
+            Determines the index of the most significant (leading) bit set to 1 in the specified byte.
+            </summary>
+            <param name="b">The byte to examine.</param>
+            <returns>The index of the most significant bit set to 1, or -1 if all bits are 0.</returns>
+        </member>
+        <member name="M:MathLib.BigIntegerExtensions.IsPowerOfTwo(System.Byte)">
+            <summary>
+            Determines whether the specified byte represents a power of two.
+            </summary>
+            <param name="b">The byte to check.</param>
+            <returns>true if the byte represents a power of two; otherwise, false.</returns>
+        </member>
+        <member name="T:MathLib.PAdics.ModP">
+            <summary>
+            Represents an element in the finite field GF(p), where p is a prime number.
+            This class supports arithmetic operations modulo p, including addition, subtraction,
+            multiplication, and division. These operations are performed in the context of a 
+            Galois field, ensuring that the results stay within the finite field.
+            </summary>
+        </member>
+        <member name="P:MathLib.PAdics.ModP.N">
+            <summary>
+            The value of the element in the finite field GF(p).
+            </summary>
+        </member>
+        <member name="P:MathLib.PAdics.ModP.P">
+            <summary>
+            The prime modulus p defining the finite field GF(p).
+            </summary>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.#ctor(System.Numerics.BigInteger,System.Numerics.BigInteger)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MathLib.PAdics.ModP"/> class, representing
+            an element in the finite field GF(p).
+            </summary>
+            <param name="n">The value of the element.</param>
+            <param name="p">The prime modulus p that defines the finite field GF(p).</param>
+            <exception cref="T:System.ArgumentException">Thrown when p is not a prime number.</exception>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.op_Addition(MathLib.PAdics.ModP,MathLib.PAdics.ModP)">
+            <summary>
+            Adds two elements in the finite field GF(p).
+            </summary>
+            <param name="a">An element in the finite field GF(p).</param>
+            <param name="b">Another element in the finite field GF(p).</param>
+            <returns>The sum of the two elements, also an element of GF(p).</returns>
+            <example>
+            <code>
+            var a = new ModP(3, 5);
+            var b = new ModP(4, 5);
+            var result = a + b; // result is 2 in GF(5)
+            </code>
+            </example>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.op_Subtraction(MathLib.PAdics.ModP,MathLib.PAdics.ModP)">
+            <summary>
+            Subtracts one element from another in the finite field GF(p).
+            </summary>
+            <param name="a">An element in the finite field GF(p).</param>
+            <param name="b">Another element in the finite field GF(p).</param>
+            <returns>The difference of the two elements, also an element of GF(p).</returns>
+            <example>
+            <code>
+            var a = new ModP(3, 5);
+            var b = new ModP(4, 5);
+            var result = a - b; // result is 4 in GF(5)
+            </code>
+            </example>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.op_Multiply(MathLib.PAdics.ModP,MathLib.PAdics.ModP)">
+            <summary>
+            Multiplies two elements in the finite field GF(p).
+            </summary>
+            <param name="a">Ab element in the finite field GF(p).</param>
+            <param name="b">Another element in the finite field GF(p).</param>
+            <returns>The product of the two elements, also an element of GF(p).</returns>
+            <example>
+            <code>
+            var a = new ModP(3, 5);
+            var b = new ModP(4, 5);
+            var result = a * b; // result is 2 in GF(5)
+            </code>
+            </example>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.op_Division(MathLib.PAdics.ModP,MathLib.PAdics.ModP)">
+            <summary>
+            Divides one element by another in the finite field GF(p).
+            </summary>
+            <param name="a">Ab element in the finite field GF(p).</param>
+            <param name="b">Another element in the finite field GF(p).</param>
+            <returns>The quotient of the two elements, also an element of GF(p).</returns>
+            <exception cref="T:System.DivideByZeroException">Thrown when attempting to divide by zero.</exception>
+            <example>
+            <code>
+            var a = new ModP(3, 5);
+            var b = new ModP(4, 5);
+            var result = a / b; // result is 2 in GF(5)
+            </code>
+            </example>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.Inverse">
+            <summary>
+            Computes the multiplicative inverse of this element in the finite field GF(p).
+            </summary>
+            <returns>The multiplicative inverse of this element, which, when multiplied by the original element, 
+            results in 1 in the finite field GF(p). This operation is essential in division within the field.
+            </returns>
+            <exception cref="T:System.DivideByZeroException">
+            Thrown when the element is zero because zero does not have a multiplicative inverse.
+            </exception>
+            <example>
+            <code>
+            var a = new ModP(3, 5);
+            var inverse = a.Inverse(); // inverse is 2 in GF(5) because 3 * 2 % 5 = 1
+            </code>
+            </example>
+            <remarks>
+            The multiplicative inverse of an element "a" in a finite field GF(p) is another element "b" such that 
+            the product of "a" and "b" is congruent to 1 modulo p. For example, in GF(5), the multiplicative inverse 
+            of 3 is 2 because (3 * 2) % 5 = 1. This method uses the Extended Euclidean Algorithm to find such an element.
+            </remarks>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.Equals(System.Object)">
+            <summary>
+            Determines whether the specified element is equal to the current element.
+            </summary>
+            <param name="obj">Another element to compare with.</param>
+            <returns>true if the elements are equal; otherwise, false.</returns>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.GetHashCode">
+            <summary>
+            Returns a hash code for this instance.
+            </summary>
+            <returns>A hash code for this instance.</returns>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.ToString">
+            <summary>
+            Returns a string that represents the current element.
+            </summary>
+            <returns>A string that represents the current element in the format "n % p".</returns>
+            <example>
+            <code>
+            var a = new ModP(3, 5);
+            Console.WriteLine(a); // Outputs "3 % 5"
+            </code>
+            </example>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.IsPrime(System.Numerics.BigInteger)">
+            <summary>
+            Determines whether a given number is prime.
+            </summary>
+            <param name="number">The number to check.</param>
+            <returns>true if the number is prime; otherwise, false.</returns>
+        </member>
+        <member name="T:MathLib.PAdics.PAdic">
+            <summary>
+            Represents a p-adic number with a specified prime base and precision.
+            P-adic numbers are a system of numbers that extends the ordinary arithmetic of the integers 
+            in a different way than the extension to the real and complex number systems.
+            </summary>
+        </member>
+        <member name="P:MathLib.PAdics.PAdic.Num">
+            <summary>
+            Gets the numerical value representing the p-adic number.
+            </summary>
+        </member>
+        <member name="P:MathLib.PAdics.PAdic.P">
+            <summary>
+            Gets the prime base <see cref="T:System.Numerics.BigInteger"/> value used for the p-adic number.
+            </summary>
+        </member>
+        <member name="P:MathLib.PAdics.PAdic.Precision">
+            <summary>
+            Gets the precision, which is the number of significant digits in the p-adic number.
+            </summary>
+        </member>
+        <member name="P:MathLib.PAdics.PAdic.Valuation">
+            <summary>
+            Gets the valuation, which is the highest power of the base <see cref="P:MathLib.PAdics.PAdic.P"/> that divides the number.
+            </summary>
+        </member>
+        <member name="M:MathLib.PAdics.PAdic.#ctor(MathLib.Q,System.Numerics.BigInteger,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MathLib.PAdics.PAdic"/> class from a rational number.
+            Converts the given rational number into its p-adic equivalent.
+            </summary>
+            <param name="q">The rational number to convert to a p-adic number.</param>
+            <param name="p">The prime base for the p-adic number.</param>
+            <param name="precision">The precision of the p-adic number, defined as the number of significant digits.</param>
+            <exception cref="T:System.ArgumentException">Thrown if <paramref name="p"/> is not a prime number.</exception>
+        </member>
+        <member name="M:MathLib.PAdics.PAdic.CalculateValuation(System.Numerics.BigInteger)">
+            <summary>
+            Calculates the p-adic valuation of a given <see cref="T:System.Numerics.BigInteger"/> number.
+            The valuation is defined as the highest power of the base <see cref="P:MathLib.PAdics.PAdic.P"/> that divides the number.
+            </summary>
+            <param name="num">The number whose valuation is to be calculated.</param>
+            <returns>The valuation of the number with respect to the base <see cref="P:MathLib.PAdics.PAdic.P"/>.</returns>
+        </member>
+        <member name="M:MathLib.PAdics.PAdic.ConvertToPAdic(MathLib.Q,System.Int32)">
+            <summary>
+            Converts a rational number into its p-adic equivalent with the specified precision.
+            </summary>
+            <param name="q">The rational number to convert.</param>
+            <param name="precision">The precision, or number of significant digits, for the p-adic number.</param>
+            <returns>A <see cref="T:System.Numerics.BigInteger"/> representing the p-adic number.</returns>
+        </member>
+        <member name="M:MathLib.PAdics.PAdic.ToString">
+            <summary>
+            Returns a string representation of the p-adic number, displaying the prime base, precision, 
+            and the numerical value with its valuation.
+            </summary>
+            <returns>A string representation of the p-adic number.</returns>
+        </member>
+        <member name="M:MathLib.PAdics.PAdic.op_Addition(MathLib.PAdics.PAdic,MathLib.PAdics.PAdic)">
+            <summary>
+            Adds two p-adic numbers.
+            </summary>
+            <param name="a">The first p-adic number to add.</param>
+            <param name="b">The second p-adic number to add.</param>
+            <returns>A new <see cref="T:MathLib.PAdics.PAdic"/> instance representing the sum of <paramref name="a"/> and <paramref name="b"/>.</returns>
+            <exception cref="T:System.ArgumentException">Thrown if <paramref name="a"/> and <paramref name="b"/> do not have the same prime base.</exception>
+        </member>
+        <member name="M:MathLib.PAdics.PAdic.op_Subtraction(MathLib.PAdics.PAdic,MathLib.PAdics.PAdic)">
+            <summary>
+            Subtracts one p-adic number from another.
+            </summary>
+            <param name="a">The p-adic number to subtract from.</param>
+            <param name="b">The p-adic number to subtract.</param>
+            <returns>A new <see cref="T:MathLib.PAdics.PAdic"/> instance representing the difference between <paramref name="a"/> and <paramref name="b"/>.</returns>
+        </member>
+        <member name="M:MathLib.PAdics.PAdic.op_Multiply(MathLib.PAdics.PAdic,MathLib.PAdics.PAdic)">
+            <summary>
+            Multiplies two p-adic numbers.
+            </summary>
+            <param name="a">The first p-adic number to multiply.</param>
+            <param name="b">The second p-adic number to multiply.</param>
+            <returns>A new <see cref="T:MathLib.PAdics.PAdic"/> instance representing the product of <paramref name="a"/> and <paramref name="b"/>.</returns>
+            <exception cref="T:System.ArgumentException">Thrown if <paramref name="a"/> and <paramref name="b"/> do not have the same prime base.</exception>
+        </member>
+        <member name="M:MathLib.PAdics.PAdic.op_Division(MathLib.PAdics.PAdic,MathLib.PAdics.PAdic)">
+            <summary>
+            Divides one p-adic number by another.
+            </summary>
+            <param name="a">The p-adic number to divide.</param>
+            <param name="b">The p-adic number by which to divide.</param>
+            <returns>A new <see cref="T:MathLib.PAdics.PAdic"/> instance representing the quotient of <paramref name="a"/> divided by <paramref name="b"/>.</returns>
+            <exception cref="T:System.ArgumentException">Thrown if <paramref name="a"/> and <paramref name="b"/> do not have the same prime base.</exception>
+        </member>
+        <member name="M:MathLib.PAdics.PAdic.op_UnaryNegation(MathLib.PAdics.PAdic)">
+            <summary>
+            Negates the current p-adic number.
+            </summary>
+            <param name="a">The p-adic number to negate.</param>
+            <returns>A new <see cref="T:MathLib.PAdics.PAdic"/> instance representing the negated value of <paramref name="a"/>.</returns>
+        </member>
+        <member name="M:MathLib.PAdics.PAdic.IsPrime(System.Numerics.BigInteger)">
+            <summary>
+            Determines whether a given number is prime.
+            </summary>
+            <param name="number">The number to check.</param>
+            <returns>true if the number is prime; otherwise, false.</returns>
+        </member>
         <member name="T:MathLib.Prime.Factorization">
             <summary>
-            Represents the result of factoring an integer into its prime factors.
+            Represents the prime factorization of an integer, potentially partial.
+            Supports composite remainder factors and handles negative integers.
             </summary>
+            <remarks>
+            Initializes a new <see cref="T:MathLib.Prime.Factorization"/> instance.
+            </remarks>
+            <param name="primeFactors">The prime factors in ascending order.</param>
+            <param name="remainderFactor">
+            The remainder after factoring, which may be composite or negative.
+            </param>
+        </member>
+        <member name="M:MathLib.Prime.Factorization.#ctor(System.Int32[],System.Numerics.BigInteger)">
+            <summary>
+            Represents the prime factorization of an integer, potentially partial.
+            Supports composite remainder factors and handles negative integers.
+            </summary>
+            <remarks>
+            Initializes a new <see cref="T:MathLib.Prime.Factorization"/> instance.
+            </remarks>
+            <param name="primeFactors">The prime factors in ascending order.</param>
+            <param name="remainderFactor">
+            The remainder after factoring, which may be composite or negative.
+            </param>
         </member>
         <member name="F:MathLib.Prime.Factorization.PrimeFactors">
             <summary>
-            The prime factors of the integer in increasing order.
+            The prime factors in ascending order.
             </summary>
         </member>
         <member name="F:MathLib.Prime.Factorization.RemainderFactor">
             <summary>
-            The remainder factor of the integer after factoring.
-            If the input integer was not fully factored, a remainder factor > 1 is left.
-            If the input integer was negative, the remainder factor is negative.
+            The remainder after factoring, which may be composite.
+            If the input was negative, the remainder carries the negative sign.
             </summary>
         </member>
         <member name="P:MathLib.Prime.Factorization.IsComplete">
             <summary>
-            A value indicating whether the factorization is complete to only primes.
-            Returns true if the factorization is complete, meaning there is no remainder factor other than 1.
-            Returns false if the factorization is partial, meaning there is a remainder factor that could be potentially composite.
+            Indicates if the factorization is complete (RemainderFactor is ±1).
             </summary>
         </member>
         <member name="P:MathLib.Prime.Factorization.IsZero">
             <summary>
-            Gets a value indicating whether the factored number is 0.
+            Indicates if the factored number is zero.
             </summary>
         </member>
         <member name="P:MathLib.Prime.Factorization.IsOne">
             <summary>
-            Gets a value indicating whether the factored number is 1.
+            Indicates if the factored number is one.
             </summary>
         </member>
         <member name="P:MathLib.Prime.Factorization.FactorCount">
             <summary>
-            The count of factors in the factorization.
+            The total count of factors, including the remainder if it is not ±1.
             </summary>
-        </member>
-        <member name="M:MathLib.Prime.Factorization.#ctor(System.Int32[],System.Numerics.BigInteger)">
-            <summary>
-            Initializes a new instance of the <see cref="T:MathLib.Prime.Factorization"/> class.
-            </summary>
-            <param name="primeFactors">The prime factors of the integer in increasing order.</param>
-            <param name="remainderFactor">The remainder factor of the integer after factoring.</param>
         </member>
         <member name="M:MathLib.Prime.Factorization.Equals(MathLib.Prime.Factorization)">
             <summary>
-            Determines whether the specified <see cref="T:MathLib.Prime.Factorization"/> object is equal to the current object.
+            Determines if this factorization is equal to another.
             </summary>
-            <param name="other">The <see cref="T:MathLib.Prime.Factorization"/> object to compare against.</param>
-            <returns>true if the objects are equal; otherwise, false.</returns>
+            <param name="other">The factorization to compare with.</param>
+            <returns>true if equal; otherwise, false.</returns>
         </member>
         <member name="M:MathLib.Prime.Factorization.Equals(System.Object)">
             <summary>
-            Determines whether the specified object is equal to the current object.
+            Determines if this object is equal to another.
             </summary>
-            <param name="obj">The object to compare with the current object.</param>
-            <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
+            <param name="obj">The object to compare with.</param>
+            <returns>true if equal; otherwise, false.</returns>
         </member>
         <member name="M:MathLib.Prime.Factorization.GetHashCode">
             <summary>
-            Serves as the default hash function.
+            Computes the hash code for this factorization.
             </summary>
-            <returns>A hash code for the current object.</returns>
+            <returns>The hash code.</returns>
         </member>
         <member name="P:MathLib.Prime.Factorization.FactoredInteger">
             <summary>
-            Gets the factored integer by multiplying all the prime factors with the remainder factor.
+            Computes the original integer from the factorization.
             </summary>
         </member>
         <member name="M:MathLib.Prime.Factorization.ToString">
             <summary>
-            Returns a string representation of the <see cref="T:MathLib.Prime.Factorization"/> object.
+            Returns the string representation of the factorization.
             </summary>
-            <returns>A string representation of the <see cref="T:MathLib.Prime.Factorization"/> object.</returns>
+            <returns>A string representing the factorization.</returns>
         </member>
         <member name="T:MathLib.Prime.PrimeGenerator">
             <summary>
-            Provides a method for generating prime numbers using a segmented sieve algorithm.
+            Generation of primes using a segmented sieve algorithm.
             </summary>
             <remarks>
             The <see cref="T:MathLib.Prime.PrimeGenerator"/> class uses a segmented sieve algorithm to efficiently generate prime numbers. 
@@ -106,12 +414,255 @@
             algorithm processes each segment.
             </remarks>
         </member>
-        <member name="P:MathLib.Q.Mixed">
+        <member name="T:MathLib.Prime.Primes">
             <summary>
-            Returns the rational number as a mixed number
+            Provides operations related to primes, such as factorization
             </summary>
             <remarks>
-            For any non-zero fractional part, the numerator is always <b>Odd</b>
+            The method <see cref="M:MathLib.Prime.Primes.Factorization(System.Numerics.BigInteger)"/> uses a highly parallelized algorithm. 
+            Since it will utilize all available cores, it will (for reduced context-switching and maximum performance) enforce only serial
+            execution between separate calls to the method. 
+            
+            The class does not consume any memory before being activated. This happens if either one of the main operations are called, 
+            or via an explicit call to <see cref="M:MathLib.Prime.Primes.Prepare(System.Action)"/>
+            </remarks>
+        </member>
+        <member name="F:MathLib.Prime.Primes.factorizationLock">
+            <summary>
+            Lock to enforce only one factorization method running at a time
+            </summary>
+        </member>
+        <member name="F:MathLib.Prime.Primes.MaxSupportedPrime">
+            <summary>
+            The maximum prime supported in factorization.
+            </summary>
+        </member>
+        <member name="M:MathLib.Prime.Primes.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MathLib.Prime.Primes"/> class.
+            </summary>
+            <param name="maxPrime">The maximum prime number supported. Default value is <see cref="F:MathLib.Prime.Primes.MaxSupportedPrime"/>.</param>
+            <param name="threadCount">The number of threads to use for generating prime numbers. Default value is -1, which means it will use the number of processors available in the system.</param>
+        </member>
+        <member name="P:MathLib.Prime.Primes.IsReady">
+            <summary>
+            Gets a value indicating whether the Primes instance is ready. All calls to this class will be queued until instance is ready
+            </summary>
+        </member>
+        <member name="M:MathLib.Prime.Primes.Prepare(System.Action)">
+            <summary>
+            Prepares the Primes instance for use in the background. 
+            </summary>
+            <remarks>
+            This method returns instantly.
+            If <see cref="M:MathLib.Prime.Primes.Prepare(System.Action)"/> is not called, everything will still work perfectly, 
+            but the first operation could take longer to complete.
+            
+            </remarks>
+            <param name="instanceReadyCallback">An optional callback to be invoked when the instance is ready.</param>
+        </member>
+        <member name="M:MathLib.Prime.Primes.Factorization(System.Numerics.BigInteger)">
+            <summary>
+            Performs the prime factorization of a given integer.
+            </summary>
+            <param name="integer">The integer to be factorized.</param>
+            <returns>A <see cref="M:MathLib.Prime.Primes.Factorization(System.Numerics.BigInteger)"/> object containing the prime factors and a remaining factor (that can be 1).</returns>
+            <seealso cref="M:MathLib.Prime.Primes.Factorization(System.Numerics.BigInteger)"/>
+        </member>
+        <member name="T:MathLib.Q">
+            <summary>
+            Represents a rational number, defined as the quotient of two <see cref="T:System.Numerics.BigInteger"/> values: a numerator and a denominator.
+            Provides functionality for various arithmetic operations.
+            Supports advanced operations related to binary representation, periodicity, and special number properties.
+            Includes methods for converting the rational number to various string formats, such as fractions, decimals, and binary representations.
+            Implements <see cref="T:System.IEquatable`1"/> for value-based equality comparisons and <see cref="T:System.IComparable`1"/> for ordering and comparisons.
+            </summary>
+            <remarks>The class methods should never throw exceptions. 
+            Instead, they return <see cref="P:MathLib.Q.Invalid"/> for undefined results (such as from divide by zero).
+            </remarks>
+        </member>
+        <member name="P:MathLib.Q.Numerator">
+            <summary>
+            The numerator of the rational number.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.Denominator">
+            <summary>
+            The denominator of the rational number, guaranteed to be positive in normalized form.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.Invalid">
+            <summary>
+            Represents an invalid rational number.
+            This is the return value of operations that are not define (e.g. when dividing by zero)
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.RadixPoint">
+            <summary>
+            Represents a delimiter for radix point position within binary rotations.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.RepetendStart">
+            <summary>
+            Represents the start of a repetend in the periodic part of the binary representation.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.RepetendEnd">
+            <summary>
+            Represents the end of a repetend in the periodic part of the binary representation.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.Zero">
+            <summary>
+            Represents the rational number zero.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.One">
+            <summary>
+            Represents the rational number one.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.Half">
+            <summary>
+            Represents the rational number one-half.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.IsInteger">
+            <summary>
+            Determines whether the rational number is an integer.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.IsTerminating">
+            <summary>
+            Determines whether the binary expansion of the rational number terminates.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.IsRadixPoint">
+            <summary>
+            Indicates whether the rational number is the radix point delimiter.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.IsRepetendStart">
+            <summary>
+            Indicates whether the rational number is the start of a repetend.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.IsRepetendEnd">
+            <summary>
+            Indicates whether the rational number is the end of a repetend.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.IsSpecialDelimiter">
+            <summary>
+            Determines whether the rational number is a special delimiter, such as radix point or repetend markers.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.IsInvalid">
+            <summary>
+            Determines whether the rational number is invalid, indicated by a zero denominator.
+            </summary>
+        </member>
+        <member name="M:MathLib.Q.#ctor">
+            <summary>
+            Initializes a rational number representing zero.
+            </summary>
+        </member>
+        <member name="M:MathLib.Q.#ctor(System.Numerics.BigInteger,System.Numerics.BigInteger)">
+            <summary>
+            Initializes a rational number with the specified numerator and denominator.
+            The rational number is automatically normalized to its simplest form.
+            </summary>
+            <param name="numerator">The numerator of the rational number.</param>
+            <param name="denominator">The denominator of the rational number. Must be non-zero.</param>
+        </member>
+        <member name="M:MathLib.Q.#ctor(System.Numerics.BigInteger,System.Numerics.BigInteger,System.Boolean)">
+            <summary>
+            Initializes a rational number with the specified numerator and denominator, with an option to skip normalization.
+            </summary>
+            <param name="numerator">The numerator of the rational number.</param>
+            <param name="denominator">The denominator of the rational number.</param>
+            <param name="normalize">If true, the rational number will be normalized.</param>
+        </member>
+        <member name="M:MathLib.Q.#ctor(System.Numerics.BigInteger)">
+            <summary>
+            Initializes a rational number with the specified integer value.
+            </summary>
+            <param name="numerator">The integer value.</param>
+        </member>
+        <member name="M:MathLib.Q.#ctor(System.String)">
+            <summary>
+            Initializes a rational number from its string representation.
+            The string can be an integer or a rational number in decimal form.
+            </summary>
+            <param name="input">The string representation of the rational number.</param>
+        </member>
+        <member name="P:MathLib.Q.IntegerPart">
+            <summary>
+            The integer part of the rational number.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.FractionalPart">
+            <summary>
+            The fractional part of the rational number, obtained by subtracting the integer part.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.IntegerLength">
+            <summary>
+            The bit length of the absolute value of the integer part.
+            </summary>
+        </member>
+        <member name="M:MathLib.Q.TryCastToInt32(System.Int32@)">
+            <summary>
+            Attempts to cast the rational number to a 32-bit integer, if possible.
+            </summary>
+            <param name="result">The resulting 32-bit integer if the cast is successful.</param>
+            <returns>true if the cast is successful; otherwise, false.</returns>
+        </member>
+        <member name="P:MathLib.Q.Item(System.Int32)">
+            <summary>
+            Retrieves the fractional part at a specified index of the binary expansion.
+            </summary>
+            <param name="index">The index in the binary expansion.</param>
+            <returns>The fractional part at the specified index.</returns>
+        </member>
+        <member name="M:MathLib.Q.Weight(System.Int32)">
+            <summary>
+            Computes the weight of the bit at the specified index in the binary expansion.
+            </summary>
+            <param name="index">The index in the binary expansion.</param>
+            <returns>The weight of the bit.</returns>
+        </member>
+        <member name="M:MathLib.Q.Term(System.Int32)">
+            <summary>
+            Computes the contribution of the bit at the specified index in the binary expansion.
+            </summary>
+            <param name="index">The index in the binary expansion.</param>
+            <returns>The contribution of the bit as a rational number.</returns>
+        </member>
+        <member name="P:MathLib.Q.RotationsBin">
+            <summary>
+            Iterates over the binary rotation sequence of the rational number.
+            Yields the fractional part at each rotation, with delimiters for the radix point and repetends.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.RotationsBalBin">
+            <summary>
+            Iterates over the balanced binary rotation sequence of the rational number.
+            The sequence is balanced by a left shift before rotation.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.Partition">
+            <summary>
+            Iterates over the partitioned binary expansion of the rational number.
+            Yields the contribution of each bit as a rational number.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.Mixed">
+            <summary>
+            Represents the rational number as a mixed number, where the numerator of the fractional part is always odd.
+            </summary>
+            <remarks>
+            The mixed number is represented as a tuple (Integer part, Fractional part).
             </remarks>
             <example>
             <code>7/3   →  2 + 1/3</code>
@@ -120,14 +671,356 @@
             <code>13/6  →  2 + 1/6</code>
             </example>
         </member>
+        <member name="P:MathLib.Q.Length">
+            <summary>
+            The total length of the binary expansion, including both non-repetitive and repetitive parts.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.Period">
+            <summary>
+            The length of the repetitive part of the binary expansion.
+            Returns zero if the binary expansion is non-repetitive.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.WeightFloor">
+            <summary>
+            Computes the largest power of two less than or equal to the absolute value of the rational number.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.RepetendAsInteger">
+            <summary>
+            Computes the repetend of the rational number as an integer, assuming the binary expansion has a periodic part.
+            </summary>
+        </member>
+        <member name="M:MathLib.Q.DivideByNextMersenneNumber(System.Boolean)">
+            <summary>
+            Divides the current rational number by the next Mersenne number greater than or equal to the numerator.
+            </summary>
+            <param name="mustBeCoprime">Indicates whether the Mersenne number must be coprime with the numerator.</param>
+            <returns>A new <see cref="T:MathLib.Q"/> instance resulting from the division.</returns>
+        </member>
+        <member name="M:MathLib.Q.NextMersenneNumber(System.Numerics.BigInteger,System.Boolean)">
+            <summary>
+            Finds the next Mersenne number that is greater than or equal to the specified number.
+            If <paramref name="mustBeCoprime"/> is true, the method continues searching until a Mersenne number is found
+            that is coprime with the input number.
+            </summary>
+            <param name="num">The number for which the next Mersenne number is to be found.</param>
+            <param name="mustBeCoprime">Specifies whether the Mersenne number must be coprime with <paramref name="num"/>.</param>
+            <returns>The next Mersenne number that is equal to or larger than <paramref name="num"/>.</returns>
+        </member>
+        <member name="M:MathLib.Q.RepetendShiftLeft">
+            <summary>
+            Returns a new <see cref="T:MathLib.Q"/> with a repetend (interpreted as an integer) that is binary shifted 1 step to the left
+            compared to the original repetend (interpreted as an integer).
+            </summary>
+            <returns>A new <see cref="T:MathLib.Q"/> instance with the shifted repetend.</returns>
+        </member>
+        <member name="M:MathLib.Q.RepetendShiftRight">
+            <summary>
+            Returns a new <see cref="T:MathLib.Q"/> with a repetend (interpreted as an integer) that is binary shifted 1 step to the right
+            compared to the original repetend (interpreted as an integer).
+            </summary>
+            <returns>A new <see cref="T:MathLib.Q"/> instance with the shifted repetend.</returns>
+        </member>
+        <member name="M:MathLib.Q.FindUnitFractionWithRepetendFactor(MathLib.Q)">
+            <summary>
+            Finds the unit fraction (1/x) with the smallest integer x that has a repetend interpreted as an integer containing
+            the specified factor.
+            </summary>
+            <param name="repetendFactor">The factor to be contained in the repetend of the unit fraction.</param>
+            <returns>A <see cref="T:MathLib.Q"/> representing the unit fraction with the specified factor in its repetend, or <see cref="P:MathLib.Q.Invalid"/> if not found.</returns>
+        </member>
+        <member name="M:MathLib.Q.AsBalanced">
+            <summary>
+            Interprets the binary expansion of the rational number as a balanced binary number.
+            </summary>
+            <returns>The balanced binary number represented by the rational number's binary expansion.</returns>
+        </member>
+        <member name="P:MathLib.Q.IsZero">
+            <summary>
+            Indicates whether the rational number is zero.
+            </summary>
+        </member>
+        <member name="P:MathLib.Q.IsOne">
+            <summary>
+            Indicates whether the rational number is equal to one.
+            </summary>
+        </member>
+        <member name="M:MathLib.Q.op_Implicit(System.Int32)~MathLib.Q">
+            <summary>
+            Implicitly converts an integer to a <see cref="T:MathLib.Q"/> rational number.
+            </summary>
+            <param name="a">The integer value to convert.</param>
+        </member>
+        <member name="M:MathLib.Q.op_Implicit(System.Numerics.BigInteger)~MathLib.Q">
+            <summary>
+            Implicitly converts a <see cref="T:System.Numerics.BigInteger"/> to a <see cref="T:MathLib.Q"/> rational number.
+            </summary>
+            <param name="a">The <see cref="T:System.Numerics.BigInteger"/> value to convert.</param>
+        </member>
+        <member name="M:MathLib.Q.op_Equality(MathLib.Q,MathLib.Q)">
+            <summary>
+            Determines whether two rational numbers are equal.
+            </summary>
+            <param name="a">The first rational number.</param>
+            <param name="b">The second rational number.</param>
+            <returns>true if the two rational numbers are equal; otherwise, false.</returns>
+        </member>
+        <member name="M:MathLib.Q.op_Inequality(MathLib.Q,MathLib.Q)">
+            <summary>
+            Determines whether two rational numbers are not equal.
+            </summary>
+            <param name="a">The first rational number.</param>
+            <param name="b">The second rational number.</param>
+            <returns>true if the two rational numbers are not equal; otherwise, false.</returns>
+        </member>
+        <member name="M:MathLib.Q.Equals(MathLib.Q)">
+            <summary>
+            Determines whether the current rational number is equal to another rational number.
+            </summary>
+            <param name="other">The rational number to compare with.</param>
+            <returns>true if the current rational number is equal to the specified rational number; otherwise, false.</returns>
+        </member>
+        <member name="M:MathLib.Q.CompareTo(MathLib.Q)">
+            <summary>
+            Compares the current rational number to another rational number.
+            </summary>
+            <param name="other">The rational number to compare with.</param>
+            <returns>An integer that indicates the relative order of the current rational number and the specified rational number.</returns>
+        </member>
+        <member name="M:MathLib.Q.op_LessThan(MathLib.Q,MathLib.Q)">
+            <summary>
+            Determines whether the current rational number is less than another rational number.
+            </summary>
+            <param name="a">The first rational number.</param>
+            <param name="b">The second rational number.</param>
+            <returns>true if the current rational number is less than the specified rational number; otherwise, false.</returns>
+        </member>
+        <member name="M:MathLib.Q.op_LessThanOrEqual(MathLib.Q,MathLib.Q)">
+            <summary>
+            Determines whether the current rational number is less than or equal to another rational number.
+            </summary>
+            <param name="a">The first rational number.</param>
+            <param name="b">The second rational number.</param>
+            <returns>true if the current rational number is less than or equal to the specified rational number; otherwise, false.</returns>
+        </member>
+        <member name="M:MathLib.Q.op_GreaterThan(MathLib.Q,MathLib.Q)">
+            <summary>
+            Determines whether the current rational number is greater than another rational number.
+            </summary>
+            <param name="a">The first rational number.</param>
+            <param name="b">The second rational number.</param>
+            <returns>true if the current rational number is greater than the specified rational number; otherwise, false.</returns>
+        </member>
+        <member name="M:MathLib.Q.op_GreaterThanOrEqual(MathLib.Q,MathLib.Q)">
+            <summary>
+            Determines whether the current rational number is greater than or equal to another rational number.
+            </summary>
+            <param name="a">The first rational number.</param>
+            <param name="b">The second rational number.</param>
+            <returns>true if the current rational number is greater than or equal to the specified rational number; otherwise, false.</returns>
+        </member>
+        <member name="P:MathLib.Q.Reciprocal">
+            <summary>
+            Returns the reciprocal of the current rational number.
+            </summary>
+            <remarks>
+            The reciprocal of a rational number a/b is b/a.
+            Returns <see cref="P:MathLib.Q.Invalid"/> if the numerator is zero.
+            </remarks>
+        </member>
+        <member name="M:MathLib.Q.op_Increment(MathLib.Q)">
+            <summary>
+            Increments the current rational number by one.
+            </summary>
+            <param name="a">The rational number to increment.</param>
+            <returns>A new rational number representing the result of the increment.</returns>
+        </member>
+        <member name="M:MathLib.Q.op_Decrement(MathLib.Q)">
+            <summary>
+            Decrements the current rational number by one.
+            </summary>
+            <param name="a">The rational number to decrement.</param>
+            <returns>A new rational number representing the result of the decrement.</returns>
+        </member>
+        <member name="M:MathLib.Q.op_UnaryNegation(MathLib.Q)">
+            <summary>
+            Negates the current rational number.
+            </summary>
+            <param name="a">The rational number to negate.</param>
+            <returns>A new rational number representing the negated value.</returns>
+        </member>
+        <member name="M:MathLib.Q.op_Addition(MathLib.Q,MathLib.Q)">
+            <summary>
+            Adds two rational numbers.
+            </summary>
+            <param name="a">The first rational number.</param>
+            <param name="b">The second rational number.</param>
+            <returns>A new rational number representing the sum of <paramref name="a"/> and <paramref name="b"/>.</returns>
+        </member>
+        <member name="M:MathLib.Q.op_Subtraction(MathLib.Q,MathLib.Q)">
+            <summary>
+            Subtracts one rational number from another.
+            </summary>
+            <param name="a">The minuend.</param>
+            <param name="b">The subtrahend.</param>
+            <returns>A new rational number representing the difference between <paramref name="a"/> and <paramref name="b"/>.</returns>
+        </member>
+        <member name="M:MathLib.Q.op_Multiply(MathLib.Q,MathLib.Q)">
+            <summary>
+            Multiplies two rational numbers.
+            </summary>
+            <param name="a">The first rational number.</param>
+            <param name="b">The second rational number.</param>
+            <returns>A new rational number representing the product of <paramref name="a"/> and <paramref name="b"/>.</returns>
+        </member>
+        <member name="M:MathLib.Q.op_Division(MathLib.Q,MathLib.Q)">
+            <summary>
+            Divides one rational number by another.
+            </summary>
+            <param name="a">The dividend.</param>
+            <param name="b">The divisor.</param>
+            <returns>A new rational number representing the quotient of <paramref name="a"/> and <paramref name="b"/>.</returns>
+        </member>
         <member name="M:MathLib.Q.op_Modulus(MathLib.Q,MathLib.Q)">
             <summary>
-            Performs the modulus operation on two rational numbers
+            Performs the modulus operation on two rational numbers.
             </summary>
-            <remarks>Formula: (an / ad) % (bn / bd) = (an * bd) % (ad * bn) / (ad * bd)</remarks>
-            <param name="a">The left operand</param>
-            <param name="b">The right operand</param>
-            <returns>The modulus of a and b</returns>
+            <remarks>
+            The formula for the modulus operation is:
+            <code>
+            (a_n / a_d) % (b_n / b_d) = ((a_n * b_d) % (a_d * b_n)) / (a_d * b_d)
+            </code>
+            where <c>a_n</c> and <c>a_d</c> are the numerator and denominator of <paramref name="a"/> respectively,
+            and <c>b_n</c> and <c>b_d</c> are the numerator and denominator of <paramref name="b"/> respectively.
+            </remarks>
+            <param name="a">The left operand.</param>
+            <param name="b">The right operand.</param>
+            <returns>The modulus of <paramref name="a"/> and <paramref name="b"/> as a <see cref="T:MathLib.Q"/>.</returns>
+        </member>
+        <member name="M:MathLib.Q.op_LeftShift(MathLib.Q,System.Int32)">
+            <summary>
+            Performs a left bitwise shift on the current rational number.
+            </summary>
+            <param name="a">The rational number to shift.</param>
+            <param name="shift">The number of bits to shift.</param>
+            <returns>A new rational number representing the result of the shift operation.</returns>
+        </member>
+        <member name="M:MathLib.Q.op_RightShift(MathLib.Q,System.Int32)">
+            <summary>
+            Performs a right bitwise shift on the current rational number.
+            </summary>
+            <param name="a">The rational number to shift.</param>
+            <param name="shift">The number of bits to shift.</param>
+            <returns>A new rational number representing the result of the shift operation.</returns>
+        </member>
+        <member name="M:MathLib.Q.Square">
+            <summary>
+            Returns the square of the current rational number.
+            </summary>
+            <returns>A new rational number representing the square of the current rational number.</returns>
+        </member>
+        <member name="P:MathLib.Q.Abs">
+            <summary>
+            Returns the absolute value of the current rational number.
+            </summary>
+            <returns>A new rational number representing the absolute value of the current rational number.</returns>
+        </member>
+        <member name="M:MathLib.Q.Pow(MathLib.Q)">
+            <summary>
+            Raises the current rational number to the power of the given exponent.
+            </summary>
+            <param name="exponent">The exponent to which to raise the current rational number.</param>
+            <returns>A new rational number representing the result of the exponentiation.</returns>
+        </member>
+        <member name="M:MathLib.Q.Pow(System.Int32)">
+            <summary>
+            Raises the current rational number to the power of the given integer exponent.
+            </summary>
+            <param name="exponent">The integer exponent to which to raise the current rational number.</param>
+            <returns>A new rational number representing the result of the exponentiation.</returns>
+        </member>
+        <member name="M:MathLib.Q.Equals(System.Object)">
+            <summary>
+            Determines whether the current instance is equal to a specified object.
+            </summary>
+            <param name="obj">The object to compare with the current instance.</param>
+            <returns>true if the current instance is equal to the specified object; otherwise, false.</returns>
+        </member>
+        <member name="M:MathLib.Q.GetHashCode">
+            <summary>
+            Returns the hash code for the current instance.
+            </summary>
+            <returns>A hash code for the current instance.</returns>
+        </member>
+        <member name="F:MathLib.Q.RadixPointChar">
+            <summary>
+            The character used to represent the radix point in decimal notation.
+            </summary>
+        </member>
+        <member name="M:MathLib.Q.AddDelimiterChars(MathLib.Q,System.Text.StringBuilder)">
+            <summary>
+            Adds delimiter characters to the provided <see cref="T:System.Text.StringBuilder"/> based on the properties of the rational number.
+            </summary>
+            <param name="r">The rational number to use for determining delimiters.</param>
+            <param name="sb">The <see cref="T:System.Text.StringBuilder"/> to which delimiters are appended.</param>
+            <returns>true if the current rational number has a special delimiter; otherwise, false.</returns>
+        </member>
+        <member name="M:MathLib.Q.ToStringFraction">
+            <summary>
+            Converts the rational number to its fractional string representation.
+            </summary>
+            <returns>A string representing the rational number in the format "numerator/denominator" or just "numerator" if the denominator is 1.</returns>
+        </member>
+        <member name="M:MathLib.Q.ToStringPartition">
+            <summary>
+            Converts the rational number's partition to a string representation.
+            </summary>
+            <returns>A string where each part of the partition is separated by a space.</returns>
+        </member>
+        <member name="M:MathLib.Q.ToStringRotationsBin">
+            <summary>
+            Converts the rotations in binary format to a string representation.
+            </summary>
+            <returns>A string where each rotation is represented as either '0' or '1', with delimiters added where appropriate.</returns>
+        </member>
+        <member name="M:MathLib.Q.ToStringBin">
+            <summary>
+            Converts the rotations in binary format to a binary string representation.
+            </summary>
+            <returns>A string where each rotation is represented as either '0' or '1'.</returns>
+        </member>
+        <member name="M:MathLib.Q.ToStringDecimal(System.Int32)">
+            <summary>
+            Converts the rational number to its decimal string representation.
+            </summary>
+            <param name="maxDecimalDigits">The maximum number of digits to include after the radix point.</param>
+            <returns>A string representing the rational number in decimal format.</returns>
+        </member>
+        <member name="M:MathLib.Q.ToStringPeriod">
+            <summary>
+            Converts the period of the rational number to a string representation.
+            </summary>
+            <returns>A string representing the period of the rational number.</returns>
+        </member>
+        <member name="M:MathLib.Q.ToStringRepetendAsInteger">
+            <summary>
+            Converts the repetend of the rational number to an integer string representation.
+            </summary>
+            <returns>A string representing the repetend as an integer.</returns>
+        </member>
+        <member name="M:MathLib.Q.ToStringFactorization">
+            <summary>
+            Converts the factorization of the rational number to a string representation.
+            </summary>
+            <returns>A string representing the factorization of the rational number.</returns>
+        </member>
+        <member name="M:MathLib.Q.ToString">
+            <summary>
+            Converts the rational number to its default string representation.
+            </summary>
+            <returns>A string representing the rational number in the format "numerator/denominator" or just "numerator" if the denominator is 1.</returns>
         </member>
     </members>
 </doc>
