@@ -27,7 +27,7 @@ public abstract class ButtonBase : IEquatable<ButtonBase>
     public bool IsEnabled => UnityButton.enabledSelf;
 
 
-    public abstract void UpdateEnabledStatus(OperationController opc, Rational leftOperand, Rational rightOperand);
+    public abstract void UpdateEnabledStatus(OperationController opc, Q leftOperand, Q rightOperand);
 
     public abstract void Execute(OperationController opc);
 

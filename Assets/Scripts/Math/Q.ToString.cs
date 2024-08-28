@@ -4,12 +4,12 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 
-public partial class Rational
+public partial class Q
 {
 
     public const char RadixPointChar = '.';
 
-    private static bool AddDelimiterChars(Rational r, StringBuilder sb)
+    private static bool AddDelimiterChars(Q r, StringBuilder sb)
     {
         if (r.IsRadixPoint)
             sb.Append(RadixPointChar);
@@ -29,7 +29,7 @@ public partial class Rational
     public string ToStringRotationsBin()
     {
         StringBuilder sb = new StringBuilder();
-        foreach (Rational r in RotationsBin)
+        foreach (Q r in RotationsBin)
         {
             if (!AddDelimiterChars(r, sb))
             {
@@ -44,7 +44,7 @@ public partial class Rational
     public string ToStringBin()
     {
         StringBuilder sb = new StringBuilder();
-        foreach (Rational r in RotationsBin)
+        foreach (Q r in RotationsBin)
         {
             if (!AddDelimiterChars(r, sb))
                 sb.Append(r >= Half ? '1' : '0');

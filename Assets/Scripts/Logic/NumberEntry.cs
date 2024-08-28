@@ -7,31 +7,31 @@ using System.Numerics;
 public class NumberEntry
 {
 
-    public NumberEntry() : this(new Rational(0)) { }
+    public NumberEntry() : this(new Q(0)) { }
     
-    public NumberEntry(BigInteger number) : this(new Rational(number))
+    public NumberEntry(BigInteger number) : this(new Q(number))
     {
     }
 
-    public NumberEntry(Rational rational)
+    public NumberEntry(Q q)
     {
-        this.Rational = rational;
-        StringFraction = new Lazy<string>(() => rational.ToStringFraction());
-        StringDecimal = new Lazy<string>(() => rational.ToStringDecimal());
-        StringBin = new Lazy<string>(() => rational.ToStringBin());
-        StringRotationsBin = new Lazy<string>(() => rational.ToStringRotationsBin());
-        StringPartition = new Lazy<string>(() => rational.ToStringPartition());
-        StringPeriod = new Lazy<string>(() => rational.ToStringPeriod());
-        StringRepetendAsInteger = new Lazy<string>(() => rational.ToStringRepetendAsInteger());
-        StringFactorization = new Lazy<string>(() => rational.ToStringFactorization());
-        StringRepetendFactorization = new Lazy<string>(() => Primes.Factorization(rational.RepetendAsInteger).ToString());
-        StringPeriodFactorization = new Lazy<string>(() => Primes.Factorization(rational.Period).ToString());
+        this.Q = q;
+        StringFraction = new Lazy<string>(() => q.ToStringFraction());
+        StringDecimal = new Lazy<string>(() => q.ToStringDecimal());
+        StringBin = new Lazy<string>(() => q.ToStringBin());
+        StringRotationsBin = new Lazy<string>(() => q.ToStringRotationsBin());
+        StringPartition = new Lazy<string>(() => q.ToStringPartition());
+        StringPeriod = new Lazy<string>(() => q.ToStringPeriod());
+        StringRepetendAsInteger = new Lazy<string>(() => q.ToStringRepetendAsInteger());
+        StringFactorization = new Lazy<string>(() => q.ToStringFactorization());
+        StringRepetendFactorization = new Lazy<string>(() => Primes.Factorization(q.RepetendAsInteger).ToString());
+        StringPeriodFactorization = new Lazy<string>(() => Primes.Factorization(q.Period).ToString());
     }
 
 
-    public Rational Rational { get; }
+    public Q Q { get; }
 
-    public static readonly NumberEntry Invalid = new NumberEntry(Rational.Invalid);
+    public static readonly NumberEntry Invalid = new NumberEntry(Q.Invalid);
 
 
     public static string ColumnTitle(int columnIndex, Format format) => columnIndex switch

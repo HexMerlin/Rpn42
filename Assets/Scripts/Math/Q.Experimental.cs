@@ -2,10 +2,10 @@
 using System;
 using System.Numerics;
 
-public partial class Rational
+public partial class Q
 {
 
-    public Rational DivideByNextMersenneNumber(bool mustBeCoprime = false) => this / NextMersenneNumber(Numerator, mustBeCoprime);
+    public Q DivideByNextMersenneNumber(bool mustBeCoprime = false) => this / NextMersenneNumber(Numerator, mustBeCoprime);
 
     public static BigInteger NextMersenneNumber(BigInteger num, bool mustBeCoprime)
     {
@@ -22,23 +22,23 @@ public partial class Rational
         return mersenne - 1;
     }
 
-    public Rational RepetendShiftLeft()
+    public Q RepetendShiftLeft()
     {
         int period = Period;
         BigInteger num = (BigInteger.One << period) - 1;
         BigInteger den = (BigInteger.One << (period - 1)) - 1;
-        return this * new Rational(num, den, false);
+        return this * new Q(num, den, false);
     }
 
-    public Rational RepetendShiftRight()
+    public Q RepetendShiftRight()
     {
         int period = Period;
         BigInteger num = (BigInteger.One << period) - 1;
         BigInteger den = (BigInteger.One << (period + 1)) - 1;
-        return this * new Rational(num, den, false);
+        return this * new Q(num, den, false);
     }
 
-    public static Rational FindUnitFractionWithRepetendFactor(Rational repetendFactor)
+    public static Q FindUnitFractionWithRepetendFactor(Q repetendFactor)
     {
         if (!repetendFactor.IsInteger)
             return Invalid;
@@ -46,7 +46,7 @@ public partial class Rational
         BigInteger repetendFactorToFind = repetendFactor.Numerator;
         for (int i = 3; i < 20000; i += 2)
         {
-            Rational r = new(1, i);
+            Q r = new(1, i);
             BigInteger repetendAsInt = r.RepetendAsInteger;
             if (repetendAsInt.IsZero)
                 continue;
@@ -60,7 +60,7 @@ public partial class Rational
     {
         BigInteger result = BigInteger.Zero;
 
-        foreach (Rational r in RotationsBin)
+        foreach (Q r in RotationsBin)
         {
             if (r.IsSpecialDelimiter)
                 continue;

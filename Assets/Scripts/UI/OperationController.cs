@@ -64,12 +64,12 @@ public class OperationController
 
     public void PerformAddInput(string input) => this.CurrentChange = this.CurrentChange.AddInput(input, inputBuf);
 
-    public void PerformUnaryOperation(Func<Rational, Rational> operation, bool retainOperand = false)
+    public void PerformUnaryOperation(Func<Q, Q> operation, bool retainOperand = false)
     { 
-        (Rational _, Rational operand) = PeekOperands();
+        (Q _, Q operand) = PeekOperands();
         if (operand.IsInvalid) return; //need 1 operand to perform operation: abort operation
 
-        Rational result = operation(operand);
+        Q result = operation(operand);
 
         if (result.IsInvalid) return;
 
@@ -83,12 +83,12 @@ public class OperationController
             this.CurrentChange.ClearInput(inputBuf).AddOutput(new NumberEntry(result), outputEntries);
     }
 
-    public void PerformBinaryOperation(Func<Rational, Rational, Rational> operation)
+    public void PerformBinaryOperation(Func<Q, Q, Q> operation)
     {
-        (Rational leftOperand, Rational rightOperand) = PeekOperands();
+        (Q leftOperand, Q rightOperand) = PeekOperands();
         if (leftOperand.IsInvalid || rightOperand.IsInvalid) return; //need 2 operands to perform operation: abort operation
 
-        Rational result = operation(leftOperand, rightOperand);
+        Q result = operation(leftOperand, rightOperand);
 
         if (result.IsInvalid) return;
 
@@ -166,13 +166,13 @@ public class OperationController
     }
 
 
-    public (Rational leftOperand, Rational rightOperand) PeekOperands()
+    public (Q leftOperand, Q rightOperand) PeekOperands()
     {
-        Rational lastOutput = OutputCount > 0 ? LastOutput.Rational : Rational.Invalid;
+        Q lastOutput = OutputCount > 0 ? LastOutput.Q : Q.Invalid;
       
         return InputEmpty ?
-            (OutputCount > 1 ? SecondLastOutput.Rational : Rational.Invalid, lastOutput)
-            : (lastOutput, new Rational(this.inputBuf.ToString()));
+            (OutputCount > 1 ? SecondLastOutput.Q : Q.Invalid, lastOutput)
+            : (lastOutput, new Q(this.inputBuf.ToString()));
     }
 
 }

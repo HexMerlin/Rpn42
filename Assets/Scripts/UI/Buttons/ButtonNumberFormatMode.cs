@@ -14,7 +14,7 @@ public class ButtonNumberFormatMode : ButtonBase
         this.DisabledText = "Pending…";
     }
 
-    public override void UpdateEnabledStatus(OperationController opc, Rational leftOperand, Rational rightOperand)
+    public override void UpdateEnabledStatus(OperationController opc, Q leftOperand, Q rightOperand)
     {
         SetEnabled(!this.RequirePrimes || Primes.IsReady);
         if (IsEnabled)

@@ -52,7 +52,7 @@ public class SavedDataJsonConverter : JsonConverter<SavedData>
 
                                 reader.Read(); // Move past EndArray
 
-                                entries.Add(new NumberEntry(new Rational(numerator, denominator)));
+                                entries.Add(new NumberEntry(new Q(numerator, denominator)));
                             }
                         }
                     }
@@ -85,8 +85,8 @@ public class SavedDataJsonConverter : JsonConverter<SavedData>
         foreach (var entry in value.numberEntries)
         {
             writer.WriteStartArray();
-            writer.WriteStringValue(entry.Rational.Numerator.ToString());
-            writer.WriteStringValue(entry.Rational.Denominator.ToString());
+            writer.WriteStringValue(entry.Q.Numerator.ToString());
+            writer.WriteStringValue(entry.Q.Denominator.ToString());
             writer.WriteEndArray();
         }
 

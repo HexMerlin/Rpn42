@@ -61,7 +61,7 @@ public class ButtonCollection : IEnumerable<ButtonBase>
 
     public void UpdateButtons(OperationController opc)
     {
-        (Rational leftOperand, Rational rightOperand) = opc.PeekOperands();
+        (Q leftOperand, Q rightOperand) = opc.PeekOperands();
 
         foreach (ButtonBase button in buttons)
             button.UpdateEnabledStatus(opc, leftOperand, rightOperand);

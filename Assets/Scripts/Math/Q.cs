@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Numerics;
 
 
-public partial class Rational : IEquatable<Rational>, IComparable<Rational>
+public partial class Q : IEquatable<Q>, IComparable<Q>
 {
     public BigInteger Numerator { get; } 
     
@@ -15,18 +15,18 @@ public partial class Rational : IEquatable<Rational>, IComparable<Rational>
     private int computedPeriod;
       
 
-    public static Rational Invalid => new Rational(0, 0, false);
+    public static Q Invalid => new Q(0, 0, false);
 
-    public static Rational RadixPoint => new Rational(0, -1, false);
+    public static Q RadixPoint => new Q(0, -1, false);
 
-    public static Rational RepetendStart => new Rational(0, -2, false);
+    public static Q RepetendStart => new Q(0, -2, false);
 
-    public static Rational RepetendEnd => new Rational(0, -3, false);
+    public static Q RepetendEnd => new Q(0, -3, false);
 
-    public static Rational Zero => new Rational(0, 1, false);
-    public static Rational One => new Rational(1, 1, false);
+    public static Q Zero => new Q(0, 1, false);
+    public static Q One => new Q(1, 1, false);
 
-    public static Rational Half => new Rational(1, 2, false);
+    public static Q Half => new Q(1, 2, false);
 
     public bool IsInteger => Denominator == 1;
    
@@ -44,11 +44,11 @@ public partial class Rational : IEquatable<Rational>, IComparable<Rational>
     private const int UninitializedInt = 0;
 
    
-    public Rational() : this(0, 1, false) { }
+    public Q() : this(0, 1, false) { }
 
-    public Rational(BigInteger numerator, BigInteger denominator) : this(numerator, denominator, true) { }
+    public Q(BigInteger numerator, BigInteger denominator) : this(numerator, denominator, true) { }
 
-    private Rational(BigInteger numerator, BigInteger denominator, bool normalize)
+    private Q(BigInteger numerator, BigInteger denominator, bool normalize)
     {
         Numerator = numerator;
         Denominator = denominator;
@@ -79,9 +79,9 @@ public partial class Rational : IEquatable<Rational>, IComparable<Rational>
     }
 
 
-    public Rational(BigInteger numerator) : this(numerator, 1, false) { }
+    public Q(BigInteger numerator) : this(numerator, 1, false) { }
 
-    public Rational(string input)
+    public Q(string input)
     {
         computedLength = UninitializedInt;
         computedPeriod = UninitializedInt;
@@ -104,7 +104,7 @@ public partial class Rational : IEquatable<Rational>, IComparable<Rational>
 
     public BigInteger IntegerPart => Numerator / Denominator;
 
-    public Rational FractionalPart => this - IntegerPart;
+    public Q FractionalPart => this - IntegerPart;
 
     public int IntegerLength => (int)BigInteger.Abs(IntegerPart).GetBitLength();
 
@@ -119,11 +119,11 @@ public partial class Rational : IEquatable<Rational>, IComparable<Rational>
         return false;
     }
 
-    public Rational this[int index] => (this << (index - IntegerLength)).FractionalPart;
+    public Q this[int index] => (this << (index - IntegerLength)).FractionalPart;
 
-    public Rational Weight(int index) => One << (IntegerLength - index - 1);
+    public Q Weight(int index) => One << (IntegerLength - index - 1);
 
-    public Rational Term(int index)
+    public Q Term(int index)
     {
         int repetendStart = Length - Period;
         bool bit = this[index] >= Half;
@@ -131,23 +131,23 @@ public partial class Rational : IEquatable<Rational>, IComparable<Rational>
         if (index < repetendStart)
             return bit ? Weight(index) : Zero;
         else
-            return bit ? (Weight(index) << Period) / ((BigInteger.One << Period) - BigInteger.One) : Rational.Zero;
+            return bit ? (Weight(index) << Period) / ((BigInteger.One << Period) - BigInteger.One) : Q.Zero;
          
     }
 
-    public IEnumerable<Rational> RotationsBin
+    public IEnumerable<Q> RotationsBin
     {
         get
         {            
             if (this < 0) yield break;
-            Rational firstInRepetend = Invalid;
+            Q firstInRepetend = Invalid;
             
             int integerLength = this.IntegerLength;
             int radixPointIndex = IsInteger ? -1 : integerLength; //do not output radix point for integers
 
             for (int i = 0; ; i++)
             {
-                Rational r = this[i];
+                Q r = this[i];
 
                 if (i == radixPointIndex)
                     yield return RadixPoint;
@@ -170,16 +170,16 @@ public partial class Rational : IEquatable<Rational>, IComparable<Rational>
         }
     }
 
-    public IEnumerable<Rational> RotationsBalBin
+    public IEnumerable<Q> RotationsBalBin
     {
         get
         {
-            Rational r = (this << 1).FractionalPart;
+            Q r = (this << 1).FractionalPart;
             return r.RotationsBin;
 
         }
     }
-    public IEnumerable<Rational> Partition
+    public IEnumerable<Q> Partition
     {
         get
         {
@@ -200,7 +200,7 @@ public partial class Rational : IEquatable<Rational>, IComparable<Rational>
     /// <code>-5/3  → -2 + 1/3</code>
     /// <code>13/6  →  2 + 1/6</code>
     /// </example>
-    public (BigInteger Integer, Rational Fraction) Mixed
+    public (BigInteger Integer, Q Fraction) Mixed
     {
         get
         {
@@ -211,7 +211,7 @@ public partial class Rational : IEquatable<Rational>, IComparable<Rational>
             if (fractionNumerator.IsEven)
             {
                 if (fractionNumerator.IsZero)
-                    return (Numerator / Denominator, Rational.Zero);
+                    return (Numerator / Denominator, Q.Zero);
                 integer++;
                 fractionNumerator = fractionNumerator - Denominator;
             }
@@ -221,7 +221,7 @@ public partial class Rational : IEquatable<Rational>, IComparable<Rational>
                 fractionNumerator = -fractionNumerator;
             }
 
-            return (integer, new Rational(fractionNumerator, Denominator));
+            return (integer, new Q(fractionNumerator, Denominator));
         }
     }
 
@@ -251,7 +251,7 @@ public partial class Rational : IEquatable<Rational>, IComparable<Rational>
 
         computedLength = 0;
         computedPeriod = -1;
-        foreach (Rational r in RotationsBin)
+        foreach (Q r in RotationsBin)
         {
             if (!r.IsSpecialDelimiter)
             {
@@ -269,11 +269,11 @@ public partial class Rational : IEquatable<Rational>, IComparable<Rational>
     }
 
 
-    public Rational WeightFloor
+    public Q WeightFloor
     {
         get
         {
-            Rational w = Rational.One;
+            Q w = Q.One;
             while (w < this.Abs)
                 w <<= 1;
             return w >> 1;
@@ -287,7 +287,7 @@ public partial class Rational : IEquatable<Rational>, IComparable<Rational>
             BigInteger repInt = 0;
             bool inRepetend = false;
 
-            foreach (Rational r in RotationsBin)
+            foreach (Q r in RotationsBin)
             {
                 if (r.IsRepetendStart)
                 {
