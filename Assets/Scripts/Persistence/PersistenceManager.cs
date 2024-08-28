@@ -9,7 +9,6 @@ public static class PersistenceManager
 
     public static SavedData LoadData()
     {
-        Debug.Log($"Read file {DataFilePath}");
         try
         {
             string jsonString = File.ReadAllText(DataFilePath);
@@ -39,7 +38,6 @@ public static class PersistenceManager
             Converters = { new SavedDataJsonConverter() },
             WriteIndented = true // Optional
         };
-        Debug.Log($"---------------------------------------Write file {DataFilePath}");
         string jsonString = JsonSerializer.Serialize(savedData, options);
         File.WriteAllText(DataFilePath, jsonString);
     }
