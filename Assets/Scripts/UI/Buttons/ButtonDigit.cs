@@ -1,4 +1,4 @@
-﻿
+﻿using MathLib;
 using UnityButton = UnityEngine.UIElements.Button;
 
 public class ButtonDigit : ButtonBase

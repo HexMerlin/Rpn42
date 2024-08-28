@@ -4,6 +4,7 @@ using System;
 using System.Numerics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using MathLib;
 
 /// <summary>
 /// Custom JSON converter for the <see cref="SavedData"/> class.

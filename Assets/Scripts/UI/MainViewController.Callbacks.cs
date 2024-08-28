@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Numerics;
+using MathLib.Prime;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityButton = UnityEngine.UIElements.Button;

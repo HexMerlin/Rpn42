@@ -1,4 +1,5 @@
-﻿using UnityButton = UnityEngine.UIElements.Button;
+﻿using MathLib;
+using UnityButton = UnityEngine.UIElements.Button;
 
 public class ButtonPow : ButtonBase
 {
