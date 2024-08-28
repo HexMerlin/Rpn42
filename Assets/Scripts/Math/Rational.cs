@@ -2,16 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using System.Text;
-using Newtonsoft.Json;
 
-[JsonObject(MemberSerialization.OptIn)]
+
 public partial class Rational : IEquatable<Rational>, IComparable<Rational>
 {
-    [JsonProperty]
     public BigInteger Numerator { get; } 
     
-    [JsonProperty]
     public BigInteger Denominator { get; }
 
     private int computedLength;
@@ -50,7 +46,6 @@ public partial class Rational : IEquatable<Rational>, IComparable<Rational>
    
     public Rational() : this(0, 1, false) { }
 
-    [JsonConstructor]
     public Rational(BigInteger numerator, BigInteger denominator) : this(numerator, denominator, true) { }
 
     private Rational(BigInteger numerator, BigInteger denominator, bool normalize)

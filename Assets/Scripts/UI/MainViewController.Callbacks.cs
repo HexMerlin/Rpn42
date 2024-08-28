@@ -115,20 +115,20 @@ public partial class MainViewController
 
     private void OnPrimesInstanceCompleted() => DemandUIRefresh();
 
-    private void OnApplicationPause(bool pauseStatus)
-    {
-        if (pauseStatus) // Save data when the app is paused
-            SaveData();
-    }
+    //private void OnApplicationPause(bool pauseStatus)
+    //{
+    //    if (pauseStatus) // Save data when the app is paused
+    //        SaveData();
+    //}
+
+    //private void OnApplicationQuit() => SaveData(); // Save data when the app is about to quit
 
     private void OnApplicationFocus(bool hasFocus)
     {
         if (!hasFocus) // Save data when the app loses focus
             SaveData();
     }
-
-    private void OnApplicationQuit() => SaveData(); // Save data when the app is about to quit
-
+   
     private void OnButtonGridClick(ClickEvent evt)
     {
         if (evt.target is not UnityButton unityButton)

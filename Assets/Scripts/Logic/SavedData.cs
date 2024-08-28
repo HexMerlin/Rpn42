@@ -1,8 +1,4 @@
-﻿
-using Newtonsoft.Json;
-
-
-public class SavedData
+﻿public class SavedData
 {
  
     public NumberEntry[] numberEntries;

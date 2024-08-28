@@ -1,18 +1,18 @@
 ﻿
-using Newtonsoft.Json;
+
 using System;
 using System.Numerics;
 
-[JsonObject(MemberSerialization.OptIn)]
+
 public class NumberEntry
 {
 
-    public NumberEntry() : this(0) { }
+    public NumberEntry() : this(new Rational(0)) { }
+    
     public NumberEntry(BigInteger number) : this(new Rational(number))
     {
     }
 
-    [JsonConstructor]
     public NumberEntry(Rational rational)
     {
         this.Rational = rational;
@@ -29,7 +29,6 @@ public class NumberEntry
     }
 
 
-    [JsonProperty]
     public Rational Rational { get; }
 
     public static readonly NumberEntry Invalid = new NumberEntry(Rational.Invalid);
@@ -117,4 +116,7 @@ public class NumberEntry
 
     public override string ToString() => StringFraction.Value;
 
+
 }
+
+
