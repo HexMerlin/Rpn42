@@ -7,6 +7,9 @@ using MathLib.Prime;
 
 public class NumberEntry
 {
+    public Q Q { get; }
+
+    public static readonly NumberEntry Invalid = new NumberEntry(Q.Invalid);
 
     public NumberEntry() : this(new Q(0)) { }
     
@@ -28,11 +31,6 @@ public class NumberEntry
         StringRepetendFactorization = new Lazy<string>(() => Primes.Factorization(q.RepetendAsInteger).ToString());
         StringPeriodFactorization = new Lazy<string>(() => Primes.Factorization(q.Period).ToString());
     }
-
-
-    public Q Q { get; }
-
-    public static readonly NumberEntry Invalid = new NumberEntry(Q.Invalid);
 
 
     public static string ColumnTitle(int columnIndex, Format format) => columnIndex switch

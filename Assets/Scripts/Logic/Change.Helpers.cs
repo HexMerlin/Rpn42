@@ -74,7 +74,7 @@ public abstract class InputChange : Change
 {
     public string Input { get; }
 
-    public InputChange(string input) : base() => this.Input = input;
+    public InputChange(string input) : base() => Input = input;
 
     public abstract Change Execute(StringBuilder inputBuf);
 
@@ -85,7 +85,7 @@ public abstract class OutputChange : Change
 {
     public NumberEntry NumberEntry { get; }
 
-    public OutputChange(NumberEntry numberEntry) : base() => this.NumberEntry = numberEntry;
+    public OutputChange(NumberEntry numberEntry) : base() => NumberEntry = numberEntry;
 
     public abstract Change Execute(List<NumberEntry> outputItems);
 
@@ -94,5 +94,5 @@ public abstract class OutputChange : Change
 
 public class NoChange : Change
 {
-    public NoChange() : base() { IsUndoPoint = true; }
+    public NoChange() : base() => IsUndoPoint = true;
 }
