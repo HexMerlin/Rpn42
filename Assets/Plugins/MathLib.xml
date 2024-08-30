@@ -50,293 +50,57 @@
             <param name="b">The byte to check.</param>
             <returns>true if the byte represents a power of two; otherwise, false.</returns>
         </member>
-        <member name="T:MathLib.PAdics.ModP">
+        <member name="T:MathLib.Lib">
             <summary>
-            Represents an element in the finite field GF(p), where p is a prime number.
-            This class supports arithmetic operations modulo p, including addition, subtraction,
-            multiplication, and division. These operations are performed in the context of a 
-            Galois field, ensuring that the results stay within the finite field.
+            Static class for general assembly methods
             </summary>
         </member>
-        <member name="P:MathLib.PAdics.ModP.N">
+        <member name="P:MathLib.Lib.BuildVersion">
             <summary>
-            The value of the element in the finite field GF(p).
+            Retrieves the version, target .NET framework, and build configuration of the current assembly.
             </summary>
-        </member>
-        <member name="P:MathLib.PAdics.ModP.P">
-            <summary>
-            The prime modulus p defining the finite field GF(p).
-            </summary>
-        </member>
-        <member name="M:MathLib.PAdics.ModP.#ctor(System.Numerics.BigInteger,System.Numerics.BigInteger)">
-            <summary>
-            Initializes a new instance of the <see cref="T:MathLib.PAdics.ModP"/> class, representing
-            an element in the finite field GF(p).
-            </summary>
-            <param name="n">The value of the element.</param>
-            <param name="p">The prime modulus p that defines the finite field GF(p).</param>
-            <exception cref="T:System.ArgumentException">Thrown when p is not a prime number.</exception>
-        </member>
-        <member name="M:MathLib.PAdics.ModP.op_Addition(MathLib.PAdics.ModP,MathLib.PAdics.ModP)">
-            <summary>
-            Adds two elements in the finite field GF(p).
-            </summary>
-            <param name="a">An element in the finite field GF(p).</param>
-            <param name="b">Another element in the finite field GF(p).</param>
-            <returns>The sum of the two elements, also an element of GF(p).</returns>
-            <example>
-            <code>
-            var a = new ModP(3, 5);
-            var b = new ModP(4, 5);
-            var result = a + b; // result is 2 in GF(5)
-            </code>
-            </example>
-        </member>
-        <member name="M:MathLib.PAdics.ModP.op_Subtraction(MathLib.PAdics.ModP,MathLib.PAdics.ModP)">
-            <summary>
-            Subtracts one element from another in the finite field GF(p).
-            </summary>
-            <param name="a">An element in the finite field GF(p).</param>
-            <param name="b">Another element in the finite field GF(p).</param>
-            <returns>The difference of the two elements, also an element of GF(p).</returns>
-            <example>
-            <code>
-            var a = new ModP(3, 5);
-            var b = new ModP(4, 5);
-            var result = a - b; // result is 4 in GF(5)
-            </code>
-            </example>
-        </member>
-        <member name="M:MathLib.PAdics.ModP.op_Multiply(MathLib.PAdics.ModP,MathLib.PAdics.ModP)">
-            <summary>
-            Multiplies two elements in the finite field GF(p).
-            </summary>
-            <param name="a">Ab element in the finite field GF(p).</param>
-            <param name="b">Another element in the finite field GF(p).</param>
-            <returns>The product of the two elements, also an element of GF(p).</returns>
-            <example>
-            <code>
-            var a = new ModP(3, 5);
-            var b = new ModP(4, 5);
-            var result = a * b; // result is 2 in GF(5)
-            </code>
-            </example>
-        </member>
-        <member name="M:MathLib.PAdics.ModP.op_Division(MathLib.PAdics.ModP,MathLib.PAdics.ModP)">
-            <summary>
-            Divides one element by another in the finite field GF(p).
-            </summary>
-            <param name="a">Ab element in the finite field GF(p).</param>
-            <param name="b">Another element in the finite field GF(p).</param>
-            <returns>The quotient of the two elements, also an element of GF(p).</returns>
-            <exception cref="T:System.DivideByZeroException">Thrown when attempting to divide by zero.</exception>
-            <example>
-            <code>
-            var a = new ModP(3, 5);
-            var b = new ModP(4, 5);
-            var result = a / b; // result is 2 in GF(5)
-            </code>
-            </example>
-        </member>
-        <member name="M:MathLib.PAdics.ModP.Inverse">
-            <summary>
-            Computes the multiplicative inverse of this element in the finite field GF(p).
-            </summary>
-            <returns>The multiplicative inverse of this element, which, when multiplied by the original element, 
-            results in 1 in the finite field GF(p). This operation is essential in division within the field.
+            <returns>
+            A string representing the version, target .NET framework, and build configuration (e.g. Debug, Release) of the assembly.
+            The format of the returned string is "Version: X.Y.Z.W Build:FrameworkName Configuration:BuildConfiguration".
             </returns>
-            <exception cref="T:System.DivideByZeroException">
-            Thrown when the element is zero because zero does not have a multiplicative inverse.
-            </exception>
             <example>
             <code>
-            var a = new ModP(3, 5);
-            var inverse = a.Inverse(); // inverse is 2 in GF(5) because 3 * 2 % 5 = 1
+            Console.WriteLine(Lib.BuildVersion);
+            // Example output:
+            // "Version: 1.0.2.0 Build:.NET Standard 2.1 Configuration:Release"
             </code>
             </example>
-            <remarks>
-            The multiplicative inverse of an element "a" in a finite field GF(p) is another element "b" such that 
-            the product of "a" and "b" is congruent to 1 modulo p. For example, in GF(5), the multiplicative inverse 
-            of 3 is 2 because (3 * 2) % 5 = 1. This method uses the Extended Euclidean Algorithm to find such an element.
-            </remarks>
-        </member>
-        <member name="M:MathLib.PAdics.ModP.Equals(System.Object)">
-            <summary>
-            Determines whether the specified element is equal to the current element.
-            </summary>
-            <param name="obj">Another element to compare with.</param>
-            <returns>true if the elements are equal; otherwise, false.</returns>
-        </member>
-        <member name="M:MathLib.PAdics.ModP.GetHashCode">
-            <summary>
-            Returns a hash code for this instance.
-            </summary>
-            <returns>A hash code for this instance.</returns>
-        </member>
-        <member name="M:MathLib.PAdics.ModP.ToString">
-            <summary>
-            Returns a string that represents the current element.
-            </summary>
-            <returns>A string that represents the current element in the format "n % p".</returns>
-            <example>
-            <code>
-            var a = new ModP(3, 5);
-            Console.WriteLine(a); // Outputs "3 % 5"
-            </code>
-            </example>
-        </member>
-        <member name="M:MathLib.PAdics.ModP.IsPrime(System.Numerics.BigInteger)">
-            <summary>
-            Determines whether a given number is prime.
-            </summary>
-            <param name="number">The number to check.</param>
-            <returns>true if the number is prime; otherwise, false.</returns>
-        </member>
-        <member name="T:MathLib.PAdics.PAdic">
-            <summary>
-            Represents a p-adic number with a specified prime base and precision.
-            P-adic numbers are a system of numbers that extends the ordinary arithmetic of the integers 
-            in a different way than the extension to the real and complex number systems.
-            </summary>
-        </member>
-        <member name="P:MathLib.PAdics.PAdic.Num">
-            <summary>
-            Gets the numerical value representing the p-adic number.
-            </summary>
-        </member>
-        <member name="P:MathLib.PAdics.PAdic.P">
-            <summary>
-            Gets the prime base <see cref="T:System.Numerics.BigInteger"/> value used for the p-adic number.
-            </summary>
-        </member>
-        <member name="P:MathLib.PAdics.PAdic.Precision">
-            <summary>
-            Gets the precision, which is the number of significant digits in the p-adic number.
-            </summary>
-        </member>
-        <member name="P:MathLib.PAdics.PAdic.Valuation">
-            <summary>
-            Gets the valuation, which is the highest power of the base <see cref="P:MathLib.PAdics.PAdic.P"/> that divides the number.
-            </summary>
-        </member>
-        <member name="M:MathLib.PAdics.PAdic.#ctor(MathLib.Q,System.Numerics.BigInteger,System.Int32)">
-            <summary>
-            Initializes a new instance of the <see cref="T:MathLib.PAdics.PAdic"/> class from a rational number.
-            Converts the given rational number into its p-adic equivalent.
-            </summary>
-            <param name="q">The rational number to convert to a p-adic number.</param>
-            <param name="p">The prime base for the p-adic number.</param>
-            <param name="precision">The precision of the p-adic number, defined as the number of significant digits.</param>
-            <exception cref="T:System.ArgumentException">Thrown if <paramref name="p"/> is not a prime number.</exception>
-        </member>
-        <member name="M:MathLib.PAdics.PAdic.CalculateValuation(System.Numerics.BigInteger)">
-            <summary>
-            Calculates the p-adic valuation of a given <see cref="T:System.Numerics.BigInteger"/> number.
-            The valuation is defined as the highest power of the base <see cref="P:MathLib.PAdics.PAdic.P"/> that divides the number.
-            </summary>
-            <param name="num">The number whose valuation is to be calculated.</param>
-            <returns>The valuation of the number with respect to the base <see cref="P:MathLib.PAdics.PAdic.P"/>.</returns>
-        </member>
-        <member name="M:MathLib.PAdics.PAdic.ConvertToPAdic(MathLib.Q,System.Int32)">
-            <summary>
-            Converts a rational number into its p-adic equivalent with the specified precision.
-            </summary>
-            <param name="q">The rational number to convert.</param>
-            <param name="precision">The precision, or number of significant digits, for the p-adic number.</param>
-            <returns>A <see cref="T:System.Numerics.BigInteger"/> representing the p-adic number.</returns>
-        </member>
-        <member name="M:MathLib.PAdics.PAdic.ToString">
-            <summary>
-            Returns a string representation of the p-adic number, displaying the prime base, precision, 
-            and the numerical value with its valuation.
-            </summary>
-            <returns>A string representation of the p-adic number.</returns>
-        </member>
-        <member name="M:MathLib.PAdics.PAdic.op_Addition(MathLib.PAdics.PAdic,MathLib.PAdics.PAdic)">
-            <summary>
-            Adds two p-adic numbers.
-            </summary>
-            <param name="a">The first p-adic number to add.</param>
-            <param name="b">The second p-adic number to add.</param>
-            <returns>A new <see cref="T:MathLib.PAdics.PAdic"/> instance representing the sum of <paramref name="a"/> and <paramref name="b"/>.</returns>
-            <exception cref="T:System.ArgumentException">Thrown if <paramref name="a"/> and <paramref name="b"/> do not have the same prime base.</exception>
-        </member>
-        <member name="M:MathLib.PAdics.PAdic.op_Subtraction(MathLib.PAdics.PAdic,MathLib.PAdics.PAdic)">
-            <summary>
-            Subtracts one p-adic number from another.
-            </summary>
-            <param name="a">The p-adic number to subtract from.</param>
-            <param name="b">The p-adic number to subtract.</param>
-            <returns>A new <see cref="T:MathLib.PAdics.PAdic"/> instance representing the difference between <paramref name="a"/> and <paramref name="b"/>.</returns>
-        </member>
-        <member name="M:MathLib.PAdics.PAdic.op_Multiply(MathLib.PAdics.PAdic,MathLib.PAdics.PAdic)">
-            <summary>
-            Multiplies two p-adic numbers.
-            </summary>
-            <param name="a">The first p-adic number to multiply.</param>
-            <param name="b">The second p-adic number to multiply.</param>
-            <returns>A new <see cref="T:MathLib.PAdics.PAdic"/> instance representing the product of <paramref name="a"/> and <paramref name="b"/>.</returns>
-            <exception cref="T:System.ArgumentException">Thrown if <paramref name="a"/> and <paramref name="b"/> do not have the same prime base.</exception>
-        </member>
-        <member name="M:MathLib.PAdics.PAdic.op_Division(MathLib.PAdics.PAdic,MathLib.PAdics.PAdic)">
-            <summary>
-            Divides one p-adic number by another.
-            </summary>
-            <param name="a">The p-adic number to divide.</param>
-            <param name="b">The p-adic number by which to divide.</param>
-            <returns>A new <see cref="T:MathLib.PAdics.PAdic"/> instance representing the quotient of <paramref name="a"/> divided by <paramref name="b"/>.</returns>
-            <exception cref="T:System.ArgumentException">Thrown if <paramref name="a"/> and <paramref name="b"/> do not have the same prime base.</exception>
-        </member>
-        <member name="M:MathLib.PAdics.PAdic.op_UnaryNegation(MathLib.PAdics.PAdic)">
-            <summary>
-            Negates the current p-adic number.
-            </summary>
-            <param name="a">The p-adic number to negate.</param>
-            <returns>A new <see cref="T:MathLib.PAdics.PAdic"/> instance representing the negated value of <paramref name="a"/>.</returns>
-        </member>
-        <member name="M:MathLib.PAdics.PAdic.IsPrime(System.Numerics.BigInteger)">
-            <summary>
-            Determines whether a given number is prime.
-            </summary>
-            <param name="number">The number to check.</param>
-            <returns>true if the number is prime; otherwise, false.</returns>
         </member>
         <member name="T:MathLib.Prime.Factorization">
             <summary>
-            Represents the prime factorization of an integer, potentially partial.
-            Supports composite remainder factors and handles negative integers.
+            Represents the prime factorization of an integer, which may be partial.
+            Handles composite remainder factors and negative integers.
             </summary>
             <remarks>
-            Initializes a new <see cref="T:MathLib.Prime.Factorization"/> instance.
+            This class is immutable. The factorization is initialized via a primary constructor that accepts
+            the prime factors and the remainder factor.
             </remarks>
-            <param name="primeFactors">The prime factors in ascending order.</param>
-            <param name="remainderFactor">
-            The remainder after factoring, which may be composite or negative.
-            </param>
-        </member>
-        <member name="M:MathLib.Prime.Factorization.#ctor(System.Int32[],System.Numerics.BigInteger)">
-            <summary>
-            Represents the prime factorization of an integer, potentially partial.
-            Supports composite remainder factors and handles negative integers.
-            </summary>
-            <remarks>
-            Initializes a new <see cref="T:MathLib.Prime.Factorization"/> instance.
-            </remarks>
-            <param name="primeFactors">The prime factors in ascending order.</param>
-            <param name="remainderFactor">
-            The remainder after factoring, which may be composite or negative.
-            </param>
         </member>
         <member name="F:MathLib.Prime.Factorization.PrimeFactors">
             <summary>
-            The prime factors in ascending order.
+            The prime factors in ascending order. True primes (meaning all are positive).
             </summary>
         </member>
         <member name="F:MathLib.Prime.Factorization.RemainderFactor">
             <summary>
-            The remainder after factoring, which may be composite.
-            If the input was negative, the remainder carries the negative sign.
+            The remainder after factoring, which may be composite if the factorization is partial.
+            If the input was negative, the remainder is also negative.
             </summary>
+        </member>
+        <member name="M:MathLib.Prime.Factorization.#ctor(System.Int32[],System.Numerics.BigInteger)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MathLib.Prime.Factorization"/> class.
+            </summary>
+            <param name="primeFactors">An array of prime factors in ascending order.</param>
+            <param name="remainderFactor">
+            The remainder after factoring, which may be composite or negative.
+            If the input integer is negative, the remainder factor carries the negative sign.
+            </param>
         </member>
         <member name="P:MathLib.Prime.Factorization.IsComplete">
             <summary>
@@ -380,12 +144,12 @@
         </member>
         <member name="P:MathLib.Prime.Factorization.FactoredInteger">
             <summary>
-            Computes the original integer from the factorization.
+            Recreates the original integer from the prime factors and remainder factor.
             </summary>
         </member>
         <member name="M:MathLib.Prime.Factorization.ToString">
             <summary>
-            Returns the string representation of the factorization.
+            Returns a string representation of the factorization, including the prime factors and remainder.
             </summary>
             <returns>A string representing the factorization.</returns>
         </member>
