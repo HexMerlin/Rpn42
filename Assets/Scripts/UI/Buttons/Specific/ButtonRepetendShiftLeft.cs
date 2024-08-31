@@ -8,5 +8,5 @@ public class ButtonRepetendShiftLeft : ButtonBase
     public override void UpdateEnabledStatus(OperationController opc, Q leftOperand, Q rightOperand)
         => SetEnabled(!rightOperand.IsInvalid);
 
-    public override void Execute(OperationController opc) => opc.PerformUnaryOperation((a) => a.RepetendShiftLeft());
+    public override void Execute(OperationController opc) => opc.PerformUnaryOperation((a) => a.NumeralSystem.RepetendShiftLeft());
 }

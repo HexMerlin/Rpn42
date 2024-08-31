@@ -20,16 +20,16 @@ public class NumberEntry
     public NumberEntry(Q q)
     {
         this.Q = q;
-        StringFraction = new Lazy<string>(() => q.ToStringFraction());
-        StringDecimal = new Lazy<string>(() => q.ToStringDecimal());
-        StringBin = new Lazy<string>(() => q.ToStringBin());
-        StringRotationsBin = new Lazy<string>(() => q.ToStringRotationsBin());
-        StringPartition = new Lazy<string>(() => q.ToStringPartition());
-        StringPeriod = new Lazy<string>(() => q.ToStringPeriod());
-        StringRepetendAsInteger = new Lazy<string>(() => q.ToStringRepetendAsInteger());
-        StringFactorization = new Lazy<string>(() => q.ToStringFactorization());
-        StringRepetendFactorization = new Lazy<string>(() => Primes.Factorization(q.RepetendAsInteger).ToString());
-        StringPeriodFactorization = new Lazy<string>(() => Primes.Factorization(q.Period).ToString());
+        StringFraction = new Lazy<string>(() => q.NumeralSystem.ToStringFraction());
+        StringDecimal = new Lazy<string>(() => q.NumeralSystem.ToStringDecimal());
+        StringBin = new Lazy<string>(() => q.NumeralSystem.ToStringBin());
+        StringRotationsBin = new Lazy<string>(() => q.NumeralSystem.ToStringRotationsBin());
+        StringPartition = new Lazy<string>(() => q.NumeralSystem.ToStringPartition());
+        StringPeriod = new Lazy<string>(() => q.NumeralSystem.ToStringPeriod());
+        StringRepetendAsInteger = new Lazy<string>(() => q.NumeralSystem.ToStringRepetendAsInteger());
+        StringFactorization = new Lazy<string>(() => q.NumeralSystem.ToStringFactorization());
+        StringRepetendFactorization = new Lazy<string>(() => Primes.Factorization(q.NumeralSystem.RepetendAsInteger).ToString());
+        StringPeriodFactorization = new Lazy<string>(() => Primes.Factorization(q.NumeralSystem.Period).ToString());
     }
 
 

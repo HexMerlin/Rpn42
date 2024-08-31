@@ -50,6 +50,20 @@
             <param name="b">The byte to check.</param>
             <returns>true if the byte represents a power of two; otherwise, false.</returns>
         </member>
+        <member name="T:MathLib.EnumerableExtensions">
+            <summary>
+            Provides extension methods for <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </summary>
+        </member>
+        <member name="M:MathLib.EnumerableExtensions.Str``1(System.Collections.Generic.IEnumerable{``0},System.String)">
+            <summary>
+            Joins the elements of the enumerable into a string, separated by the specified delimiter.
+            </summary>
+            <typeparam name="T">The type of the elements in the enumerable.</typeparam>
+            <param name="source">The enumerable to join.</param>
+            <param name="delimiter">The delimiter to insert between each element. Defaults to an empty string.</param>
+            <returns>A string with the joined elements.</returns>
+        </member>
         <member name="T:MathLib.Lib">
             <summary>
             Static class for general assembly methods
@@ -57,19 +71,173 @@
         </member>
         <member name="P:MathLib.Lib.BuildVersion">
             <summary>
-            Retrieves the version, target .NET framework, and build configuration of the current assembly.
+            Retrieves assebly information. 
             </summary>
             <returns>
             A string representing the version, target .NET framework, and build configuration (e.g. Debug, Release) of the assembly.
-            The format of the returned string is "Version: X.Y.Z.W Build:FrameworkName Configuration:BuildConfiguration".
+            The format of the returned string is "Version: 'X.Y.Z.W' Build:'FrameworkName' Configuration:'BuildConfiguration'".
             </returns>
             <example>
             <code>
             Console.WriteLine(Lib.BuildVersion);
             // Example output:
-            // "Version: 1.0.2.0 Build:.NET Standard 2.1 Configuration:Release"
+            // "Version: 1.0.0.0 Build:.NET Standard 2.1 Configuration:Release"
             </code>
             </example>
+        </member>
+        <member name="T:MathLib.PAdics.ModP">
+            <summary>
+            Represents an element in the finite field GF(p), where p is a prime number.
+            This class supports arithmetic operations modulo p, including addition, subtraction,
+            multiplication, and division. These operations are performed in the context of a 
+            Galois field, ensuring that the results stay within the finite field.
+            </summary>
+        </member>
+        <member name="P:MathLib.PAdics.ModP.N">
+            <summary>
+            The value of the element in the finite field GF(p).
+            </summary>
+        </member>
+        <member name="P:MathLib.PAdics.ModP.P">
+            <summary>
+            The prime modulus p defining the finite field GF(p).
+            </summary>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.#ctor(System.Numerics.BigInteger,System.Numerics.BigInteger)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MathLib.PAdics.ModP"/> class, representing
+            an element in the finite field GF(p).
+            </summary>
+            <param name="n">The value of the element.</param>
+            <param name="p">The prime modulus p that defines the finite field GF(p).</param>
+            <exception cref="T:System.ArgumentException">Thrown when p is not a prime number.</exception>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.op_Addition(MathLib.PAdics.ModP,MathLib.PAdics.ModP)">
+            <summary>
+            Adds two elements in the finite field GF(p).
+            </summary>
+            <param name="a">An element in the finite field GF(p).</param>
+            <param name="b">Another element in the finite field GF(p).</param>
+            <returns>The sum of the two elements, also an element of GF(p).</returns>
+            <example>
+            <code>
+            var a = new ModP(3, 5);
+            var b = new ModP(4, 5);
+            var result = a + b; // result is 2 in GF(5)
+            </code>
+            </example>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.op_Subtraction(MathLib.PAdics.ModP,MathLib.PAdics.ModP)">
+            <summary>
+            Subtracts one element from another in the finite field GF(p).
+            </summary>
+            <param name="a">An element in the finite field GF(p).</param>
+            <param name="b">Another element in the finite field GF(p).</param>
+            <returns>The difference of the two elements, also an element of GF(p).</returns>
+            <example>
+            <code>
+            var a = new ModP(3, 5);
+            var b = new ModP(4, 5);
+            var result = a - b; // result is 4 in GF(5)
+            </code>
+            </example>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.op_Multiply(MathLib.PAdics.ModP,MathLib.PAdics.ModP)">
+            <summary>
+            Multiplies two elements in the finite field GF(p).
+            </summary>
+            <param name="a">Ab element in the finite field GF(p).</param>
+            <param name="b">Another element in the finite field GF(p).</param>
+            <returns>The product of the two elements, also an element of GF(p).</returns>
+            <example>
+            <code>
+            var a = new ModP(3, 5);
+            var b = new ModP(4, 5);
+            var result = a * b; // result is 2 in GF(5)
+            </code>
+            </example>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.op_Division(MathLib.PAdics.ModP,MathLib.PAdics.ModP)">
+            <summary>
+            Divides one element by another in the finite field GF(p).
+            </summary>
+            <param name="a">Ab element in the finite field GF(p).</param>
+            <param name="b">Another element in the finite field GF(p).</param>
+            <returns>The quotient of the two elements, also an element of GF(p).</returns>
+            <exception cref="T:System.DivideByZeroException">Thrown when attempting to divide by zero.</exception>
+            <example>
+            <code>
+            var a = new ModP(3, 5);
+            var b = new ModP(4, 5);
+            var result = a / b; // result is 2 in GF(5)
+            </code>
+            </example>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.Inverse">
+            <summary>
+            Computes the multiplicative inverse of this element in the finite field GF(p).
+            </summary>
+            <returns>The multiplicative inverse of this element, which, when multiplied by the original element, 
+            results in 1 in the finite field GF(p). This operation is essential in division within the field.
+            </returns>
+            <exception cref="T:System.DivideByZeroException">
+            Thrown when the element is zero because zero does not have a multiplicative inverse.
+            </exception>
+            <example>
+            <code>
+            var a = new ModP(3, 5);
+            var inverse = a.Inverse(); // inverse is 2 in GF(5) because 3 * 2 % 5 = 1
+            </code>
+            </example>
+            <remarks>
+            The multiplicative inverse of an element "a" in a finite field GF(p) is another element "b" such that 
+            the product of "a" and "b" is congruent to 1 modulo p. For example, in GF(5), the multiplicative inverse 
+            of 3 is 2 because (3 * 2) % 5 = 1. This method uses the Extended Euclidean Algorithm to find such an element.
+            </remarks>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.Equals(System.Object)">
+            <summary>
+            Determines whether the specified element is equal to the current element.
+            </summary>
+            <param name="obj">Another element to compare with.</param>
+            <returns>true if the elements are equal; otherwise, false.</returns>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.GetHashCode">
+            <summary>
+            Returns a hash code for this instance.
+            </summary>
+            <returns>A hash code for this instance.</returns>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.ToString">
+            <summary>
+            Returns a string that represents the current element.
+            </summary>
+            <returns>A string that represents the current element in the format "n % p".</returns>
+            <example>
+            <code>
+            var a = new ModP(3, 5);
+            Console.WriteLine(a); // Outputs "3 % 5"
+            </code>
+            </example>
+        </member>
+        <member name="M:MathLib.PAdics.ModP.IsPrime(System.Numerics.BigInteger)">
+            <summary>
+            Determines whether a given number is prime.
+            </summary>
+            <param name="number">The number to check.</param>
+            <returns>true if the number is prime; otherwise, false.</returns>
+        </member>
+        <member name="M:MathLib.PAdics.PAdicPrefix.ReverseExpansion">
+            <summary>
+            Returns the digit expansion of <see cref="T:MathLib.PAdics.PAdicPrefix"/> in reverse order compared to standard p-adic notation
+            </summary>
+            <returns>Digits in reverse order</returns>
+        </member>
+        <member name="M:MathLib.PAdics.PAdicPrefix.ToString">
+            <summary>
+            Returns a digit expansion of the <see cref="T:MathLib.PAdics.PAdicPrefix"/>
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:MathLib.Prime.Factorization">
             <summary>
@@ -370,11 +538,6 @@
             The fractional part of the rational number, obtained by subtracting the integer part.
             </summary>
         </member>
-        <member name="P:MathLib.Q.IntegerLength">
-            <summary>
-            The bit length of the absolute value of the integer part.
-            </summary>
-        </member>
         <member name="M:MathLib.Q.TryCastToInt32(System.Int32@)">
             <summary>
             Attempts to cast the rational number to a 32-bit integer, if possible.
@@ -382,78 +545,9 @@
             <param name="result">The resulting 32-bit integer if the cast is successful.</param>
             <returns>true if the cast is successful; otherwise, false.</returns>
         </member>
-        <member name="P:MathLib.Q.Item(System.Int32)">
-            <summary>
-            Retrieves the fractional part at a specified index of the binary expansion.
-            </summary>
-            <param name="index">The index in the binary expansion.</param>
-            <returns>The fractional part at the specified index.</returns>
-        </member>
-        <member name="M:MathLib.Q.Weight(System.Int32)">
-            <summary>
-            Computes the weight of the bit at the specified index in the binary expansion.
-            </summary>
-            <param name="index">The index in the binary expansion.</param>
-            <returns>The weight of the bit.</returns>
-        </member>
-        <member name="M:MathLib.Q.Term(System.Int32)">
-            <summary>
-            Computes the contribution of the bit at the specified index in the binary expansion.
-            </summary>
-            <param name="index">The index in the binary expansion.</param>
-            <returns>The contribution of the bit as a rational number.</returns>
-        </member>
-        <member name="P:MathLib.Q.RotationsBin">
-            <summary>
-            Iterates over the binary rotation sequence of the rational number.
-            Yields the fractional part at each rotation, with delimiters for the radix point and repetends.
-            </summary>
-        </member>
-        <member name="P:MathLib.Q.RotationsBalBin">
-            <summary>
-            Iterates over the balanced binary rotation sequence of the rational number.
-            The sequence is balanced by a left shift before rotation.
-            </summary>
-        </member>
-        <member name="P:MathLib.Q.Partition">
-            <summary>
-            Iterates over the partitioned binary expansion of the rational number.
-            Yields the contribution of each bit as a rational number.
-            </summary>
-        </member>
-        <member name="P:MathLib.Q.Mixed">
-            <summary>
-            Represents the rational number as a mixed number, where the numerator of the fractional part is always odd.
-            </summary>
-            <remarks>
-            The mixed number is represented as a tuple (Integer part, Fractional part).
-            </remarks>
-            <example>
-            <code>7/3   →  2 + 1/3</code>
-            <code>2/5   →  1 - 3/5</code>
-            <code>-5/3  → -2 + 1/3</code>
-            <code>13/6  →  2 + 1/6</code>
-            </example>
-        </member>
-        <member name="P:MathLib.Q.Length">
-            <summary>
-            The total length of the binary expansion, including both non-repetitive and repetitive parts.
-            </summary>
-        </member>
-        <member name="P:MathLib.Q.Period">
-            <summary>
-            The length of the repetitive part of the binary expansion.
-            Returns zero if the binary expansion is non-repetitive.
-            </summary>
-        </member>
         <member name="P:MathLib.Q.WeightFloor">
             <summary>
             Computes the largest power of two less than or equal to the absolute value of the rational number.
-            </summary>
-        </member>
-        <member name="P:MathLib.Q.RepetendAsInteger">
-            <summary>
-            Computes the repetend of the rational number as an integer, assuming the binary expansion has a periodic part.
             </summary>
         </member>
         <member name="M:MathLib.Q.DivideByNextMersenneNumber(System.Boolean)">
@@ -472,34 +566,6 @@
             <param name="num">The number for which the next Mersenne number is to be found.</param>
             <param name="mustBeCoprime">Specifies whether the Mersenne number must be coprime with <paramref name="num"/>.</param>
             <returns>The next Mersenne number that is equal to or larger than <paramref name="num"/>.</returns>
-        </member>
-        <member name="M:MathLib.Q.RepetendShiftLeft">
-            <summary>
-            Returns a new <see cref="T:MathLib.Q"/> with a repetend (interpreted as an integer) that is binary shifted 1 step to the left
-            compared to the original repetend (interpreted as an integer).
-            </summary>
-            <returns>A new <see cref="T:MathLib.Q"/> instance with the shifted repetend.</returns>
-        </member>
-        <member name="M:MathLib.Q.RepetendShiftRight">
-            <summary>
-            Returns a new <see cref="T:MathLib.Q"/> with a repetend (interpreted as an integer) that is binary shifted 1 step to the right
-            compared to the original repetend (interpreted as an integer).
-            </summary>
-            <returns>A new <see cref="T:MathLib.Q"/> instance with the shifted repetend.</returns>
-        </member>
-        <member name="M:MathLib.Q.FindUnitFractionWithRepetendFactor(MathLib.Q)">
-            <summary>
-            Finds the unit fraction (1/x) with the smallest integer x that has a repetend interpreted as an integer containing
-            the specified factor.
-            </summary>
-            <param name="repetendFactor">The factor to be contained in the repetend of the unit fraction.</param>
-            <returns>A <see cref="T:MathLib.Q"/> representing the unit fraction with the specified factor in its repetend, or <see cref="P:MathLib.Q.Invalid"/> if not found.</returns>
-        </member>
-        <member name="M:MathLib.Q.AsBalanced">
-            <summary>
-            Interprets the binary expansion of the rational number as a balanced binary number.
-            </summary>
-            <returns>The balanced binary number represented by the rational number's binary expansion.</returns>
         </member>
         <member name="P:MathLib.Q.IsZero">
             <summary>
@@ -718,12 +784,108 @@
             </summary>
             <returns>A hash code for the current instance.</returns>
         </member>
-        <member name="F:MathLib.Q.RadixPointChar">
+        <member name="P:MathLib.RationalNumerals.IntegerLength">
+            <summary>
+            The bit length of the absolute value of the integer part.
+            </summary>
+        </member>
+        <member name="P:MathLib.RationalNumerals.Length">
+            <summary>
+            The total length of the binary expansion, including both non-repetitive and repetitive parts.
+            </summary>
+        </member>
+        <member name="P:MathLib.RationalNumerals.Period">
+            <summary>
+            The length of the repetitive part of the binary expansion.
+            Returns zero if the binary expansion is non-repetitive.
+            </summary>
+        </member>
+        <member name="P:MathLib.RationalNumerals.Item(System.Int32)">
+            <summary>
+            Retrieves the fractional part at a specified index of the binary expansion.
+            </summary>
+            <param name="index">The index in the binary expansion.</param>
+            <returns>The fractional part at the specified index.</returns>
+        </member>
+        <member name="M:MathLib.RationalNumerals.RepetendShiftLeft">
+            <summary>
+            Returns a new <see cref="P:MathLib.RationalNumerals.Q"/> with a repetend (interpreted as an integer) that is binary shifted 1 step to the left
+            compared to the original repetend (interpreted as an integer).
+            </summary>
+            <returns>A new <see cref="P:MathLib.RationalNumerals.Q"/> instance with the shifted repetend.</returns>
+        </member>
+        <member name="M:MathLib.RationalNumerals.RepetendShiftRight">
+            <summary>
+            Returns a new <see cref="P:MathLib.RationalNumerals.Q"/> with a repetend (interpreted as an integer) that is binary shifted 1 step to the right
+            compared to the original repetend (interpreted as an integer).
+            </summary>
+            <returns>A new <see cref="P:MathLib.RationalNumerals.Q"/> instance with the shifted repetend.</returns>
+        </member>
+        <member name="M:MathLib.RationalNumerals.Weight(System.Int32)">
+            <summary>
+            Computes the weight of the bit at the specified index in the binary expansion.
+            </summary>
+            <param name="index">The index in the binary expansion.</param>
+            <returns>The weight of the bit.</returns>
+        </member>
+        <member name="M:MathLib.RationalNumerals.Term(System.Int32)">
+            <summary>
+            Computes the contribution of the bit at the specified index in the binary expansion.
+            </summary>
+            <param name="index">The index in the binary expansion.</param>
+            <returns>The contribution of the bit as a rational number.</returns>
+        </member>
+        <member name="P:MathLib.RationalNumerals.Partition">
+            <summary>
+            Iterates over the partitioned binary expansion of the rational number.
+            Yields the contribution of each bit as a rational number.
+            </summary>
+        </member>
+        <member name="P:MathLib.RationalNumerals.RotationsBin">
+            <summary>
+            Iterates over the binary rotation sequence of the rational number.
+            Yields the fractional part at each rotation, with delimiters for the radix point and repetends.
+            </summary>
+        </member>
+        <member name="P:MathLib.RationalNumerals.RepetendAsInteger">
+            <summary>
+            Computes the repetend of the rational number as an integer, assuming the binary expansion has a periodic part.
+            </summary>
+        </member>
+        <member name="P:MathLib.RationalNumerals.Mixed">
+            <summary>
+            Represents the rational number as a mixed number, where the numerator of the fractional part is always odd.
+            </summary>
+            <remarks>
+            The mixed number is represented as a tuple (Integer part, Fractional part).
+            </remarks>
+            <example>
+            <code>7/3   →  2 + 1/3</code>
+            <code>2/5   →  1 - 3/5</code>
+            <code>-5/3  → -2 + 1/3</code>
+            <code>13/6  →  2 + 1/6</code>
+            </example>
+        </member>
+        <member name="M:MathLib.RationalNumerals.FindUnitFractionWithRepetendFactor(MathLib.Q)">
+            <summary>
+            Finds the unit fraction (1/x) with the smallest integer x that has a repetend interpreted as an integer containing
+            the specified factor.
+            </summary>
+            <param name="repetendFactor">The factor to be contained in the repetend of the unit fraction.</param>
+            <returns>A <see cref="P:MathLib.RationalNumerals.Q"/> representing the unit fraction with the specified factor in its repetend, or <see cref="!:Invalid"/> if not found.</returns>
+        </member>
+        <member name="M:MathLib.RationalNumerals.AsBalanced">
+            <summary>
+            Interprets the binary expansion of the rational number as a balanced binary number.
+            </summary>
+            <returns>The balanced binary number represented by the rational number's binary expansion.</returns>
+        </member>
+        <member name="F:MathLib.RationalNumerals.RadixPointChar">
             <summary>
             The character used to represent the radix point in decimal notation.
             </summary>
         </member>
-        <member name="M:MathLib.Q.AddDelimiterChars(MathLib.Q,System.Text.StringBuilder)">
+        <member name="M:MathLib.RationalNumerals.AddDelimiterChars(MathLib.Q,System.Text.StringBuilder)">
             <summary>
             Adds delimiter characters to the provided <see cref="T:System.Text.StringBuilder"/> based on the properties of the rational number.
             </summary>
@@ -731,56 +893,56 @@
             <param name="sb">The <see cref="T:System.Text.StringBuilder"/> to which delimiters are appended.</param>
             <returns>true if the current rational number has a special delimiter; otherwise, false.</returns>
         </member>
-        <member name="M:MathLib.Q.ToStringFraction">
+        <member name="M:MathLib.RationalNumerals.ToStringFraction">
             <summary>
             Converts the rational number to its fractional string representation.
             </summary>
             <returns>A string representing the rational number in the format "numerator/denominator" or just "numerator" if the denominator is 1.</returns>
         </member>
-        <member name="M:MathLib.Q.ToStringPartition">
+        <member name="M:MathLib.RationalNumerals.ToStringPartition">
             <summary>
             Converts the rational number's partition to a string representation.
             </summary>
             <returns>A string where each part of the partition is separated by a space.</returns>
         </member>
-        <member name="M:MathLib.Q.ToStringRotationsBin">
+        <member name="M:MathLib.RationalNumerals.ToStringRotationsBin">
             <summary>
             Converts the rotations in binary format to a string representation.
             </summary>
             <returns>A string where each rotation is represented as either '0' or '1', with delimiters added where appropriate.</returns>
         </member>
-        <member name="M:MathLib.Q.ToStringBin">
+        <member name="M:MathLib.RationalNumerals.ToStringBin">
             <summary>
             Converts the rotations in binary format to a binary string representation.
             </summary>
             <returns>A string where each rotation is represented as either '0' or '1'.</returns>
         </member>
-        <member name="M:MathLib.Q.ToStringDecimal(System.Int32)">
+        <member name="M:MathLib.RationalNumerals.ToStringDecimal(System.Int32)">
             <summary>
             Converts the rational number to its decimal string representation.
             </summary>
             <param name="maxDecimalDigits">The maximum number of digits to include after the radix point.</param>
             <returns>A string representing the rational number in decimal format.</returns>
         </member>
-        <member name="M:MathLib.Q.ToStringPeriod">
+        <member name="M:MathLib.RationalNumerals.ToStringPeriod">
             <summary>
             Converts the period of the rational number to a string representation.
             </summary>
             <returns>A string representing the period of the rational number.</returns>
         </member>
-        <member name="M:MathLib.Q.ToStringRepetendAsInteger">
+        <member name="M:MathLib.RationalNumerals.ToStringRepetendAsInteger">
             <summary>
             Converts the repetend of the rational number to an integer string representation.
             </summary>
             <returns>A string representing the repetend as an integer.</returns>
         </member>
-        <member name="M:MathLib.Q.ToStringFactorization">
+        <member name="M:MathLib.RationalNumerals.ToStringFactorization">
             <summary>
             Converts the factorization of the rational number to a string representation.
             </summary>
             <returns>A string representing the factorization of the rational number.</returns>
         </member>
-        <member name="M:MathLib.Q.ToString">
+        <member name="M:MathLib.RationalNumerals.ToString">
             <summary>
             Converts the rational number to its default string representation.
             </summary>
