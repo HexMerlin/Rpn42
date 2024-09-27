@@ -550,6 +550,12 @@
             Computes the largest power of two less than or equal to the absolute value of the rational number.
             </summary>
         </member>
+        <member name="M:MathLib.Q.ToString">
+            <summary>
+            Returns the rational number as a simple fraction representation in base 10.
+            </summary>
+            <returns>A string representing the rational number (in base 10) in the format "numerator/denominator" or just "numerator" if the denominator is 1.</returns>
+        </member>
         <member name="M:MathLib.Q.DivideByNextMersenneNumber(System.Boolean)">
             <summary>
             Divides the current rational number by the next Mersenne number greater than or equal to the numerator.
@@ -944,9 +950,9 @@
         </member>
         <member name="M:MathLib.RationalNumerals.ToString">
             <summary>
-            Converts the rational number to its default string representation.
+            Returns the rational number as a simple fraction representation in base 10.
             </summary>
-            <returns>A string representing the rational number in the format "numerator/denominator" or just "numerator" if the denominator is 1.</returns>
+            <returns>A string representing the rational number (in base 10) in the format "numerator/denominator" or just "numerator" if the denominator is 1.</returns>
         </member>
     </members>
 </doc>
