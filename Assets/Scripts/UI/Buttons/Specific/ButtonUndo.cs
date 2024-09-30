@@ -1,7 +1,7 @@
 ﻿using MathLib;
 using UnityButton = UnityEngine.UIElements.Button;
 
-public class ButtonUndo : ButtonBase
+public class ButtonUndo : AbstractButton
 {
     public ButtonUndo(UnityButton unityButton) : base(unityButton) { }
 

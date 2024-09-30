@@ -1,7 +1,7 @@
 ﻿using MathLib;
 using UnityButton = UnityEngine.UIElements.Button;
 
-public class ButtonRepetendShiftRight : ButtonBase
+public class ButtonRepetendShiftRight : AbstractButton
 {
     public ButtonRepetendShiftRight(UnityButton unityButton) : base(unityButton) { }
 

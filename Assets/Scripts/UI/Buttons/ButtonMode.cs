@@ -2,13 +2,13 @@
 using MathLib.Prime;
 using UnityButton = UnityEngine.UIElements.Button;
 
-public class ButtonNumberFormatMode : ButtonBase
+public class ButtonMode : AbstractButton
 {
     public Mode NumberMode {  get; }
 
     public bool RequirePrimes { get; }
 
-    public ButtonNumberFormatMode(UnityButton unityButton, Mode numberMode, bool requirePrimes) : base(unityButton)
+    public ButtonMode(UnityButton unityButton, Mode numberMode, bool requirePrimes) : base(unityButton)
     {
         this.NumberMode = numberMode;
         this.RequirePrimes = requirePrimes;

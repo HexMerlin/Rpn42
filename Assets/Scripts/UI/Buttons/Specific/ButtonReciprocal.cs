@@ -1,7 +1,7 @@
 ﻿using MathLib;
 using UnityButton = UnityEngine.UIElements.Button;
 
-public class ButtonReciprocal : ButtonBase
+public class ButtonReciprocal : AbstractButton
 {
     public ButtonReciprocal(UnityButton unityButton) : base(unityButton) { }
 

@@ -1,7 +1,7 @@
 ﻿using MathLib;
 using UnityButton = UnityEngine.UIElements.Button;
 
-public class ButtonDiff : ButtonBase
+public class ButtonDiff : AbstractButton
 {
     public ButtonDiff(UnityButton unityButton) : base(unityButton) { }
 

@@ -2,7 +2,7 @@
 using System.Numerics;
 using UnityButton = UnityEngine.UIElements.Button;
 
-public class ButtonDivMersenne : ButtonBase
+public class ButtonDivMersenne : AbstractButton
 {
     public ButtonDivMersenne(UnityButton unityButton) : base(unityButton) { }
 

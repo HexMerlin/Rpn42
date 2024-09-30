@@ -3,7 +3,7 @@ using MathLib;
 using UnityEngine.UIElements;
 using UnityButton = UnityEngine.UIElements.Button;
 
-public abstract class ButtonBase : IEquatable<ButtonBase>
+public abstract class AbstractButton : IEquatable<AbstractButton>
 {
     private const string selectedKeyword = "selected";
 
@@ -15,7 +15,7 @@ public abstract class ButtonBase : IEquatable<ButtonBase>
 
     public UnityButton UnityButton { get; }
 
-    public ButtonBase(UnityButton unityButton)
+    public AbstractButton(UnityButton unityButton)
     {
         this.UnityButton = unityButton;
         this.Text = unityButton.text;
@@ -23,7 +23,7 @@ public abstract class ButtonBase : IEquatable<ButtonBase>
         unityButton.userData = this;
     }
 
-    public static ButtonBase Button(UnityButton unityButton) => unityButton.userData as ButtonBase;
+    public static AbstractButton Button(UnityButton unityButton) => unityButton.userData as AbstractButton;
 
     public bool IsEnabled => UnityButton.enabledSelf;
 
@@ -46,7 +46,7 @@ public abstract class ButtonBase : IEquatable<ButtonBase>
         else UnityButton.RemoveFromClassList(selectedKeyword);
     }
 
-    public bool Equals(ButtonBase other) => Name == other.Name;  
+    public bool Equals(AbstractButton other) => Name == other.Name;  
 
     public override int GetHashCode() => Name.GetHashCode();
    

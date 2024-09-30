@@ -1,7 +1,7 @@
 ﻿using MathLib;
 using UnityButton = UnityEngine.UIElements.Button;
 
-public class ButtonNeg : ButtonBase
+public class ButtonNeg : AbstractButton
 {
     public ButtonNeg(UnityButton unityButton) : base(unityButton) { }
 

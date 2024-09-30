@@ -6,16 +6,16 @@ using MathLib;
 using UnityEngine.UIElements;
 using UnityButton = UnityEngine.UIElements.Button;
 
-public class ButtonCollection : IEnumerable<ButtonBase>
+public class ButtonCollection : IEnumerable<AbstractButton>
 {
 
-    private readonly IReadOnlyList<ButtonBase> buttons;
+    private readonly IReadOnlyList<AbstractButton> buttons;
 
     public ButtonCollection(VisualElement buttonGrid)
     {
         UnityButton UnityButton(string buttonName) => buttonGrid.Q<UnityButton>(buttonName) ?? throw new ArgumentNullException($"Cannot find a button {buttonName}");
 
-        this.buttons = new ButtonBase[] {
+        this.buttons = new AbstractButton[] {
 
             new ButtonDigit(UnityButton("button-0")),
             new ButtonDigit(UnityButton("button-1")),
@@ -48,13 +48,13 @@ public class ButtonCollection : IEnumerable<ButtonBase>
             new ButtonRepetendShiftLeft(UnityButton("button-rep-shift-left")),
             new ButtonRepetendShiftRight(UnityButton("button-rep-shift-right")),
 
-            new ButtonNumberFormatMode(UnityButton("button-format-normal"), Mode.Normal, false),
-            new ButtonNumberFormatMode(UnityButton("button-format-periodic"), Mode.Periodic, false),
-            new ButtonNumberFormatMode(UnityButton("button-format-padic"), Mode.PAdic, false),
-            new ButtonNumberFormatMode(UnityButton("button-format-rot"), Mode.Rotations, false),
-            new ButtonNumberFormatMode(UnityButton("button-format-factor"), Mode.Factorization, true),
-            new ButtonNumberFormatMode(UnityButton("button-format-repetend"), Mode.Repetend, true),
-            new ButtonNumberFormatMode(UnityButton("button-format-period"), Mode.Period, true),
+            new ButtonMode(UnityButton("button-format-normal"), Mode.Normal, false),
+            new ButtonMode(UnityButton("button-format-periodic"), Mode.Periodic, false),
+            new ButtonMode(UnityButton("button-format-padic"), Mode.PAdic, false),
+            new ButtonMode(UnityButton("button-format-rot"), Mode.Rotations, false),
+            new ButtonMode(UnityButton("button-format-factor"), Mode.Factorization, true),
+            new ButtonMode(UnityButton("button-format-repetend"), Mode.Repetend, true),
+            new ButtonMode(UnityButton("button-format-period"), Mode.Period, true),
             //new ButtonNumberFormatMode(UnityButton("button-format-partition"), Format.Partition, false), 
         };
 
@@ -64,11 +64,11 @@ public class ButtonCollection : IEnumerable<ButtonBase>
     {
         (Q leftOperand, Q rightOperand) = opc.PeekOperands();
 
-        foreach (ButtonBase button in buttons)
+        foreach (AbstractButton button in buttons)
             button.UpdateEnabledStatus(opc, leftOperand, rightOperand);
     }
 
-    public IEnumerator<ButtonBase> GetEnumerator() => this.buttons.GetEnumerator();
+    public IEnumerator<AbstractButton> GetEnumerator() => this.buttons.GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 }

@@ -135,7 +135,7 @@ public partial class MainViewController
         if (evt.target is not UnityButton unityButton)
             return;
 
-        ButtonBase? button = ButtonBase.Button(unityButton);
+        AbstractButton? button = AbstractButton.Button(unityButton);
         if (button is null) return; //button not assigned
 
         GuiEnable = false;

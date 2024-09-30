@@ -1,7 +1,7 @@
 ﻿using MathLib;
 using UnityButton = UnityEngine.UIElements.Button;
 
-public class ButtonBackDrop : ButtonBase
+public class ButtonBackDrop : AbstractButton
 {
     public ButtonBackDrop(UnityButton unityButton) : base(unityButton) { }
 
