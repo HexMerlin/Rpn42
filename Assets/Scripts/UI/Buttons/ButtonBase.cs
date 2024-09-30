@@ -1,5 +1,4 @@
 ﻿using MathLib;
-using MathLib.Prime;
 using UnityButton = UnityEngine.UIElements.Button;
 
 /// <summary>
@@ -20,6 +19,9 @@ public class ButtonBase : AbstractButton
             SetSelected(this.Base == opc.NumberFormat.Base);
     }
 
-    public override void Execute(OperationController opc) => opc.NumberBase = this.Base;
+    public override void Execute(OperationController opc)
+    {
+        opc.NumberBase = this.Base;
+    }
 }
 

@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Logic\QExtensions.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonRadixPoint.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonClear.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonPow.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonAsRepetend.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonUndo.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonBackDrop.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\ButtonDigit.cs" />
+    <Compile Include="Assets\Scripts\Logic\StringParser.cs" />
     <Compile Include="Assets\Scripts\Logic\Change.Helpers.cs" />
     <Compile Include="Assets\Scripts\Logic\Format.cs" />
     <Compile Include="Assets\Scripts\Persistence\PersistenceManager.cs" />
@@ -87,6 +89,7 @@
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonRepetendShiftLeft.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonQuotient.cs" />
     <Compile Include="Assets\Scripts\UI\MainViewController.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonModePAdic.cs" />
     <Compile Include="Assets\Scripts\Logic\DeferredResult.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\AbstractButton.cs" />
     <Compile Include="Assets\Scripts\Persistence\SavedData.cs" />
@@ -95,7 +98,6 @@
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonCopy2.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonMod.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonSquare.cs" />
-    <Compile Include="Assets\Scripts\Logic\Tokenizer.cs" />
     <Compile Include="Assets\Scripts\Logic\NumberEntry.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonNeg.cs" />
     <Compile Include="Assets\Scripts\UI\MainViewController.Callbacks.cs" />

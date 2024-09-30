@@ -75,7 +75,7 @@ public partial class MainViewController
     {
         if (evt.target is Label cellLabel)
         {
-            BigInteger[] integers = Tokenizer.TokenizeDistinctIntegers(cellLabel.text);
+            BigInteger[] integers = StringParser.TokenizeDistinctIntegers(cellLabel.text);
             if (integers.Length == 0)
                 return;
             else if (integers.Length == 1)

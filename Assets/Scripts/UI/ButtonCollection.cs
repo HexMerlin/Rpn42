@@ -27,6 +27,7 @@ public class ButtonCollection : IEnumerable<AbstractButton>
             new ButtonDigit(UnityButton("button-7"), 7),
             new ButtonDigit(UnityButton("button-8"), 8),
             new ButtonDigit(UnityButton("button-9"), 9),
+            new ButtonRadixPoint(UnityButton("button-radix-point")),
             new ButtonEnter(UnityButton("button-enter")),
             new ButtonQuotient(UnityButton("button-quotient")),
             new ButtonBackDrop(UnityButton("button-back-drop")),
@@ -50,7 +51,7 @@ public class ButtonCollection : IEnumerable<AbstractButton>
 
             new ButtonMode(UnityButton("button-mode-normal"), Mode.Normal, false),
             new ButtonMode(UnityButton("button-mode-periodic"), Mode.Periodic, false),
-            new ButtonMode(UnityButton("button-mode-padic"), Mode.PAdic, false),
+            new ButtonModePAdic(UnityButton("button-mode-padic")),
             new ButtonMode(UnityButton("button-mode-rot"), Mode.Rotations, false),
             new ButtonMode(UnityButton("button-mode-factor"), Mode.Factorization, true),
             new ButtonMode(UnityButton("button-mode-repetend"), Mode.Repetend, true),

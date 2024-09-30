@@ -65,7 +65,7 @@
                 <ui:Button text="Redo" name="button-redo" class="button" />
                 <ui:Button name="button-mod" text="Mod" class="button" />
                 <ui:Button text="+" name="button-sum" class="button" />
-                <ui:Button text="." name="button-point" class="button" />
+                <ui:Button text="." name="button-radixpoint" class="button" />
                 <ui:Button text="0" name="button-0" class="button" />
                 <ui:Button text="Enter" name="button-enter" class="button" style="width: 19%;" />
             </ui:VisualElement>

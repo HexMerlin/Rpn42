@@ -12,7 +12,8 @@ public class ButtonMode : AbstractButton
     {
         this.NumberMode = numberMode;
         this.RequirePrimes = requirePrimes;
-        this.DisabledText = "Pending…";
+        if (requirePrimes)
+            this.DisabledText = "Pending…";
     }
 
     public override void UpdateEnabledStatus(OperationController opc, Q leftOperand, Q rightOperand)
@@ -22,6 +23,9 @@ public class ButtonMode : AbstractButton
             SetSelected(this.NumberMode == opc.NumberFormat.Mode);
     }
 
-    public override void Execute(OperationController opc) => opc.NumberMode = this.NumberMode;
+    public override void Execute(OperationController opc)
+    {
+        opc.NumberMode = this.NumberMode;
+    }
 }
 

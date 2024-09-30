@@ -424,6 +424,20 @@
             </list>
             </returns>
         </member>
+        <member name="M:MathLib.BigIntegerExtensions.Parse(System.String,System.Int32)">
+            <summary>
+            Parses the string representation of a number in the specified base to its <see cref="T:System.Numerics.BigInteger"/> equivalent.
+            </summary>
+            <param name="input">The string representation of the number to parse. It may start with a '-' to indicate a negative number.</param>
+            <param name="fromBase">The base of the input number, ranging from 2 to 36.</param>
+            <returns>A <see cref="T:System.Numerics.BigInteger"/> representation of the parsed value.</returns>
+            <example>
+            <code>
+            Console.WriteLine(Parse("-10.011", 2));  //outputs "-19/8"
+            </code>
+            </example>
+            <exception cref="T:System.ArgumentException">Thrown if <paramref name="fromBase"/> is not within 2 to 36.</exception>
+        </member>
         <member name="T:MathLib.Cp">
             <summary>
             Represents the field of complex p-adic numbers, denoted ℂₚ in mathematics.
@@ -1218,16 +1232,6 @@
             Protected constructor that creates a copy of a Q object.
             </summary>
             <param name="q"></param>
-        </member>
-        <member name="M:MathLib.Q.#ctor(System.String)">
-            <summary>
-            Initializes a rational number from its string representation.
-            The string can be an integer or a rational number in decimal form.
-            </summary>
-            <remarks>
-            Currently, the constructor does not support point notation.
-            </remarks>
-            <param name="input">The string representation of the rational number.</param>
         </member>
         <member name="M:MathLib.Q.PAryInterpretation(System.Boolean,MathLib.BaseInt,MathLib.BaseInt,System.Int32)">
             <summary>

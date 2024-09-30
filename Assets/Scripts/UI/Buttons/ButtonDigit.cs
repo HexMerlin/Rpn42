@@ -1,5 +1,4 @@
 ﻿using MathLib;
-using MathLib.Prime;
 using UnityButton = UnityEngine.UIElements.Button;
 
 public class ButtonDigit : AbstractButton

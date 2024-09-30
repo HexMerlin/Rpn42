@@ -11,24 +11,31 @@ public class OperationController
 
     private StringBuilder inputBuf = new StringBuilder();
 
-   // public ButtonCollection Buttons;
-
     public Change CurrentChange = Change.CreateStart();
 
     public IReadOnlyList<NumberEntry> OutputEntries => outputEntries;
 
-    public Format NumberFormat { get; set; }
+    public Format NumberFormat { get; private set; }
 
     public Mode NumberMode
     {
         get => NumberFormat.Mode;
-        set => NumberFormat = new Format(value, NumberFormat.Base);
+        set
+        {
+            NumberFormat = new Format(value, NumberFormat.Base);
+        }
     }
 
     public int NumberBase
     {
         get => NumberFormat.Base;
-        set => NumberFormat = new Format(NumberFormat.Mode, value);
+        set 
+        {
+            if (!InputEmpty)
+                PerformUnaryOperation((a) => a);
+            NumberFormat = new Format(NumberFormat.Mode, value);
+
+        }
     }
 
 
@@ -182,7 +189,7 @@ public class OperationController
       
         return InputEmpty ?
             (OutputCount > 1 ? SecondLastOutput.Q : Q.NaN, lastOutput)
-            : (lastOutput, new Q(this.inputBuf.ToString()));
+            : (lastOutput, StringParser.ParseNumber(this.inputBuf.ToString(), NumberBase));
     }
 
 }

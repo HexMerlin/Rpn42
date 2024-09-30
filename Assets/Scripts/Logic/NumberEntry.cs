@@ -1,9 +1,6 @@
-﻿
-
-using System;
+﻿using System;
 using System.Numerics;
 using MathLib;
-using MathLib.Prime;
 
 public class NumberEntry
 {
