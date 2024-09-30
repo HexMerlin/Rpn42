@@ -55,7 +55,12 @@ public class ButtonCollection : IEnumerable<AbstractButton>
             new ButtonMode(UnityButton("button-format-factor"), Mode.Factorization, true),
             new ButtonMode(UnityButton("button-format-repetend"), Mode.Repetend, true),
             new ButtonMode(UnityButton("button-format-period"), Mode.Period, true),
-            //new ButtonNumberFormatMode(UnityButton("button-format-partition"), Format.Partition, false), 
+
+            new ButtonBase(UnityButton("button-base-2"), 2),
+            new ButtonBase(UnityButton("button-base-3"), 3),
+            new ButtonBase(UnityButton("button-base-5"), 5),
+            new ButtonBase(UnityButton("button-base-10"), 10),
+  
         };
 
     }

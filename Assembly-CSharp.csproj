@@ -83,6 +83,7 @@
     <Compile Include="Assets\Scripts\UI\OperationController.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonSum.cs" />
     <Compile Include="Assets\Scripts\Logic\Change.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\ButtonBase.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonRepetendShiftLeft.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonQuotient.cs" />
     <Compile Include="Assets\Scripts\UI\MainViewController.cs" />
