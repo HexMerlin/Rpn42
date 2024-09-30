@@ -19,7 +19,7 @@ public partial class MainViewController : MonoBehaviour
 
     private NumberDialog numberDialog;
   
-    private volatile bool uiRefreshDemanded;
+    private volatile bool uiRefreshRequested;
     private readonly object uiRefreshLock = new object();
 
     private bool _guiEnabled = true;
@@ -45,7 +45,7 @@ public partial class MainViewController : MonoBehaviour
         SavedData savedData = PersistenceManager.LoadData();
      
         this.OperationController.ReadFrom(savedData);
-        DemandUIRefresh();
+        RequestUIRefresh();
     }
 
 
@@ -57,9 +57,9 @@ public partial class MainViewController : MonoBehaviour
         PersistenceManager.SaveData(savedData);
     }
 
-    public void DemandUIRefresh()
+    public void RequestUIRefresh()
     {
-        uiRefreshDemanded = true;
+        uiRefreshRequested = true;
     }
 
     private void PerformUIRefresh()
@@ -102,7 +102,7 @@ public partial class MainViewController : MonoBehaviour
             if (this.OperationController.OutputCount > 0)
                 this.output.schedule.Execute(() => this.output.ScrollToItem(this.OperationController.OutputCount - 1));
             
-            uiRefreshDemanded = false;
+            uiRefreshRequested = false;
         }
     }
 

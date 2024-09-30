@@ -66,7 +66,7 @@ public partial class MainViewController
         
         this.numberDialog.Hide();
         LoadSavedData();
-        DemandUIRefresh();
+        RequestUIRefresh();
 
     }
 
@@ -82,7 +82,7 @@ public partial class MainViewController
             {
                 NumberEntry numberEntry = new NumberEntry(integers[0]);
                 OperationController.AddOutput(numberEntry, isUndoPoint: true);
-                DemandUIRefresh();
+                RequestUIRefresh();
             }
             else
             {
@@ -103,18 +103,18 @@ public partial class MainViewController
         NumberEntry numberEntry = new NumberEntry(BigInteger.Parse(selectedItem));
         OperationController.AddOutput(numberEntry, isUndoPoint: true);
         GuiEnable = true;
-        DemandUIRefresh();
+        RequestUIRefresh();
     }
 
 
     public void Update()
     {
-        if (uiRefreshDemanded)
+        if (uiRefreshRequested)
             PerformUIRefresh();
     }
 
 
-    private void OnPrimesInstanceCompleted() => DemandUIRefresh();
+    private void OnPrimesInstanceCompleted() => RequestUIRefresh();
 
     //private void OnApplicationPause(bool pauseStatus)
     //{
@@ -143,7 +143,7 @@ public partial class MainViewController
         button.Execute(OperationController);
         OperationController.CurrentChange.IsUndoPoint = true;
 
-        DemandUIRefresh();
+        RequestUIRefresh();
         GuiEnable = true;
        
     }
