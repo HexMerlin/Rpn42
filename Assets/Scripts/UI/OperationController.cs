@@ -33,8 +33,8 @@ public class OperationController
         {
             if (!InputEmpty)
                 PerformUnaryOperation((a) => a);
-            NumberFormat = new Format(NumberFormat.Mode, value);
-
+            Mode mode = value == 10 && NumberFormat.Mode is Mode.PAdic ? Mode.Normal : NumberFormat.Mode;
+            NumberFormat = new Format(mode, value);
         }
     }
 
