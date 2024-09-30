@@ -1051,21 +1051,6 @@
             </summary>
             <returns>A hash code for the current instance.</returns>
         </member>
-        <member name="P:MathLib.Q.IntegralPartAlwaysFEO">
-            <summary>
-            This version always sets FEO mode.
-            </summary>
-        </member>
-        <member name="M:MathLib.Q.IntegralPartSelective(System.Boolean)">
-            <summary>
-            This version selects between FIO and FEO mode.
-            </summary>
-            <remarks>
-            This property needs to replace the existing version to come in to effect.
-            Current implementation is provided only to give an understanding.
-            </remarks>
-            <param name="fio">If <see langword="true"/> FIO mode, otherwise FEO mode</param>
-        </member>
         <member name="P:MathLib.Q.Numerator">
             <summary>
             The numerator of the rational number.
@@ -1255,7 +1240,7 @@
             <param name="pAryPreperiodic">The preperiodic part as an integer.</param>
             <param name="pAryPeriodic">The periodic part as an integer.</param>
             <param name="firstExponent">The exponent index of the first coefficient of the number.</param>
-            <exception cref="T:System.ArgumentException">Thrown when the bases of <paramref name="pAryPreperiodic"/> and <paramref name="pAryPeriodic"/> are not equal.</exception>
+            <exception cref="!:ArgumentException">Thrown when the bases of <paramref name="pAryPreperiodic"/> and <paramref name="pAryPeriodic"/> are not equal.</exception>
             <returns>A new <see cref="T:MathLib.Q"/> representing the rational number derived from the given parts.</returns>
         </member>
         <member name="M:MathLib.Q.InBase(MathLib.Base)">
@@ -1485,6 +1470,21 @@
             </summary>
             <param name="result">The resulting 32-bit integer if the cast is successful.</param>
             <returns><see langword="true"/> <c>iff</c> the cast is successful.</returns>
+        </member>
+        <member name="P:MathLib.Q.IntegralPartAlwaysFEO">
+            <summary>
+            This version always sets FEO mode.
+            </summary>
+        </member>
+        <member name="M:MathLib.Q.IntegralPartSelective(System.Boolean)">
+            <summary>
+            This version selects between FIO and FEO mode.
+            </summary>
+            <remarks>
+            This property needs to replace the existing version to come in to effect.
+            Current implementation is provided only to give an understanding.
+            </remarks>
+            <param name="fio">If <see langword="true"/> FIO mode, otherwise FEO mode</param>
         </member>
         <member name="M:MathLib.Q.ToStringCanonical">
             <summary>
@@ -1930,7 +1930,7 @@
             <param name="pAryPreperiodic">The preperiodic part as an integer.</param>
             <param name="pAryPeriodic">The periodic part as an integer.</param>
             <param name="firstExponent">The exponent index of the first coefficient of the number.</param>
-            <exception cref="T:System.ArgumentException">Thrown when the bases of <paramref name="pAryPreperiodic"/> and <paramref name="pAryPeriodic"/> are not equal.</exception>
+            <exception cref="!:ArgumentException">Thrown when the bases of <paramref name="pAryPreperiodic"/> and <paramref name="pAryPeriodic"/> are not equal.</exception>
             <returns>A new <see cref="T:MathLib.Q"/> representing the rational number derived from the given parts.</returns>
         </member>
     </members>
