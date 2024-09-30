@@ -45,17 +45,17 @@ public class ButtonCollection : IEnumerable<ButtonBase>
             new ButtonRedo(UnityButton("button-redo")),
             new ButtonRepFactor(UnityButton("button-rep-factor")),
             new ButtonAsRepetend(UnityButton("button-as-repetend")),
-            new ButtonAsBalanced(UnityButton("button-as-bal")),
             new ButtonRepetendShiftLeft(UnityButton("button-rep-shift-left")),
             new ButtonRepetendShiftRight(UnityButton("button-rep-shift-right")),
 
-            new ButtonNumberFormatMode(UnityButton("button-format-normal"), Format.Normal, false),
-            new ButtonNumberFormatMode(UnityButton("button-format-bin"), Format.Bin, false),
-            new ButtonNumberFormatMode(UnityButton("button-format-repetend"), Format.Repetend, true),
-            new ButtonNumberFormatMode(UnityButton("button-format-rotbin"), Format.RotationsBin, false),
-            new ButtonNumberFormatMode(UnityButton("button-format-factor"), Format.Factor, true),
-            new ButtonNumberFormatMode(UnityButton("button-format-period"), Format.Period, true),
-            new ButtonNumberFormatMode(UnityButton("button-format-partition"), Format.Partition, false), 
+            new ButtonNumberFormatMode(UnityButton("button-format-normal"), Mode.Normal, false),
+            new ButtonNumberFormatMode(UnityButton("button-format-periodic"), Mode.Periodic, false),
+            new ButtonNumberFormatMode(UnityButton("button-format-padic"), Mode.PAdic, false),
+            new ButtonNumberFormatMode(UnityButton("button-format-rot"), Mode.Rotations, false),
+            new ButtonNumberFormatMode(UnityButton("button-format-factor"), Mode.Factorization, true),
+            new ButtonNumberFormatMode(UnityButton("button-format-repetend"), Mode.Repetend, true),
+            new ButtonNumberFormatMode(UnityButton("button-format-period"), Mode.Period, true),
+            //new ButtonNumberFormatMode(UnityButton("button-format-partition"), Format.Partition, false), 
         };
 
     }

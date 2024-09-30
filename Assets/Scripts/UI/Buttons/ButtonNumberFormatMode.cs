@@ -4,13 +4,13 @@ using UnityButton = UnityEngine.UIElements.Button;
 
 public class ButtonNumberFormatMode : ButtonBase
 {
-    public Format NumberFormat {  get; }
+    public Mode NumberMode {  get; }
 
     public bool RequirePrimes { get; }
 
-    public ButtonNumberFormatMode(UnityButton unityButton, Format numberFormat, bool requirePrimes) : base(unityButton)
+    public ButtonNumberFormatMode(UnityButton unityButton, Mode numberMode, bool requirePrimes) : base(unityButton)
     {
-        this.NumberFormat = numberFormat;
+        this.NumberMode = numberMode;
         this.RequirePrimes = requirePrimes;
         this.DisabledText = "Pending…";
     }
@@ -19,9 +19,9 @@ public class ButtonNumberFormatMode : ButtonBase
     {
         SetEnabled(!this.RequirePrimes || Primes.IsReady);
         if (IsEnabled)
-            SetSelected(this.NumberFormat == opc.NumberFormat);
+            SetSelected(this.NumberMode == opc.NumberFormat.Mode);
     }
 
-    public override void Execute(OperationController opc) => opc.NumberFormat = this.NumberFormat;
+    public override void Execute(OperationController opc) => opc.NumberMode = this.NumberMode;
 }
 

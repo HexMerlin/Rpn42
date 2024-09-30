@@ -6,7 +6,8 @@ public class ButtonRepFactor : ButtonBase
     public ButtonRepFactor(UnityButton unityButton) : base(unityButton) { }
 
     public override void UpdateEnabledStatus(OperationController opc, Q leftOperand, Q rightOperand)
-        => SetEnabled(!rightOperand.IsInvalid);
+        => SetEnabled(!rightOperand.IsNaN);
 
-    public override void Execute(OperationController opc) => opc.PerformUnaryOperation((a) => RationalNumerals.FindUnitFractionWithRepetendFactor(a));
+    //TODO: Fix this!
+    public override void Execute(OperationController opc) => opc.PerformUnaryOperation((a) => a);// RationalNumerals.FindUnitFractionWithRepetendFactor(a));
 }

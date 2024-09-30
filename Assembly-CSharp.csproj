@@ -61,6 +61,7 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.21f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Logic\QExtensions.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonClear.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonPow.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonAsRepetend.cs" />
@@ -93,11 +94,11 @@
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonMod.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonSquare.cs" />
     <Compile Include="Assets\Scripts\Logic\Tokenizer.cs" />
-    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonAsBalanced.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\ButtonNumberFormatMode.cs" />
     <Compile Include="Assets\Scripts\Logic\NumberEntry.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonNeg.cs" />
     <Compile Include="Assets\Scripts\UI\MainViewController.Callbacks.cs" />
+    <Compile Include="Assets\Scripts\Logic\BaseEntry.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonDivMersenne.cs" />
   </ItemGroup>
   <ItemGroup>

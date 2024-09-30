@@ -17,12 +17,25 @@ public class OperationController
 
     public IReadOnlyList<NumberEntry> OutputEntries => outputEntries;
 
-    public Format NumberFormat { get; set; } = Format.Normal;
+    public Format NumberFormat { get; set; }
+
+    public Mode NumberMode
+    {
+        get => NumberFormat.Mode;
+        set => NumberFormat = new Format(value, NumberFormat.Base);
+    }
+
+    public int NumberBase
+    {
+        get => NumberFormat.Base;
+        set => NumberFormat = new Format(NumberFormat.Mode, value);
+    }
+
 
     public OperationController()
     {
         this.outputEntries = new List<NumberEntry>();
-        this.NumberFormat = Format.Normal;
+        this.NumberFormat = new Format(Mode.Normal, 10);
 
     }
     public NumberEntry this[int index] => this.outputEntries[index];
@@ -64,11 +77,11 @@ public class OperationController
     public void PerformUnaryOperation(Func<Q, Q> operation, bool retainOperand = false)
     { 
         (Q _, Q operand) = PeekOperands();
-        if (operand.IsInvalid) return; //need 1 operand to perform operation: abort operation
+        if (operand.IsNaN) return; //need 1 operand to perform operation: abort operation
 
         Q result = operation(operand);
 
-        if (result.IsInvalid) return;
+        if (result.IsNaN) return;
 
         if (retainOperand)
         {
@@ -83,11 +96,11 @@ public class OperationController
     public void PerformBinaryOperation(Func<Q, Q, Q> operation)
     {
         (Q leftOperand, Q rightOperand) = PeekOperands();
-        if (leftOperand.IsInvalid || rightOperand.IsInvalid) return; //need 2 operands to perform operation: abort operation
+        if (leftOperand.IsNaN || rightOperand.IsNaN) return; //need 2 operands to perform operation: abort operation
 
         Q result = operation(leftOperand, rightOperand);
 
-        if (result.IsInvalid) return;
+        if (result.IsNaN) return;
 
         this.CurrentChange = InputEmpty ?
             this.CurrentChange.RemoveOutput(outputEntries).ReplaceOutput(new NumberEntry(result), outputEntries) :
@@ -165,10 +178,10 @@ public class OperationController
 
     public (Q leftOperand, Q rightOperand) PeekOperands()
     {
-        Q lastOutput = OutputCount > 0 ? LastOutput.Q : Q.Invalid;
+        Q lastOutput = OutputCount > 0 ? LastOutput.Q : Q.NaN;
       
         return InputEmpty ?
-            (OutputCount > 1 ? SecondLastOutput.Q : Q.Invalid, lastOutput)
+            (OutputCount > 1 ? SecondLastOutput.Q : Q.NaN, lastOutput)
             : (lastOutput, new Q(this.inputBuf.ToString()));
     }
 

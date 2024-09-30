@@ -9,7 +9,7 @@ public class NumberEntry
 {
     public Q Q { get; }
 
-    public static readonly NumberEntry Invalid = new NumberEntry(Q.Invalid);
+    public static readonly NumberEntry Invalid = new NumberEntry(Q.NaN);
 
     public NumberEntry() : this(new Q(0)) { }
     
@@ -20,17 +20,25 @@ public class NumberEntry
     public NumberEntry(Q q)
     {
         this.Q = q;
-        StringFraction = new Lazy<string>(() => q.NumeralSystem.ToStringFraction());
-        StringDecimal = new Lazy<string>(() => q.NumeralSystem.ToStringDecimal());
-        StringBin = new Lazy<string>(() => q.NumeralSystem.ToStringBin());
-        StringRotationsBin = new Lazy<string>(() => q.NumeralSystem.ToStringRotationsBin());
-        StringPartition = new Lazy<string>(() => q.NumeralSystem.ToStringPartition());
-        StringPeriod = new Lazy<string>(() => q.NumeralSystem.ToStringPeriod());
-        StringRepetendAsInteger = new Lazy<string>(() => q.NumeralSystem.ToStringRepetendAsInteger());
-        StringFactorization = new Lazy<string>(() => q.NumeralSystem.ToStringFactorization());
-        StringRepetendFactorization = new Lazy<string>(() => Primes.Factorization(q.NumeralSystem.RepetendAsInteger).ToString());
-        StringPeriodFactorization = new Lazy<string>(() => Primes.Factorization(q.NumeralSystem.Period).ToString());
+        StringCanonical = new Lazy<string>(() => q.ToStringCanonical());
+        StringFactorization = new Lazy<string>(() => q.ToStringFactorization());
+        Base2Entry = new Lazy<BaseEntry>(() => new BaseEntry(q, 2));
+        Base3Entry = new Lazy<BaseEntry>(() => new BaseEntry(q, 3));
+        Base5Entry = new Lazy<BaseEntry>(() => new BaseEntry(q, 5));
+        Base10Entry = new Lazy<BaseEntry>(() => new BaseEntry(q, 10));
+
     }
+    private Lazy<string> StringCanonical { get; }
+
+    private Lazy<string> StringFactorization { get; }
+
+    private Lazy<BaseEntry> Base2Entry { get; }
+    
+    private Lazy<BaseEntry> Base3Entry { get; }
+
+    private Lazy<BaseEntry> Base5Entry { get; }
+
+    private Lazy<BaseEntry> Base10Entry { get; }
 
 
     public static string ColumnTitle(int columnIndex, Format format) => columnIndex switch
@@ -50,70 +58,60 @@ public class NumberEntry
         _ =>  throw new ArgumentOutOfRangeException(nameof(columnIndex), columnIndex, "Unknown column"),
     };
 
-    private static string Col0Title(Format _) => "Fraction";
+    private static string Col0Title(Format _) => "Canonical";
 
-    private string Col0Data(Format _) => StringFraction.Value;
+    private string Col0Data(Format _) => StringCanonical.Value;
 
-    private static string Col1Title(Format numberFormat) => numberFormat switch
-    {  
-        Format.Bin or Format.Repetend or Format.Factor => "Repetend Int",
-        Format.Period or Format.Partition => "Period",
+    private static string Col1Title(Format format) 
+        => format.Mode switch
+    {
+        Mode.PAdic => "Generator",
+        Mode.Repetend => "Repetend",
+        Mode.Period => "Period",
         _ => "",
     };
 
-    private string Col1Data(Format format) => format switch
+    private string Col1Data(Format format) 
+        => format.Mode switch
     {
-        Format.Bin or Format.Repetend or Format.Factor => StringRepetendAsInteger.Value,
-        Format.Period or Format.Partition => StringPeriod.Value,
+        Mode.PAdic => BaseEntry(format).StringQpGenerator.Value,
+        Mode.Repetend => BaseEntry(format).StringRepetend.Value,
+        Mode.Period => BaseEntry(format).StringPeriod.Value,
         _ => "",
     };
 
-    private static string Col2Title(Format numberFormat) => numberFormat switch
+    private static string Col2Title(Format format) => format.Mode switch
     {
-        Format.Normal => "Decimal",
-        Format.Bin => "Binary",
-        Format.Repetend => "Repetend factors",
-        Format.RotationsBin => "Rotations",
-        Format.Factor => "Factors",
-        Format.Period => "Period factors",
-        Format.Partition => "Partitions",
-        _ => $"Unhandled format '{numberFormat}'",
-    };
-
-
-    private string Col2Data(Format format) => format switch
-    {
-        Format.Normal => StringDecimal.Value,
-        Format.Bin => StringBin.Value,
-        Format.Repetend => StringRepetendFactorization.Value,
-        Format.RotationsBin => StringRotationsBin.Value,
-        Format.Factor => StringFactorization.Value,
-        Format.Period => StringPeriodFactorization.Value,
-        Format.Partition => StringPartition.Value,
+        Mode.Normal => "Expanded",
+        Mode.Periodic => "Periodic",
+        Mode.PAdic => "P-Adic",
+        Mode.Rotations => "Rotations",
+        Mode.Factorization => "Factors",
+        Mode.Repetend => "Repetend Factors",
+        Mode.Period => "Period Factors",
         _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown format"),
     };
 
-    private Lazy<string> StringFraction { get; }
+    private string Col2Data(Format format) => format.Mode switch
+    {
+        Mode.Normal => BaseEntry(format).StringExpanded.Value,
+        Mode.Periodic => BaseEntry(format).StringPeriodic.Value,
+        Mode.PAdic => BaseEntry(format).StringQpPeriodic.Value,
+        Mode.Rotations => BaseEntry(format).StringRotations.Value,
+        Mode.Factorization => StringFactorization.Value,
+        Mode.Repetend => BaseEntry(format).StringRepetendFactorization.Value,
+        Mode.Period => BaseEntry(format).StringPeriodFactorization.Value,
+        _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown format"),
+    };
 
-    private Lazy<string> StringDecimal { get; }
-
-    private Lazy<string> StringBin { get; }
-
-    private Lazy<string> StringRotationsBin { get; }
-
-    private Lazy<string> StringPartition { get; }
-
-    private Lazy<string> StringPeriod { get; }
-
-    private Lazy<string> StringRepetendAsInteger { get; }
-    
-    private Lazy<string> StringFactorization { get; }
-    
-    private Lazy<string> StringRepetendFactorization { get; }
-    
-    private Lazy<string> StringPeriodFactorization { get; }
-
-    public override string ToString() => StringFraction.Value;
+    private BaseEntry BaseEntry(Format format) => format.Base switch
+    {
+        2 => Base2Entry.Value,
+        3 => Base3Entry.Value,
+        5 => Base5Entry.Value,
+        10 => Base10Entry.Value,
+        _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown base"),
+    };
 
 
 }

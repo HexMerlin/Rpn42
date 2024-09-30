@@ -6,7 +6,7 @@ public class ButtonAsRepetend : ButtonBase
     public ButtonAsRepetend(UnityButton unityButton) : base(unityButton) { }
 
     public override void UpdateEnabledStatus(OperationController opc, Q leftOperand, Q rightOperand)
-        => SetEnabled(!rightOperand.IsInvalid);
+        => SetEnabled(!rightOperand.IsNaN);
 
-    public override void Execute(OperationController opc) => opc.PerformUnaryOperation((a) => a.DivideByNextMersenneNumber(mustBeCoprime: true));
+    public override void Execute(OperationController opc) => opc.PerformUnaryOperation((a) => QExtensions.DivideByNextMersenneNumber(a, mustBeCoprime: true));
 }

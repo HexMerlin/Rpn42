@@ -69,6 +69,15 @@ Label {
     color: rgb(159, 159, 159);
 }
 
+.button.base-button {
+    font-size: 32px;
+}
+
+.button.base-button.selected {
+    color: rgb(0, 255, 0);
+    -unity-font-style: bold;
+}
+
 .button.mode-button {
     font-size: 32px;
 }
