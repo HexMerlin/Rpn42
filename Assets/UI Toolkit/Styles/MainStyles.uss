@@ -69,6 +69,15 @@ Label {
     color: rgb(159, 159, 159);
 }
 
+.button.mode-button {
+    font-size: 32px;
+}
+
+.button.mode-button.selected {
+    color: rgb(0, 255, 0);
+    -unity-font-style: bold;
+}
+
 .button.base-button {
     font-size: 32px;
 }
@@ -78,12 +87,9 @@ Label {
     -unity-font-style: bold;
 }
 
-.button.mode-button {
+.button.toggle-button {
     font-size: 32px;
-}
-
-.button.mode-button.selected {
-    color: rgb(0, 255, 0);
+     color: rgb(0, 0, 255);
     -unity-font-style: bold;
 }
 

@@ -20,7 +20,7 @@
                 <ui:Button name="button-base-3" text="Base 3" class="button base-button" />
                 <ui:Button name="button-base-5" text="Base 5" class="button base-button" />
                 <ui:Button name="button-base-10" text="Dec" class="button base-button" />
-                <ui:Button class="button" />
+                <ui:Button name="button-toggle-input" text="Decimal&#10;Input" class="button toggle-button" />
             </ui:VisualElement>
             <ui:VisualElement name="row-1" style="flex-grow: 1; flex-direction: row; justify-content: center;">
                 <ui:Button class="button" />

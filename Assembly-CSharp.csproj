@@ -94,6 +94,7 @@
     <Compile Include="Assets\Scripts\UI\Buttons\AbstractButton.cs" />
     <Compile Include="Assets\Scripts\Persistence\SavedData.cs" />
     <Compile Include="Assets\Scripts\UI\ButtonCollection.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\ButtonToggle.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonEnter.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonCopy2.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonMod.cs" />
