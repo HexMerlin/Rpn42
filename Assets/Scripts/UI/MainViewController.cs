@@ -39,28 +39,16 @@ public partial class MainViewController : MonoBehaviour
         get => _guiEnabled;
     }
 
-
     private void LoadSavedData()
     {
-        SavedData savedData = PersistenceManager.LoadData();
-     
-        this.ModelController.ReadFrom(savedData);
+        this.ModelController.LoadSavedData();
         RequestUIRefresh();
     }
 
 
-    private void SaveData()
-    {
-        SavedData savedData = new SavedData();
-    
-        this.ModelController.WriteTo(savedData);
-        PersistenceManager.SaveData(savedData);
-    }
+    private void SaveData() => this.ModelController.SaveData();
 
-    public void RequestUIRefresh()
-    {
-        uiRefreshRequested = true;
-    }
+    public void RequestUIRefresh() => this.uiRefreshRequested = true;
 
     private void PerformUIRefresh()
     {

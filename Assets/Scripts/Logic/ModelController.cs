@@ -59,7 +59,23 @@ public class ModelController
 
     private NumberEntry SecondLastOutput => this.outputEntries[^2];
 
-    public void ReadFrom(SavedData savedData)
+
+    public void LoadSavedData()
+    {
+        SavedData savedData = PersistenceManager.LoadData(); //load the saved data from disk
+        ReadFrom(savedData); //read the saved data into the model
+    }
+
+
+    public void SaveData()
+    {
+        SavedData savedData = new SavedData(); //create an empty instance of SavedData
+        WriteTo(savedData); //write the current state of the model to the instance of SavedData
+        PersistenceManager.SaveData(savedData); //save the instance of SavedData to disk
+    }
+
+
+    private void ReadFrom(SavedData savedData)
     {
         this.outputEntries.Clear();
         this.outputEntries.AddRange(savedData.numberEntries);
@@ -67,7 +83,7 @@ public class ModelController
         this.inputBuf.Append(savedData.input);
     }
 
-    public void WriteTo(SavedData savedData)
+    private void WriteTo(SavedData savedData)
     {
         savedData.numberEntries = this.OutputEntries.ToArray();
         savedData.input = this.Input;
