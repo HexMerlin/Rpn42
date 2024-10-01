@@ -14,10 +14,10 @@ public abstract class Change
 
     public static Change CreateStart() => new NoChange();
 
-    public Change AddInput(string input, StringBuilder inputBuf) 
+    public Change AddInput(string input, InputBuffer inputBuf) 
         => new AddInput(input).Execute(inputBuf).AppendTo(this);
 
-    public Change RemoveInputChars(int count, StringBuilder inputBuf)
+    public Change RemoveInputChars(int count, InputBuffer inputBuf)
     {
         string input = inputBuf.ToString(inputBuf.Length - count, count);
         return new RemoveInput(input).Execute(inputBuf).AppendTo(this);
@@ -28,9 +28,9 @@ public abstract class Change
     public Change RemoveOutput(List<NumberEntry> outputItems) 
         => new RemoveOutput(outputItems[^1]).Execute(outputItems).AppendTo(this);
 
-    public Change RemoveInputChar(StringBuilder inputBuf) => RemoveInputChars(1, inputBuf);
+    public Change RemoveInputChar(InputBuffer inputBuf) => RemoveInputChars(1, inputBuf);
 
-    public Change ClearInput(StringBuilder inputBuf) => RemoveInputChars(inputBuf.Length, inputBuf);
+    public Change ClearInput(InputBuffer inputBuf) => RemoveInputChars(inputBuf.Length, inputBuf);
 
     public Change ClearAllOutputs(List<NumberEntry> outputItems)
     {
@@ -39,7 +39,7 @@ public abstract class Change
             change = change.RemoveOutput(outputItems);
         return change;
     }
-    public Change ReplaceInput(string input, StringBuilder inputBuf) => ClearInput(inputBuf).AddInput(input, inputBuf);
+    public Change ReplaceInput(string input, InputBuffer inputBuf) => ClearInput(inputBuf).AddInput(input, inputBuf);
 
 
     public Change ReplaceOutput(NumberEntry numberEntry, List<NumberEntry> outputItems) => RemoveOutput(outputItems).AddOutput(numberEntry, outputItems);

@@ -9,7 +9,7 @@ public class ModelController
    
     private List<NumberEntry> outputEntries;
 
-    private StringBuilder inputBuf = new StringBuilder();
+    private readonly InputBuffer inputBuf = new InputBuffer();
 
     public Change CurrentChange = Change.CreateStart();
 
@@ -205,7 +205,7 @@ public class ModelController
       
         return InputEmpty ?
             (OutputCount > 1 ? SecondLastOutput.Q : Q.NaN, lastOutput)
-            : (lastOutput, StringParser.ParseNumber(this.inputBuf.ToString(), NumberBase));
+            : (lastOutput, inputBuf.AsQ(NumberBase));
     }
 
 }

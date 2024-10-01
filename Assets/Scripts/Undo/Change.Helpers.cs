@@ -5,13 +5,13 @@ public class AddInput : InputChange
 {
     public AddInput(string input) : base(input) { }
 
-    public override Change Execute(StringBuilder inputBuf)
+    public override Change Execute(InputBuffer inputBuf)
     {
         inputBuf.Append(Input);
         return this;
     }
 
-    public override Change Rollback(StringBuilder inputBuf)
+    public override Change Rollback(InputBuffer inputBuf)
     {
         new RemoveInput(Input).Execute(inputBuf);
         return this;
@@ -22,13 +22,13 @@ public class RemoveInput : InputChange
 {
     public RemoveInput(string input) : base(input) { }
 
-    public override Change Execute(StringBuilder inputBuf)
+    public override Change Execute(InputBuffer inputBuf)
     {
-        inputBuf.Remove(inputBuf.Length - Input.Length, Input.Length);
+        inputBuf.RemoveChars(inputBuf.Length - Input.Length, Input.Length);
         return this;
     }
 
-    public override Change Rollback(StringBuilder inputBuf)
+    public override Change Rollback(InputBuffer inputBuf)
     {
         new AddInput(Input).Execute(inputBuf);
         return this;
@@ -76,9 +76,9 @@ public abstract class InputChange : Change
 
     public InputChange(string input) : base() => Input = input;
 
-    public abstract Change Execute(StringBuilder inputBuf);
+    public abstract Change Execute(InputBuffer inputBuf);
 
-    public abstract Change Rollback(StringBuilder inputBuf);
+    public abstract Change Rollback(InputBuffer inputBuf);
 }
 
 public abstract class OutputChange : Change
