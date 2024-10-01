@@ -5,11 +5,17 @@ using MathLib;
 
 public class InputBuffer
 {
+    public int Base { 
+        get; 
+        internal set; //TODO: Throw exception if set when sb is not empty - or change the base of sb?
+    }
+
     private readonly StringBuilder sb;
 
-    public InputBuffer()
+    public InputBuffer(int base_)
     {
         this.sb = new StringBuilder();
+        Base = base_;
     }
 
     public int Length => this.sb.Length;
@@ -23,7 +29,7 @@ public class InputBuffer
         sb.Remove(startIndex, count);
     }
 
-    public Q AsQ(int base_) => ParseNumber(sb.ToString(), base_);
+    public Q AsQ() => ParseNumber(sb.ToString(), Base);
 
     /// <summary>
     /// Parses a number from a string denoting its positional representation.

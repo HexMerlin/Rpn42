@@ -12,7 +12,7 @@ public class ButtonDigit : AbstractButton
 
     public override void UpdateEnabledStatus(ModelController mc, Q leftOperand, Q rightOperand)
     {
-        SetEnabled(Digit < mc.NumberBase);
+        SetEnabled(Digit < mc.InputBase);
     }
 
     public override void Execute(ModelController mc) => mc.PerformAddInput(Digit.ToString());

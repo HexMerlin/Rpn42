@@ -14,6 +14,5 @@ public class AddOutput : OutputChange
     {
         new RemoveOutput(NumberEntry).Execute(outputItems);
         return this;
-
     }
 }

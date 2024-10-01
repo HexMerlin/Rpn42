@@ -9,40 +9,63 @@ public class ModelController
    
     private List<NumberEntry> outputEntries;
 
-    private readonly InputBuffer inputBuf = new InputBuffer();
+    private readonly InputBuffer inputBuf;
 
     public Change CurrentChange = Change.CreateStart();
 
     public IReadOnlyList<NumberEntry> OutputEntries => outputEntries;
 
-    public Format NumberFormat { get; private set; }
+    public Format NumberFormat => new Format(NumberMode, NumberBase);
 
     public Mode NumberMode
     {
-        get => NumberFormat.Mode;
-        set
-        {
-            NumberFormat = new Format(value, NumberFormat.Base);
-        }
+        get; set;
     }
 
     public int NumberBase
     {
-        get => NumberFormat.Base;
-        set 
-        {
-            if (!InputEmpty)
-                PerformUnaryOperation((a) => a);
-            Mode mode = value == 10 && NumberFormat.Mode is Mode.PAdic ? Mode.Normal : NumberFormat.Mode;
-            NumberFormat = new Format(mode, value);
-        }
+        get; set;
     }
 
+    public int InputBase
+    {
+        get => inputBuf.Base;
+        set => inputBuf.Base = value;
+    }
+    //private int _numberBase;   
+    //public int NumberBase
+    //{
+    //    get => _numberBase;
+    //    set
+    //    {
+    //        if (value == NumberBase) return;
+    //        if (!InputEmpty)
+    //            PerformUnaryOperation((a) => a);
+    //        if (value == 10 && NumberMode is Mode.PAdic)
+    //            NumberMode = Mode.Normal;
+    //        this.CurrentChange = this.CurrentChange.ChangeBase(_numberBase, value);
+    //        _numberBase = value;
+
+    //    }
+    //}
+
+    //public void PerformChangeBase(int newBase)
+    //{
+    //    if (newBase == NumberBase) return;
+    //    if (!InputEmpty)
+    //        PerformUnaryOperation((a) => a);
+    //    if (newBase == 10 && NumberMode is Mode.PAdic)
+    //        NumberMode = Mode.Normal;
+
+    //    this.CurrentChange = this.CurrentChange.AddInput(input, inputBuf);
+    //}
 
     public ModelController()
     {
         this.outputEntries = new List<NumberEntry>();
-        this.NumberFormat = new Format(Mode.Normal, 10);
+        this.NumberBase = 10;
+        this.NumberMode = Mode.Normal;
+        this.inputBuf = new InputBuffer(base_: 10);
 
     }
     public NumberEntry this[int index] => this.outputEntries[index];
@@ -205,7 +228,7 @@ public class ModelController
       
         return InputEmpty ?
             (OutputCount > 1 ? SecondLastOutput.Q : Q.NaN, lastOutput)
-            : (lastOutput, inputBuf.AsQ(NumberBase));
+            : (lastOutput, inputBuf.AsQ());
     }
 
 }
