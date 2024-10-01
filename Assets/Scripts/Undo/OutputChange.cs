@@ -4,7 +4,7 @@ public abstract class OutputChange : Change
 {
     public NumberEntry NumberEntry { get; }
 
-    public OutputChange(NumberEntry numberEntry) : base() => NumberEntry = numberEntry;
+    public OutputChange(ModelController modelController, NumberEntry numberEntry) : base(modelController) => NumberEntry = numberEntry;
 
     public abstract Change Execute(List<NumberEntry> outputItems);
 

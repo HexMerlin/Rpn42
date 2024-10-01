@@ -4,5 +4,5 @@
 /// </summary>
 public class NoChange : Change
 {
-    public NoChange() : base() => IsUndoPoint = true;
+    public NoChange(ModelController modelController) : base(modelController) => IsUndoPoint = true;
 }

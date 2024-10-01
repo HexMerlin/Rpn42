@@ -2,7 +2,7 @@
 
 public class RemoveOutput : OutputChange
 {
-    public RemoveOutput(NumberEntry numberEntry) : base(numberEntry) { }
+    public RemoveOutput(ModelController modelController, NumberEntry numberEntry) : base(modelController, numberEntry) { }
 
     public override Change Execute(List<NumberEntry> outputItems)
     {
@@ -12,7 +12,7 @@ public class RemoveOutput : OutputChange
 
     public override Change Rollback(List<NumberEntry> outputItems)
     {
-        new AddOutput(NumberEntry).Execute(outputItems);
+        new AddOutput(ModelController, NumberEntry).Execute(outputItems);
         return this;
     }
 }

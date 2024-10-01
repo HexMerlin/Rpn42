@@ -2,7 +2,7 @@
 {
     public string Input { get; }
 
-    public InputChange(string input) : base() => Input = input;
+    public InputChange(ModelController modelController, string input) : base(modelController) => Input = input;
 
     public abstract Change Execute(InputBuffer inputBuf);
 

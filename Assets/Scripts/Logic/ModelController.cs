@@ -11,7 +11,7 @@ public class ModelController
 
     private readonly InputBuffer inputBuf;
 
-    public Change CurrentChange = Change.CreateStart();
+    public Change CurrentChange;
 
     public IReadOnlyList<NumberEntry> OutputEntries => outputEntries;
 
@@ -62,6 +62,7 @@ public class ModelController
 
     public ModelController()
     {
+        this.CurrentChange = Change.CreateStart(this);
         this.outputEntries = new List<NumberEntry>();
         this.NumberBase = 10;
         this.NumberMode = Mode.Normal;

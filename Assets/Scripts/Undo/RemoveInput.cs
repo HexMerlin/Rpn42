@@ -1,6 +1,6 @@
 ﻿public class RemoveInput : InputChange
 {
-    public RemoveInput(string input) : base(input) { }
+    public RemoveInput(ModelController modelController, string input) : base(modelController, input) { }
 
     public override Change Execute(InputBuffer inputBuf)
     {
@@ -10,7 +10,7 @@
 
     public override Change Rollback(InputBuffer inputBuf)
     {
-        new AddInput(Input).Execute(inputBuf);
+        new AddInput(ModelController, Input).Execute(inputBuf);
         return this;
     }
 }
