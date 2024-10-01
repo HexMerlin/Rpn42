@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 [RequireComponent(typeof(UIDocument))]
-public partial class MainViewController : MonoBehaviour
+public partial class MainViewControl : MonoBehaviour
 {
     [SerializeField] private UIDocument uiDocument;
 

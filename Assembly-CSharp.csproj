@@ -72,6 +72,7 @@
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonUndo.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonBackDrop.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\ButtonDigit.cs" />
+    <Compile Include="Assets\Scripts\UI\MainViewControl.cs" />
     <Compile Include="Assets\Scripts\Logic\StringParser.cs" />
     <Compile Include="Assets\Scripts\Logic\Change.Helpers.cs" />
     <Compile Include="Assets\Scripts\Logic\Format.cs" />
@@ -83,11 +84,11 @@
     <Compile Include="Assets\Scripts\Persistence\SavedDataJsonConverter.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonRepetendShiftRight.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonSum.cs" />
+    <Compile Include="Assets\Scripts\UI\MainViewControl.Callbacks.cs" />
     <Compile Include="Assets\Scripts\Logic\Change.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\ButtonBase.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonRepetendShiftLeft.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonQuotient.cs" />
-    <Compile Include="Assets\Scripts\UI\MainViewController.cs" />
     <Compile Include="Assets\Scripts\Logic\ModelController.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonModePAdic.cs" />
     <Compile Include="Assets\Scripts\Logic\DeferredResult.cs" />
@@ -101,7 +102,6 @@
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonSquare.cs" />
     <Compile Include="Assets\Scripts\Logic\NumberEntry.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonNeg.cs" />
-    <Compile Include="Assets\Scripts\UI\MainViewController.Callbacks.cs" />
     <Compile Include="Assets\Scripts\Logic\BaseEntry.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonDivMersenne.cs" />
   </ItemGroup>

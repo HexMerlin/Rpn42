@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityButton = UnityEngine.UIElements.Button;
 
-public partial class MainViewController
+public partial class MainViewControl
 {
 
     void Awake()
