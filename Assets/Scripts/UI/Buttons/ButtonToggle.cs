@@ -3,11 +3,14 @@ using UnityButton = UnityEngine.UIElements.Button;
 
 public class ButtonToggle : AbstractButton
 {
-    //public int Digit { get; }
+    public bool State { get; private set; }
 
-    public ButtonToggle(UnityButton unityButton) : base(unityButton)
+    public string AltText { get; }
+
+    public ButtonToggle(UnityButton unityButton, string altText) : base(unityButton)
     {
-        this.UnityButton.userData = "kalle";
+        this.AltText = altText;
+        this.State = true;
     }
 
     public override void Execute(OperationController opc) => throw new System.NotImplementedException();
