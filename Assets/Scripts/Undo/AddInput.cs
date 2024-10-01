@@ -2,15 +2,15 @@
 {
     public AddInput(ModelController modelController, string input) : base(modelController, input) { }
 
-    public override Change Execute(InputBuffer inputBuf)
+    public override Change Execute()
     {
-        inputBuf.Append(Input);
+        InputBuffer.Append(Input);
         return this;
     }
 
-    public override Change Rollback(InputBuffer inputBuf)
+    public override Change Rollback()
     {
-        new RemoveInput(ModelController, Input).Execute(inputBuf);
+        new RemoveInput(ModelController, Input).Execute();
         return this;
     }
 }

@@ -2,17 +2,17 @@
 
 public class RemoveOutput : OutputChange
 {
-    public RemoveOutput(ModelController modelController, NumberEntry numberEntry) : base(modelController, numberEntry) { }
+    public RemoveOutput(ModelController modelController) : base(modelController, modelController.OutputEntries[^1]) { }
 
-    public override Change Execute(List<NumberEntry> outputItems)
+    public override Change Execute()
     {
-        outputItems.RemoveAt(outputItems.Count - 1);
+        OutputEntries.RemoveAt(OutputEntries.Count - 1);
         return this;
     }
 
-    public override Change Rollback(List<NumberEntry> outputItems)
+    public override Change Rollback()
     {
-        new AddOutput(ModelController, NumberEntry).Execute(outputItems);
+        new AddOutput(ModelController, NumberEntry).Execute();
         return this;
     }
 }

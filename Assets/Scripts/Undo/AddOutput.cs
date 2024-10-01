@@ -1,18 +1,17 @@
-﻿using System.Collections.Generic;
-
+﻿
 public class AddOutput : OutputChange
 {
     public AddOutput(ModelController modelController, NumberEntry numberEntry) : base(modelController, numberEntry) { }
 
-    public override Change Execute(List<NumberEntry> outputItems)
+    public override Change Execute()
     {
-        outputItems.Add(NumberEntry);
+        OutputEntries.Add(NumberEntry);
         return this;
     }
 
-    public override Change Rollback(List<NumberEntry> outputItems)
+    public override Change Rollback()
     {
-        new RemoveOutput(ModelController, NumberEntry).Execute(outputItems);
+        new RemoveOutput(ModelController).Execute();
         return this;
     }
 }

@@ -6,15 +6,14 @@ using MathLib;
 
 public class ModelController 
 {
-   
-    private List<NumberEntry> outputEntries;
 
-    private readonly InputBuffer inputBuf;
+    internal readonly List<NumberEntry> OutputEntries;
+
+    internal readonly InputBuffer InputBuffer;
 
     public Change CurrentChange;
 
-    public IReadOnlyList<NumberEntry> OutputEntries => outputEntries;
-
+   
     public Format NumberFormat => new Format(NumberMode, NumberBase);
 
     public Mode NumberMode
@@ -29,8 +28,8 @@ public class ModelController
 
     public int InputBase
     {
-        get => inputBuf.Base;
-        set => inputBuf.Base = value;
+        get => InputBuffer.Base;
+        set => InputBuffer.Base = value;
     }
     //private int _numberBase;   
     //public int NumberBase
@@ -63,25 +62,25 @@ public class ModelController
     public ModelController()
     {
         this.CurrentChange = Change.CreateStart(this);
-        this.outputEntries = new List<NumberEntry>();
+        this.OutputEntries = new List<NumberEntry>();
         this.NumberBase = 10;
         this.NumberMode = Mode.Normal;
-        this.inputBuf = new InputBuffer(base_: 10);
+        this.InputBuffer = new InputBuffer(base_: 10);
 
     }
-    public NumberEntry this[int index] => this.outputEntries[index];
+    public NumberEntry this[int index] => this.OutputEntries[index];
 
-    public int OutputCount => this.outputEntries.Count;
+    public int OutputCount => this.OutputEntries.Count;
 
-    private bool OutputEmpty => this.outputEntries.Count == 0;
+    private bool OutputEmpty => this.OutputEntries.Count == 0;
 
-    public string Input => this.inputBuf.ToString();
+    public string Input => this.InputBuffer.ToString();
 
-    public bool InputEmpty => this.inputBuf.Length == 0;
+    public bool InputEmpty => this.InputBuffer.Length == 0;
      
-    private NumberEntry LastOutput => this.outputEntries[^1];
+    private NumberEntry LastOutput => this.OutputEntries[^1];
 
-    private NumberEntry SecondLastOutput => this.outputEntries[^2];
+    private NumberEntry SecondLastOutput => this.OutputEntries[^2];
 
 
     public void LoadSavedData()
@@ -101,10 +100,10 @@ public class ModelController
 
     private void ReadFrom(SavedData savedData)
     {
-        this.outputEntries.Clear();
-        this.outputEntries.AddRange(savedData.numberEntries);
-        this.inputBuf.Clear();
-        this.inputBuf.Append(savedData.input);
+        this.OutputEntries.Clear();
+        this.OutputEntries.AddRange(savedData.numberEntries);
+        this.InputBuffer.Clear();
+        this.InputBuffer.Append(savedData.input);
     }
 
     private void WriteTo(SavedData savedData)
@@ -115,11 +114,11 @@ public class ModelController
 
     public void AddOutput(NumberEntry numberEntry, bool isUndoPoint)
     {
-        this.CurrentChange = this.CurrentChange.AddOutput(numberEntry, outputEntries);
+        this.CurrentChange = this.CurrentChange.AddOutput(numberEntry);
         this.CurrentChange.IsUndoPoint = isUndoPoint;
     }
 
-    public void PerformAddInput(string input) => this.CurrentChange = this.CurrentChange.AddInput(input, inputBuf);
+    public void PerformAddInput(string input) => this.CurrentChange = this.CurrentChange.AddInput(input);
 
     public void PerformUnaryOperation(Func<Q, Q> operation, bool retainOperand = false)
     { 
@@ -132,12 +131,12 @@ public class ModelController
 
         if (retainOperand)
         {
-            this.CurrentChange = this.CurrentChange.AddOutput(new NumberEntry(result), outputEntries);
+            this.CurrentChange = this.CurrentChange.AddOutput(new NumberEntry(result));
         } 
         else 
         this.CurrentChange = InputEmpty ?
-            this.CurrentChange.ReplaceOutput(new NumberEntry(result), outputEntries) :
-            this.CurrentChange.ClearInput(inputBuf).AddOutput(new NumberEntry(result), outputEntries);
+            this.CurrentChange.ReplaceOutput(new NumberEntry(result)) :
+            this.CurrentChange.ClearInput().AddOutput(new NumberEntry(result));
     }
 
     public void PerformBinaryOperation(Func<Q, Q, Q> operation)
@@ -150,8 +149,8 @@ public class ModelController
         if (result.IsNaN) return;
 
         this.CurrentChange = InputEmpty ?
-            this.CurrentChange.RemoveOutput(outputEntries).ReplaceOutput(new NumberEntry(result), outputEntries) :
-            this.CurrentChange.ClearInput(inputBuf).ReplaceOutput(new NumberEntry(result), outputEntries);
+            this.CurrentChange.RemoveOutput().ReplaceOutput(new NumberEntry(result)) :
+            this.CurrentChange.ClearInput().ReplaceOutput(new NumberEntry(result));
     }
 
     public void PerformBackDrop()
@@ -159,20 +158,20 @@ public class ModelController
         if (InputEmpty)
         {
             if (OutputEmpty) return;
-            this.CurrentChange = this.CurrentChange.RemoveOutput(outputEntries);
+            this.CurrentChange = this.CurrentChange.RemoveOutput();
         }
         else
         {
-            this.CurrentChange = this.CurrentChange.RemoveInputChar(inputBuf);
+            this.CurrentChange = this.CurrentChange.RemoveInputChar();
         }
     }
 
     public void PerformClear()
     {
         if (!InputEmpty)
-            this.CurrentChange = this.CurrentChange.ClearInput(inputBuf);
+            this.CurrentChange = this.CurrentChange.ClearInput();
         if (!OutputEmpty)
-            this.CurrentChange = this.CurrentChange.ClearAllOutputs(outputEntries);
+            this.CurrentChange = this.CurrentChange.ClearAllOutputs();
     }
 
     public void PerformCopy2()
@@ -180,8 +179,8 @@ public class ModelController
         if (OutputCount < 2) return;
         NumberEntry secondLastOutput = this.SecondLastOutput;
         NumberEntry lastOutput = this.LastOutput;
-        this.CurrentChange = this.CurrentChange.AddOutput(secondLastOutput, outputEntries);
-        this.CurrentChange = this.CurrentChange.AddOutput(lastOutput, outputEntries);
+        this.CurrentChange = this.CurrentChange.AddOutput(secondLastOutput);
+        this.CurrentChange = this.CurrentChange.AddOutput(lastOutput);
     }
 
     public void PerformUndo()
@@ -193,8 +192,8 @@ public class ModelController
         {
             this.CurrentChange = this.CurrentChange switch
             {
-                InputChange inputChange => inputChange.Rollback(inputBuf).Previous,
-                OutputChange outputChange => outputChange.Rollback(outputEntries).Previous,
+                InputChange inputChange => inputChange.Rollback().Previous,
+                OutputChange outputChange => outputChange.Rollback().Previous,
                 _ => throw new ArgumentOutOfRangeException($"Unknown ChangeType {CurrentChange.GetType().Name}")
             };
             if (this.CurrentChange.IsUndoPoint)
@@ -213,8 +212,8 @@ public class ModelController
 
             this.CurrentChange = this.CurrentChange switch
             {
-                InputChange inputChange => inputChange.Execute(this.inputBuf),
-                OutputChange outputChange => outputChange.Execute(this.outputEntries),
+                InputChange inputChange => inputChange.Execute(),
+                OutputChange outputChange => outputChange.Execute(),
                 _ => throw new ArgumentOutOfRangeException($"Unknown ChangeType {this.CurrentChange.GetType().Name}")
             };
             if (this.CurrentChange.IsUndoPoint)
@@ -229,7 +228,7 @@ public class ModelController
       
         return InputEmpty ?
             (OutputCount > 1 ? SecondLastOutput.Q : Q.NaN, lastOutput)
-            : (lastOutput, inputBuf.AsQ());
+            : (lastOutput, InputBuffer.AsQ());
     }
 
 }

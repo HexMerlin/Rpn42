@@ -2,11 +2,13 @@
 
 public abstract class OutputChange : Change
 {
+    public List<NumberEntry> OutputEntries => ModelController.OutputEntries;
+
     public NumberEntry NumberEntry { get; }
 
     public OutputChange(ModelController modelController, NumberEntry numberEntry) : base(modelController) => NumberEntry = numberEntry;
 
-    public abstract Change Execute(List<NumberEntry> outputItems);
+    public abstract Change Execute();
 
-    public abstract Change Rollback(List<NumberEntry> outputItems);
+    public abstract Change Rollback();
 }
