@@ -66,10 +66,15 @@
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonClear.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonPow.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonAsRepetend.cs" />
+    <Compile Include="Assets\Scripts\Undo\RemoveInput.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonRedo.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\ButtonMode.cs" />
+    <Compile Include="Assets\Scripts\Undo\AddInput.cs" />
+    <Compile Include="Assets\Scripts\Undo\InputChange.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonReciprocal.cs" />
+    <Compile Include="Assets\Scripts\Undo\NoChange.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonUndo.cs" />
+    <Compile Include="Assets\Scripts\Undo\OutputChange.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonBackDrop.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\ButtonDigit.cs" />
     <Compile Include="Assets\Scripts\UI\MainViewControl.cs" />
@@ -83,6 +88,7 @@
     <Compile Include="Assets\Scripts\Persistence\SavedDataJsonConverter.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonRepetendShiftRight.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonSum.cs" />
+    <Compile Include="Assets\Scripts\Undo\RemoveOutput.cs" />
     <Compile Include="Assets\Scripts\UI\MainViewControl.Callbacks.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\ButtonBase.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonRepetendShiftLeft.cs" />
@@ -99,11 +105,11 @@
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonEnter.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonCopy2.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonMod.cs" />
-    <Compile Include="Assets\Scripts\Undo\Change.Helpers.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonSquare.cs" />
     <Compile Include="Assets\Scripts\Logic\NumberEntry.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonNeg.cs" />
     <Compile Include="Assets\Scripts\Logic\BaseEntry.cs" />
+    <Compile Include="Assets\Scripts\Undo\AddOutput.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonDivMersenne.cs" />
   </ItemGroup>
   <ItemGroup>
