@@ -10,11 +10,11 @@ public class ButtonDigit : AbstractButton
         this.Digit = digit;
     }
 
-    public override void UpdateEnabledStatus(OperationController opc, Q leftOperand, Q rightOperand)
+    public override void UpdateEnabledStatus(ModelController mc, Q leftOperand, Q rightOperand)
     {
-        SetEnabled(Digit < opc.NumberBase);
+        SetEnabled(Digit < mc.NumberBase);
     }
 
-    public override void Execute(OperationController opc) => opc.PerformAddInput(Digit.ToString());
+    public override void Execute(ModelController mc) => mc.PerformAddInput(Digit.ToString());
 }
 

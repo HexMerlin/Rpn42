@@ -5,7 +5,7 @@ public class ButtonClear : AbstractButton
 {
     public ButtonClear(UnityButton unityButton) : base(unityButton) { }
 
-    public override void UpdateEnabledStatus(OperationController opc, Q leftOperand, Q rightOperand) { }
+    public override void UpdateEnabledStatus(ModelController mc, Q leftOperand, Q rightOperand) { }
 
-    public override void Execute(OperationController opc) => opc.PerformClear();
+    public override void Execute(ModelController mc) => mc.PerformClear();
 }

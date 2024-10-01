@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using MathLib;
 
-public class OperationController 
+public class ModelController 
 {
    
     private List<NumberEntry> outputEntries;
@@ -39,7 +39,7 @@ public class OperationController
     }
 
 
-    public OperationController()
+    public ModelController()
     {
         this.outputEntries = new List<NumberEntry>();
         this.NumberFormat = new Format(Mode.Normal, 10);

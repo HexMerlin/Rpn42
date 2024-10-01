@@ -5,8 +5,8 @@ public class ButtonUndo : AbstractButton
 {
     public ButtonUndo(UnityButton unityButton) : base(unityButton) { }
 
-    public override void UpdateEnabledStatus(OperationController opc, Q leftOperand, Q rightOperand)
-        => SetEnabled(opc.CurrentChange is not NoChange);
+    public override void UpdateEnabledStatus(ModelController mc, Q leftOperand, Q rightOperand)
+        => SetEnabled(mc.CurrentChange is not NoChange);
 
-    public override void Execute(OperationController opc) => opc.PerformUndo();
+    public override void Execute(ModelController mc) => mc.PerformUndo();
 }

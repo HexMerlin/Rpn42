@@ -13,15 +13,15 @@ public class ButtonBase : AbstractButton
         this.Base = numberBase;
     }
 
-    public override void UpdateEnabledStatus(OperationController opc, Q leftOperand, Q rightOperand)
+    public override void UpdateEnabledStatus(ModelController mc, Q leftOperand, Q rightOperand)
     {
         if (IsEnabled)
-            SetSelected(this.Base == opc.NumberFormat.Base);
+            SetSelected(this.Base == mc.NumberFormat.Base);
     }
 
-    public override void Execute(OperationController opc)
+    public override void Execute(ModelController mc)
     {
-        opc.NumberBase = this.Base;
+        mc.NumberBase = this.Base;
     }
 }
 

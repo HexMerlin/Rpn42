@@ -5,9 +5,9 @@ public class ButtonRepFactor : AbstractButton
 {
     public ButtonRepFactor(UnityButton unityButton) : base(unityButton) { }
 
-    public override void UpdateEnabledStatus(OperationController opc, Q leftOperand, Q rightOperand)
+    public override void UpdateEnabledStatus(ModelController mc, Q leftOperand, Q rightOperand)
         => SetEnabled(!rightOperand.IsNaN);
 
     //TODO: Fix this!
-    public override void Execute(OperationController opc) => opc.PerformUnaryOperation((a) => a);// RationalNumerals.FindUnitFractionWithRepetendFactor(a));
+    public override void Execute(ModelController mc) => mc.PerformUnaryOperation((a) => a);// RationalNumerals.FindUnitFractionWithRepetendFactor(a));
 }

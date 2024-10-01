@@ -16,16 +16,16 @@ public class ButtonMode : AbstractButton
             this.DisabledText = "Pending…";
     }
 
-    public override void UpdateEnabledStatus(OperationController opc, Q leftOperand, Q rightOperand)
+    public override void UpdateEnabledStatus(ModelController mc, Q leftOperand, Q rightOperand)
     {
         SetEnabled(!this.RequirePrimes || Primes.IsReady);
         if (IsEnabled)
-            SetSelected(this.NumberMode == opc.NumberFormat.Mode);
+            SetSelected(this.NumberMode == mc.NumberFormat.Mode);
     }
 
-    public override void Execute(OperationController opc)
+    public override void Execute(ModelController mc)
     {
-        opc.NumberMode = this.NumberMode;
+        mc.NumberMode = this.NumberMode;
     }
 }
 

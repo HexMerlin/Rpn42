@@ -9,7 +9,7 @@ public partial class MainViewController : MonoBehaviour
 
     private ButtonCollection Buttons;
 
-    private OperationController OperationController;
+    private ModelController ModelController;
 
     private Label inputLabel;
 
@@ -44,7 +44,7 @@ public partial class MainViewController : MonoBehaviour
     {
         SavedData savedData = PersistenceManager.LoadData();
      
-        this.OperationController.ReadFrom(savedData);
+        this.ModelController.ReadFrom(savedData);
         RequestUIRefresh();
     }
 
@@ -53,7 +53,7 @@ public partial class MainViewController : MonoBehaviour
     {
         SavedData savedData = new SavedData();
     
-        this.OperationController.WriteTo(savedData);
+        this.ModelController.WriteTo(savedData);
         PersistenceManager.SaveData(savedData);
     }
 
@@ -70,19 +70,19 @@ public partial class MainViewController : MonoBehaviour
             bool storedGuiEnableState = GuiEnable;
             
             GuiEnable = false;
-            this.inputLabel.text = OperationController.Input;
+            this.inputLabel.text = ModelController.Input;
 
             for (int column = 0; column < this.output.columns.Count; column++)
             {
-                string columnTitle = NumberEntry.ColumnTitle(column, this.OperationController.NumberFormat);
+                string columnTitle = NumberEntry.ColumnTitle(column, this.ModelController.NumberFormat);
                 this.output.columns[column].title = columnTitle;
 
                 int maxCharCount = columnTitle.Length * 2;
 
-                for (int row = 0; row < this.OperationController.OutputCount; row++)
+                for (int row = 0; row < this.ModelController.OutputCount; row++)
                 {
-                    NumberEntry entry = this.OperationController[row];
-                    int charCount = entry.ColumnData(column, OperationController.NumberFormat).Length;
+                    NumberEntry entry = this.ModelController[row];
+                    int charCount = entry.ColumnData(column, ModelController.NumberFormat).Length;
                     if (charCount > maxCharCount)
                     {
                         maxCharCount = charCount;
@@ -93,14 +93,14 @@ public partial class MainViewController : MonoBehaviour
 
             this.output.RefreshItems();
 
-            this.Buttons.UpdateButtons(OperationController);
+            this.Buttons.UpdateButtons(ModelController);
 
          
             GuiEnable = storedGuiEnableState;
             
             this.output.selectedIndex = -1;
-            if (this.OperationController.OutputCount > 0)
-                this.output.schedule.Execute(() => this.output.ScrollToItem(this.OperationController.OutputCount - 1));
+            if (this.ModelController.OutputCount > 0)
+                this.output.schedule.Execute(() => this.output.ScrollToItem(this.ModelController.OutputCount - 1));
             
             uiRefreshRequested = false;
         }

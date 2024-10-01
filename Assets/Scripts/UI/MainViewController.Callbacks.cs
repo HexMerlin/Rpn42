@@ -24,7 +24,7 @@ public partial class MainViewController
 
         this.Buttons = new ButtonCollection(buttonGrid);
 
-        this.OperationController = new();
+        this.ModelController = new();
 
         Primes.Prepare(OnPrimesInstanceCompleted); //start preparing the prime factoring capability in the background
 
@@ -34,7 +34,7 @@ public partial class MainViewController
 
         this.output = Control<MultiColumnListView>(outputElementName);
 
-        this.output.itemsSource = (System.Collections.IList)OperationController.OutputEntries;
+        this.output.itemsSource = (System.Collections.IList)ModelController.OutputEntries;
 
         Debug.Assert(output.columns.Count == 3, $"Expected column count 3, but actual was {output.columns.Count}");
 
@@ -44,9 +44,9 @@ public partial class MainViewController
             output.columns[columnIndex].makeCell = makeCell;
         }
 
-        this.output.columns[0].bindCell = (e, row) => ((Label) e).text = OperationController[row].ColumnData(0, this.OperationController.NumberFormat);
-        this.output.columns[1].bindCell = (e, row) => ((Label) e).text = OperationController[row].ColumnData(1, this.OperationController.NumberFormat);
-        this.output.columns[2].bindCell = (e, row) => ((Label) e).text = OperationController[row].ColumnData(2, this.OperationController.NumberFormat);
+        this.output.columns[0].bindCell = (e, row) => ((Label) e).text = ModelController[row].ColumnData(0, this.ModelController.NumberFormat);
+        this.output.columns[1].bindCell = (e, row) => ((Label) e).text = ModelController[row].ColumnData(1, this.ModelController.NumberFormat);
+        this.output.columns[2].bindCell = (e, row) => ((Label) e).text = ModelController[row].ColumnData(2, this.ModelController.NumberFormat);
 
         this.output.makeNoneElement = () => new Label(""); //avoid message "List is empty"
 
@@ -81,7 +81,7 @@ public partial class MainViewController
             else if (integers.Length == 1)
             {
                 NumberEntry numberEntry = new NumberEntry(integers[0]);
-                OperationController.AddOutput(numberEntry, isUndoPoint: true);
+                ModelController.AddOutput(numberEntry, isUndoPoint: true);
                 RequestUIRefresh();
             }
             else
@@ -101,7 +101,7 @@ public partial class MainViewController
             return;
         }
         NumberEntry numberEntry = new NumberEntry(BigInteger.Parse(selectedItem));
-        OperationController.AddOutput(numberEntry, isUndoPoint: true);
+        ModelController.AddOutput(numberEntry, isUndoPoint: true);
         GuiEnable = true;
         RequestUIRefresh();
     }
@@ -140,8 +140,8 @@ public partial class MainViewController
 
         GuiEnable = false;
 
-        button.Execute(OperationController);
-        OperationController.CurrentChange.IsUndoPoint = true;
+        button.Execute(ModelController);
+        ModelController.CurrentChange.IsUndoPoint = true;
 
         RequestUIRefresh();
         GuiEnable = true;

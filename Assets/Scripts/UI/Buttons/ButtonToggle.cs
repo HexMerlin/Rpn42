@@ -13,8 +13,8 @@ public class ButtonToggle : AbstractButton
         this.State = true;
     }
 
-    public override void Execute(OperationController opc) => throw new System.NotImplementedException();
-    public override void UpdateEnabledStatus(OperationController opc, Q leftOperand, Q rightOperand) => throw new System.NotImplementedException();
+    public override void Execute(ModelController mc) => throw new System.NotImplementedException();
+    public override void UpdateEnabledStatus(ModelController mc, Q leftOperand, Q rightOperand) => throw new System.NotImplementedException();
 
     //public override void UpdateEnabledStatus(OperationController opc, Q leftOperand, Q rightOperand)
     //{

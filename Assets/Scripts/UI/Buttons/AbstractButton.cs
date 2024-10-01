@@ -28,9 +28,9 @@ public abstract class AbstractButton : IEquatable<AbstractButton>
     public bool IsEnabled => UnityButton.enabledSelf;
 
 
-    public abstract void UpdateEnabledStatus(OperationController opc, Q leftOperand, Q rightOperand);
+    public abstract void UpdateEnabledStatus(ModelController mc, Q leftOperand, Q rightOperand);
 
-    public abstract void Execute(OperationController opc);
+    public abstract void Execute(ModelController mc);
 
     protected void SetEnabled(bool enabled)
     {

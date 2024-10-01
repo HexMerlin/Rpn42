@@ -66,12 +66,12 @@ public class ButtonCollection : IEnumerable<AbstractButton>
 
     }
 
-    public void UpdateButtons(OperationController opc)
+    public void UpdateButtons(ModelController mc)
     {
-        (Q leftOperand, Q rightOperand) = opc.PeekOperands();
+        (Q leftOperand, Q rightOperand) = mc.PeekOperands();
 
         foreach (AbstractButton button in buttons)
-            button.UpdateEnabledStatus(opc, leftOperand, rightOperand);
+            button.UpdateEnabledStatus(mc, leftOperand, rightOperand);
     }
 
     public IEnumerator<AbstractButton> GetEnumerator() => this.buttons.GetEnumerator();

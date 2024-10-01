@@ -88,6 +88,7 @@
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonRepetendShiftLeft.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonQuotient.cs" />
     <Compile Include="Assets\Scripts\UI\MainViewController.cs" />
+    <Compile Include="Assets\Scripts\Logic\ModelController.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonModePAdic.cs" />
     <Compile Include="Assets\Scripts\Logic\DeferredResult.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\AbstractButton.cs" />
@@ -102,7 +103,6 @@
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonNeg.cs" />
     <Compile Include="Assets\Scripts\UI\MainViewController.Callbacks.cs" />
     <Compile Include="Assets\Scripts\Logic\BaseEntry.cs" />
-    <Compile Include="Assets\Scripts\Logic\OperationController.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonDivMersenne.cs" />
   </ItemGroup>
   <ItemGroup>

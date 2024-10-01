@@ -5,12 +5,12 @@ public class ButtonRadixPoint : AbstractButton
 {
     public ButtonRadixPoint(UnityButton unityButton) : base(unityButton) { }
 
-    public override void UpdateEnabledStatus(OperationController opc, Q leftOperand, Q rightOperand)
+    public override void UpdateEnabledStatus(ModelController mc, Q leftOperand, Q rightOperand)
     {
-        SetEnabled(!opc.Input.Contains('.', System.StringComparison.InvariantCulture));
+        SetEnabled(!mc.Input.Contains('.', System.StringComparison.InvariantCulture));
     }
 
-    public override void Execute(OperationController opc) => opc.PerformAddInput(".");
+    public override void Execute(ModelController mc) => mc.PerformAddInput(".");
     
 }
 

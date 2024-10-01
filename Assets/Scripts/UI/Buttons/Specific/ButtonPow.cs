@@ -5,8 +5,8 @@ public class ButtonPow : AbstractButton
 {
     public ButtonPow(UnityButton unityButton) : base(unityButton) { }
 
-    public override void UpdateEnabledStatus(OperationController opc, Q leftOperand, Q rightOperand)
+    public override void UpdateEnabledStatus(ModelController mc, Q leftOperand, Q rightOperand)
         => SetEnabled(!leftOperand.IsNaN && rightOperand.TryCastToInt32(out int _));
 
-    public override void Execute(OperationController opc) => opc.PerformBinaryOperation((a, b) => a.Pow(b));
+    public override void Execute(ModelController mc) => mc.PerformBinaryOperation((a, b) => a.Pow(b));
 }

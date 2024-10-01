@@ -5,8 +5,8 @@ public class ButtonAsRepetend : AbstractButton
 {
     public ButtonAsRepetend(UnityButton unityButton) : base(unityButton) { }
 
-    public override void UpdateEnabledStatus(OperationController opc, Q leftOperand, Q rightOperand)
+    public override void UpdateEnabledStatus(ModelController mc, Q leftOperand, Q rightOperand)
         => SetEnabled(!rightOperand.IsNaN);
 
-    public override void Execute(OperationController opc) => opc.PerformUnaryOperation((a) => QExtensions.DivideByNextMersenneNumber(a, mustBeCoprime: true));
+    public override void Execute(ModelController mc) => mc.PerformUnaryOperation((a) => QExtensions.DivideByNextMersenneNumber(a, mustBeCoprime: true));
 }

@@ -5,8 +5,8 @@ public class ButtonRedo : AbstractButton
 {
     public ButtonRedo(UnityButton unityButton) : base(unityButton) { }
 
-    public override void UpdateEnabledStatus(OperationController opc, Q leftOperand, Q rightOperand)
-        => SetEnabled(opc.CurrentChange.Next is not null);
+    public override void UpdateEnabledStatus(ModelController mc, Q leftOperand, Q rightOperand)
+        => SetEnabled(mc.CurrentChange.Next is not null);
 
-    public override void Execute(OperationController opc) => opc.PerformRedo();
+    public override void Execute(ModelController mc) => mc.PerformRedo();
 }
