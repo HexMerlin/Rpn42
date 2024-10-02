@@ -1645,6 +1645,16 @@
             <param name="periodicPart">The periodic part as a <see cref="T:MathLib.BaseInt"/>>.</param>
             <param name="firstExponent">The exponent index of the first coefficient of the number.</param>
         </member>
+        <member name="P:MathLib.Qb.NaN">
+            <summary>
+            Returns a NaN Qb instance.
+            </summary>
+        </member>
+        <member name="M:MathLib.Qb.#ctor">
+            <summary>
+            Constructor for a NaN Qb instance.
+            </summary>
+        </member>
         <member name="M:MathLib.Qb.#ctor(MathLib.Q,MathLib.Base)">
             <summary>
             Extends a rational number to a Qb extension with the specific base <paramref name="base_"/>.
@@ -1887,6 +1897,16 @@
             p-adic valuation of the current p-adic number.
             </summary>
             <returns>Valuation of the number relative to <see cref="P:MathLib.Qp.Base"/>.</returns>
+        </member>
+        <member name="P:MathLib.Qp.NaN">
+            <summary>
+            Returns a NaN Qp instance.
+            </summary>
+        </member>
+        <member name="M:MathLib.Qp.#ctor">
+            <summary>
+            Constructor for a NaN Qp instance.
+            </summary>
         </member>
         <member name="M:MathLib.Qp.Coefficients">
             <summary>

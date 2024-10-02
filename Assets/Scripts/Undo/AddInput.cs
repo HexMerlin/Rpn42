@@ -4,6 +4,7 @@
 
     public override Change Execute()
     {
+        InputBuffer.Base = this.Base; // Assert we have the same base set as when the input was added
         InputBuffer.Append(Input);
         return this;
     }

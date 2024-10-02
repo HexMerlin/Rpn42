@@ -8,7 +8,7 @@ internal class BaseEntry
     public BaseEntry(Q q, int base_)
     {
         Qb = new Lazy<Qb>(() => new Qb(q, new Base(base_)));
-        Qp = new Lazy<Qp>(() => new Qp(q, new Base(base_)));
+        Qp = new Lazy<Qp>(() => CreateQp(q, base_));
 
         StringExpanded = new Lazy<string>(() => Qb.Value.ToStringExpandedSigned());
         StringPeriodic = new Lazy<string>(() => Qb.Value.ToStringPeriodic());
@@ -19,6 +19,18 @@ internal class BaseEntry
         StringRepetendFactorization = new Lazy<string>(() => Primes.Factorization(Qb.Value.PeriodicPart.IntValue).ToString());
         StringPeriod = new Lazy<string>(() => Qb.Value.Period.ToString());
         StringPeriodFactorization = new Lazy<string>(() => Primes.Factorization(Qb.Value.Period).ToString());
+    }
+
+    private static Qp CreateQp(Q q, int base_)
+    {
+        try {
+            return new Qp(q, new Base(base_));
+            
+        }
+        catch 
+        {            
+            return MathLib.Qp.NaN; 
+        }
     }
 
     internal Lazy<Qb> Qb { get; }

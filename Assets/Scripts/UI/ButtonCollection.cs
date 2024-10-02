@@ -57,10 +57,17 @@ public class ButtonCollection : IEnumerable<AbstractButton>
             new ButtonMode(UnityButton("button-mode-repetend"), Mode.Repetend, true),
             new ButtonMode(UnityButton("button-mode-period"), Mode.Period, true),
 
-            new ButtonBase(UnityButton("button-base-2"), 2),
-            new ButtonBase(UnityButton("button-base-3"), 3),
-            new ButtonBase(UnityButton("button-base-5"), 5),
-            new ButtonBase(UnityButton("button-base-10"), 10),
+            new ButtonBase(UnityButton("button-out-base-2"), 2),
+            new ButtonBase(UnityButton("button-out-base-3"), 3),
+            new ButtonBase(UnityButton("button-out-base-5"), 5),
+            new ButtonBase(UnityButton("button-out-base-7"), 7),
+            new ButtonBase(UnityButton("button-out-base-10"), 10),
+
+            new ButtonBase(UnityButton("button-in-base-2"), 2),
+            new ButtonBase(UnityButton("button-in-base-3"), 3),
+            new ButtonBase(UnityButton("button-in-base-5"), 5),
+            new ButtonBase(UnityButton("button-in-base-7"), 7),
+            new ButtonBase(UnityButton("button-in-base-10"), 10),
   
         };
 

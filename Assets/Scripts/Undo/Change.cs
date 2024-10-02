@@ -35,6 +35,7 @@ public abstract class Change
     public Change RemoveOutput() 
         => new RemoveOutput(ModelController).Execute().AppendTo(this);
 
+    //we remove them one by one, so they all are tracked by the undo system
     public Change ClearAllOutputs()
     {
         Change change = RemoveOutput();
