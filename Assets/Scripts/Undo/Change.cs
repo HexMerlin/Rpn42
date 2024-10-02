@@ -15,6 +15,10 @@ public abstract class Change
         this.ModelController = modelController;
     }
 
+    public abstract Change Execute();
+
+    public abstract Change Rollback();
+
     public static Change CreateStart(ModelController modelController) => new NoChange(modelController);
 
     public Change AddInput(string input) 

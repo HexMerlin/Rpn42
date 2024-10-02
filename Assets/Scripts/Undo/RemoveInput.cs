@@ -15,6 +15,6 @@
     public override Change Rollback()
     {
         new AddInput(ModelController, Input).Execute();
-        return this;
+        return Previous;
     }
 }

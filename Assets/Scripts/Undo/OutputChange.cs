@@ -8,7 +8,4 @@ public abstract class OutputChange : Change
 
     public OutputChange(ModelController modelController, NumberEntry numberEntry) : base(modelController) => NumberEntry = numberEntry;
 
-    public abstract Change Execute();
-
-    public abstract Change Rollback();
 }

@@ -186,37 +186,23 @@ public class ModelController
         if (this.CurrentChange is NoChange)
             return;
 
-        while (true)
+        do
         {
-            this.CurrentChange = this.CurrentChange switch
-            {
-                InputChange inputChange => inputChange.Rollback().Previous,
-                OutputChange outputChange => outputChange.Rollback().Previous,
-                _ => throw new ArgumentOutOfRangeException($"Unknown ChangeType {CurrentChange.GetType().Name}")
-            };
-            if (this.CurrentChange.IsUndoPoint)
-                return;
-        }
+            this.CurrentChange = this.CurrentChange.Rollback();
+
+        } while (! this.CurrentChange.IsUndoPoint);
     }
 
     public void PerformRedo()
     {
-             
-        while (true)
+        do
         {
             if (this.CurrentChange.Next is null)
                 return;
             this.CurrentChange = this.CurrentChange.Next;
+            this.CurrentChange = this.CurrentChange.Execute();
 
-            this.CurrentChange = this.CurrentChange switch
-            {
-                InputChange inputChange => inputChange.Execute(),
-                OutputChange outputChange => outputChange.Execute(),
-                _ => throw new ArgumentOutOfRangeException($"Unknown ChangeType {this.CurrentChange.GetType().Name}")
-            };
-            if (this.CurrentChange.IsUndoPoint)
-                return;
-        }
+        } while (!this.CurrentChange.IsUndoPoint) ;
     }
 
 

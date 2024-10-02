@@ -13,6 +13,6 @@ public class RemoveOutput : OutputChange
     public override Change Rollback()
     {
         new AddOutput(ModelController, NumberEntry).Execute();
-        return this;
+        return Previous;
     }
 }

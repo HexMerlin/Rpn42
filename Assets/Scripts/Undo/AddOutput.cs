@@ -12,6 +12,6 @@ public class AddOutput : OutputChange
     public override Change Rollback()
     {
         new RemoveOutput(ModelController).Execute();
-        return this;
+        return Previous;
     }
 }

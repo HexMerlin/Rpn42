@@ -12,7 +12,4 @@
         Input = input;
     }
 
-    public abstract Change Execute();
-
-    public abstract Change Rollback();
 }
