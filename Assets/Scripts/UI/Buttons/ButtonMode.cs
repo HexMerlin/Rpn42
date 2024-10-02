@@ -20,7 +20,7 @@ public class ButtonMode : AbstractButton
     {
         SetEnabled(!this.RequirePrimes || Primes.IsReady);
         if (IsEnabled)
-            SetSelected(this.NumberMode == mc.NumberFormat.Mode);
+            SetSelected(this.NumberMode == mc.NumberMode);
     }
 
     public override void Execute(ModelController mc)

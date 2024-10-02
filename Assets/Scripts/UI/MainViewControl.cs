@@ -62,7 +62,7 @@ public partial class MainViewControl : MonoBehaviour
 
             for (int column = 0; column < this.output.columns.Count; column++)
             {
-                string columnTitle = NumberEntry.ColumnTitle(column, this.ModelController.NumberFormat);
+                string columnTitle = NumberEntry.ColumnTitle(column, this.ModelController.OutputFormat);
                 this.output.columns[column].title = columnTitle;
 
                 int maxCharCount = columnTitle.Length * 2;
@@ -70,7 +70,7 @@ public partial class MainViewControl : MonoBehaviour
                 for (int row = 0; row < this.ModelController.OutputCount; row++)
                 {
                     NumberEntry entry = this.ModelController[row];
-                    int charCount = entry.ColumnData(column, ModelController.NumberFormat).Length;
+                    int charCount = entry.ColumnData(column, ModelController.OutputFormat).Length;
                     if (charCount > maxCharCount)
                     {
                         maxCharCount = charCount;

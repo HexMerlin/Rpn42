@@ -57,17 +57,17 @@ public class ButtonCollection : IEnumerable<AbstractButton>
             new ButtonMode(UnityButton("button-mode-repetend"), Mode.Repetend, true),
             new ButtonMode(UnityButton("button-mode-period"), Mode.Period, true),
 
-            new ButtonBase(UnityButton("button-out-base-2"), 2),
-            new ButtonBase(UnityButton("button-out-base-3"), 3),
-            new ButtonBase(UnityButton("button-out-base-5"), 5),
-            new ButtonBase(UnityButton("button-out-base-7"), 7),
-            new ButtonBase(UnityButton("button-out-base-10"), 10),
+            new ButtonBase(UnityButton("button-out-base-2"), isInputBase: false, 2),
+            new ButtonBase(UnityButton("button-out-base-3"), isInputBase: false, 3),
+            new ButtonBase(UnityButton("button-out-base-5"), isInputBase: false, 5),
+            new ButtonBase(UnityButton("button-out-base-7"), isInputBase: false, 7),
+            new ButtonBase(UnityButton("button-out-base-10"), isInputBase: false, 10),
 
-            new ButtonBase(UnityButton("button-in-base-2"), 2),
-            new ButtonBase(UnityButton("button-in-base-3"), 3),
-            new ButtonBase(UnityButton("button-in-base-5"), 5),
-            new ButtonBase(UnityButton("button-in-base-7"), 7),
-            new ButtonBase(UnityButton("button-in-base-10"), 10),
+            new ButtonBase(UnityButton("button-in-base-2"), isInputBase: true, 2),
+            new ButtonBase(UnityButton("button-in-base-3"), isInputBase: true, 3),
+            new ButtonBase(UnityButton("button-in-base-5"), isInputBase: true, 5),
+            new ButtonBase(UnityButton("button-in-base-7"), isInputBase: true, 7),
+            new ButtonBase(UnityButton("button-in-base-10"), isInputBase: true, 10),
   
         };
 

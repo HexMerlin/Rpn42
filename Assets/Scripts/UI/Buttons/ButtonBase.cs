@@ -8,20 +8,28 @@ public class ButtonBase : AbstractButton
 {
     public int Base { get; }
 
-    public ButtonBase(UnityButton unityButton, int numberBase) : base(unityButton)
+    public bool IsInputBase { get; }
+
+    public ButtonBase(UnityButton unityButton, bool isInputBase, int numberBase) : base(unityButton)
     {
+        this.IsInputBase = isInputBase;
         this.Base = numberBase;
     }
 
     public override void UpdateEnabledStatus(ModelController mc, Q leftOperand, Q rightOperand)
     {
         if (IsEnabled)
-            SetSelected(this.Base == mc.NumberFormat.Base);
+        {
+            SetSelected(this.Base == (this.IsInputBase ? mc.InputBase : mc.OutputBase));    
+        }
     }
 
     public override void Execute(ModelController mc)
     {
-        mc.NumberBase = this.Base;
+        if (this.IsInputBase)
+            mc.InputBase = this.Base;
+        else
+            mc.OutputBase = this.Base;
     }
 }
 

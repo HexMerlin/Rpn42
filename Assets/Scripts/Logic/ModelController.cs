@@ -14,14 +14,14 @@ public class ModelController
     public Change CurrentChange;
 
    
-    public Format NumberFormat => new Format(NumberMode, NumberBase);
+    public Format OutputFormat => new Format(NumberMode, OutputBase);
 
     public Mode NumberMode
     {
         get; set;
     }
 
-    public int NumberBase
+    public int OutputBase
     {
         get; set;
     }
@@ -63,7 +63,7 @@ public class ModelController
     {
         this.CurrentChange = Change.CreateStart(this);
         this.OutputEntries = new List<NumberEntry>();
-        this.NumberBase = 10;
+        this.OutputBase = 10;
         this.NumberMode = Mode.Normal;
         this.InputBuffer = new InputBuffer(base_: 10);
 
