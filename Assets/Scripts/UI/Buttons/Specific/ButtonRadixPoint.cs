@@ -7,7 +7,7 @@ public class ButtonRadixPoint : AbstractButton
 
     public override void UpdateEnabledStatus(ModelController mc, Q leftOperand, Q rightOperand)
     {
-        SetEnabled(!mc.Input.Contains('.', System.StringComparison.InvariantCulture));
+        SetEnabled(!mc.InputBuffer.ContainsRadixPoint());
     }
 
     public override void Execute(ModelController mc) => mc.PerformAddInput(".");

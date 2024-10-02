@@ -58,7 +58,7 @@ public partial class MainViewControl : MonoBehaviour
             bool storedGuiEnableState = GuiEnable;
             
             GuiEnable = false;
-            this.inputLabel.text = ModelController.Input;
+            this.inputLabel.text = ModelController.InputBuffer.String();
 
             for (int column = 0; column < this.output.columns.Count; column++)
             {

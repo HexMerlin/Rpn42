@@ -74,8 +74,6 @@ public class ModelController
 
     private bool OutputEmpty => this.OutputEntries.Count == 0;
 
-    public string Input => this.InputBuffer.ToString();
-
     public bool InputEmpty => this.InputBuffer.Length == 0;
      
     private NumberEntry LastOutput => this.OutputEntries[^1];
@@ -109,7 +107,7 @@ public class ModelController
     private void WriteTo(SavedData savedData)
     {
         savedData.numberEntries = this.OutputEntries.ToArray();
-        savedData.input = this.Input;
+        savedData.input = this.InputBuffer.String();
     }
 
     public void AddOutput(NumberEntry numberEntry, bool isUndoPoint)

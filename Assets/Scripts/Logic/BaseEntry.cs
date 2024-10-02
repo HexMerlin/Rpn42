@@ -55,8 +55,5 @@ internal class BaseEntry
 
     internal Lazy<string> StringPeriodFactorization { get; }
     
-    //private Lazy<string> StringPartition { get; }
-
-
 }
 

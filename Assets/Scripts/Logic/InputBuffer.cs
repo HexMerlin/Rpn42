@@ -55,7 +55,13 @@ public class InputBuffer
         return new Q(BigIntegerExtensions.Parse(input, base_), BigInteger.Pow(base_, input.Length - pointIndex));
     }
 
-    public override string ToString() => sb.ToString(); 
-    public string ToString(int startIndex, int length) => this.sb.ToString(startIndex, length);
+    public bool ContainsRadixPoint() => sb.ToString().Contains('.', StringComparison.InvariantCulture);
+
+    public string SubString(int startIndex, int length) => sb.ToString(startIndex, length);
+
+    public string String() => sb.ToString(); 
+
+    public override string ToString() => throw new InvalidOperationException("No ToString() method for InputBuffer");
+
 }
 

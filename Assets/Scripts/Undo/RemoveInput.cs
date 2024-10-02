@@ -4,7 +4,7 @@
 
     public RemoveInput(ModelController modelController) : this(modelController, modelController.InputBuffer.Length) { }
 
-    public RemoveInput(ModelController modelController, int count) : base(modelController, modelController.InputBuffer.ToString(modelController.InputBuffer.Length - count, count)) { }
+    public RemoveInput(ModelController modelController, int count) : base(modelController, modelController.InputBuffer.SubString(modelController.InputBuffer.Length - count, count)) { }
 
     public override Change Execute()
     {
