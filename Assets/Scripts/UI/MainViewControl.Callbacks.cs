@@ -81,7 +81,7 @@ public partial class MainViewControl
             else if (integers.Length == 1)
             {
                 NumberEntry numberEntry = new NumberEntry(integers[0]);
-                ModelController.AddOutput(numberEntry, isUndoPoint: true);
+                ModelController.PerformAddOutput(numberEntry, isUndoPoint: true);
                 RequestUIRefresh();
             }
             else
@@ -101,7 +101,7 @@ public partial class MainViewControl
             return;
         }
         NumberEntry numberEntry = new NumberEntry(BigInteger.Parse(selectedItem));
-        ModelController.AddOutput(numberEntry, isUndoPoint: true);
+        ModelController.PerformAddOutput(numberEntry, isUndoPoint: true);
         GuiEnable = true;
         RequestUIRefresh();
     }
@@ -141,7 +141,7 @@ public partial class MainViewControl
         GuiEnable = false;
 
         button.Execute(ModelController);
-        ModelController.CurrentChange.IsUndoPoint = true;
+        ModelController.SetUndoPoint();
 
         RequestUIRefresh();
         GuiEnable = true;

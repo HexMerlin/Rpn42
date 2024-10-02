@@ -4,7 +4,7 @@ public abstract class Change
 {
     public ModelController ModelController { get; }
 
-    public bool IsUndoPoint { get; set; } = false;
+    public bool IsUndoPoint { get; private set; } = false;
 
     public Change? Previous { get; private set; } = null;
 
@@ -20,6 +20,12 @@ public abstract class Change
     public abstract Change Rollback();
 
     public static Change CreateStart(ModelController modelController) => new NoChange(modelController);
+
+    public virtual Change SetUndoPoint(bool isUndoPoint = true)
+    {
+        IsUndoPoint = isUndoPoint;
+        return this;
+    }
 
     public Change AddInput(string input) 
         => new AddInput(ModelController, input).Execute().AppendTo(this);

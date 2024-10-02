@@ -80,6 +80,7 @@ public class ModelController
 
     private NumberEntry SecondLastOutput => this.OutputEntries[^2];
 
+    public void SetUndoPoint(bool isUndoPoint = true) => this.CurrentChange.SetUndoPoint(isUndoPoint);
 
     public void LoadSavedData()
     {
@@ -110,10 +111,9 @@ public class ModelController
         savedData.input = this.InputBuffer.String();
     }
 
-    public void AddOutput(NumberEntry numberEntry, bool isUndoPoint)
+    public void PerformAddOutput(NumberEntry numberEntry, bool isUndoPoint)
     {
-        this.CurrentChange = this.CurrentChange.AddOutput(numberEntry);
-        this.CurrentChange.IsUndoPoint = isUndoPoint;
+        this.CurrentChange = this.CurrentChange.AddOutput(numberEntry).SetUndoPoint(isUndoPoint);
     }
 
     public void PerformAddInput(string input) => this.CurrentChange = this.CurrentChange.AddInput(input);
