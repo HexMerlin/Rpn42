@@ -26,37 +26,7 @@ public class ModelController
         get; set;
     }
 
-    public int InputBase
-    {
-        get => InputBuffer.Base;
-    }
-    //private int _numberBase;   
-    //public int NumberBase
-    //{
-    //    get => _numberBase;
-    //    set
-    //    {
-    //        if (value == NumberBase) return;
-    //        if (!InputEmpty)
-    //            PerformUnaryOperation((a) => a);
-    //        if (value == 10 && NumberMode is Mode.PAdic)
-    //            NumberMode = Mode.Normal;
-    //        this.CurrentChange = this.CurrentChange.ChangeBase(_numberBase, value);
-    //        _numberBase = value;
-
-    //    }
-    //}
-
-    //public void PerformChangeBase(int newBase)
-    //{
-    //    if (newBase == NumberBase) return;
-    //    if (!InputEmpty)
-    //        PerformUnaryOperation((a) => a);
-    //    if (newBase == 10 && NumberMode is Mode.PAdic)
-    //        NumberMode = Mode.Normal;
-
-    //    this.CurrentChange = this.CurrentChange.AddInput(input, inputBuf);
-    //}
+    public int InputBase => InputBuffer.Base;
 
     public ModelController()
     {

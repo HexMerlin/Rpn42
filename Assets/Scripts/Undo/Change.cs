@@ -33,16 +33,16 @@ public abstract class Change
     public Change ChangeInputBase(int newBase)
     {
         if (ModelController.InputEmpty)
-            return this.FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase)).Execute();
+            return FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase)).Execute();
         
         Q q = ModelController.InputBuffer.AsQ();
-        return this
+        var result = this
             .FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase)).Execute()
-            .ClearInput()
-            .HasFiniteExpansion(q, newBase)
-                ? AddInput(q.ToStringFinite(newBase))
-                : AddOutput(new NumberEntry(q));
-         
+            .ClearInput();
+
+            return HasFiniteExpansion(q, newBase) 
+                ? result.AddInput(q.ToStringFinite(newBase))
+                : result.AddOutput(new NumberEntry(q));
     }
 
     public Change AddInput(string input) 
@@ -77,12 +77,12 @@ public abstract class Change
  
     public Change FollowedBy(Change next)
     {
-        next.Previous = this;
         this.Next = next;
+        next.Previous = this;
         return next;
     }
 
-    public bool HasFiniteExpansion(Q q, int base_)
+    public static bool HasFiniteExpansion(Q q, int base_)
     {
         if (base_ is not (2 or 3 or 5 or 7 or 10))
             throw new ArgumentOutOfRangeException(nameof(base_), base_, "Base must be 2, 3, 5, 7, or 10");

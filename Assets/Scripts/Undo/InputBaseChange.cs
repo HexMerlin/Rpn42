@@ -19,6 +19,12 @@ public class InputBaseChange : Change
         return this;
     }
 
+    public override Change Rollback()
+    {
+        ModelController.InputBuffer.ChangeBase(OldBase);
+        return Previous;
+    }
+
     //public Change ChangeInputBase(int newBase)
     //{
     //    if (ModelController.InputEmpty)
@@ -35,11 +41,7 @@ public class InputBaseChange : Change
     //}
 
 
-    public override Change Rollback()
-    {
-        new InputBaseChange(ModelController, NewBase, OldBase).Execute();
-        return Previous;
-    }
+
 
 
 }
