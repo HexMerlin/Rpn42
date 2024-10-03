@@ -65,6 +65,8 @@ public class NumberEntry
     private static string Col1Title(Format format) 
         => format.Mode switch
     {
+        Mode.Normal => "Expanded p-ary",
+        Mode.Periodic => "p-Ary",
         Mode.PAdic => "Generator",
         Mode.Repetend => "Repetend",
         Mode.Period => "Period",
@@ -74,6 +76,7 @@ public class NumberEntry
     private string Col1Data(Format format) 
         => format.Mode switch
     {
+        Mode.Periodic => BaseEntry(format).StringPeriodic.Value,
         Mode.PAdic => BaseEntry(format).StringQpGenerator.Value,
         Mode.Repetend => BaseEntry(format).StringRepetend.Value,
         Mode.Period => BaseEntry(format).StringPeriod.Value,
@@ -82,9 +85,9 @@ public class NumberEntry
 
     private static string Col2Title(Format format) => format.Mode switch
     {
-        Mode.Normal => "Expanded",
-        Mode.Periodic => "Periodic",
-        Mode.PAdic => "P-Adic",
+        Mode.Normal => "p-adic",
+        Mode.Periodic => "p-Adic",
+        Mode.PAdic => "p-Adic",
         Mode.Rotations => "Rotations",
         Mode.Factorization => "Factors",
         Mode.Repetend => "Repetend Factors",
@@ -94,8 +97,8 @@ public class NumberEntry
 
     private string Col2Data(Format format) => format.Mode switch
     {
-        Mode.Normal => BaseEntry(format).StringExpanded.Value,
-        Mode.Periodic => BaseEntry(format).StringPeriodic.Value,
+        Mode.Normal => BaseEntry(format).StringQpGenerator.Value,
+        Mode.Periodic => BaseEntry(format).StringQpPeriodic.Value,
         Mode.PAdic => BaseEntry(format).StringQpPeriodic.Value,
         Mode.Rotations => BaseEntry(format).StringRotations.Value,
         Mode.Factorization => StringFactorization.Value,
