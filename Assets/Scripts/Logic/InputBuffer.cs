@@ -7,7 +7,7 @@ public class InputBuffer
 {
     public int Base { 
         get; 
-        internal set; //TODO: Throw exception if set when sb is not empty - or change the base of sb?
+        private set; 
     }
 
     private readonly StringBuilder sb;
@@ -20,9 +20,32 @@ public class InputBuffer
 
     public int Length => this.sb.Length;
 
+    public bool IsEmpty => this.sb.Length == 0;
+
+    public void ChangeBase(int newBase)
+    {
+        if (newBase == Base) return;
+        Base = newBase;
+    }
+
+    //public void ChangeBase(int newBase)
+    //{
+    //    if (newBase == Base) return;
+
+    //    if (sb.Length > 0)
+    //    {
+    //        Q q = AsQ();
+    //        sb.Clear();
+    //        sb.Append(q.ToStringFinite(newBase));
+
+    //    }
+    //    Base = newBase;
+    //}
+
     public void Clear() => this.sb.Clear();
 
-    public void Append(string input) => this.sb.Append(input);
+    public void Append(string input) 
+        => this.sb.Append(input);
 
     public void RemoveChars(int startIndex, int count)
     {

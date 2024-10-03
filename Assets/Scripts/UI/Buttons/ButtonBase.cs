@@ -27,7 +27,7 @@ public class ButtonBase : AbstractButton
     public override void Execute(ModelController mc)
     {
         if (this.IsInputBase)
-            mc.InputBase = this.Base;
+            mc.PerformInputBaseChange(this.Base);
         else
             mc.OutputBase = this.Base;
     }

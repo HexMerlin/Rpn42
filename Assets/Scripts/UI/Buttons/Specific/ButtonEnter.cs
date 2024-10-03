@@ -8,5 +8,5 @@ public class ButtonEnter : AbstractButton
     public override void UpdateEnabledStatus(ModelController mc, Q leftOperand, Q rightOperand)
         => SetEnabled(!leftOperand.IsNaN || !rightOperand.IsNaN);
 
-    public override void Execute(ModelController mc) => mc.PerformUnaryOperation((a) => a, mc.InputEmpty);
+    public override void Execute(ModelController mc) => mc.PerformEnter();
 }

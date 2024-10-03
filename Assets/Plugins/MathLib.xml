@@ -40,13 +40,6 @@
             <param name="exponent">The exponent.</param>
             <returns>The result of raising the base to the exponent.</returns>
         </member>
-        <member name="M:MathLib.Base.LengthOf(System.Numerics.BigInteger)">
-            <summary>
-            Gets the length of the given integer in the current base.
-            </summary>
-            <param name="integer">The integer.</param>
-            <returns>The length of the integer in the current base.</returns>
-        </member>
         <member name="M:MathLib.Base.Equals(System.Object)">
             <inheritdoc/>
         </member>
@@ -1254,6 +1247,27 @@
             <param name="base_">The base to convert to.</param>
             <returns>A new <see cref="T:MathLib.Qb"/> representing the current rational number in the specified base.</returns>
         </member>
+        <member name="M:MathLib.Q.ShiftedFractions(System.Int32)">
+            <summary>
+            Light version of <see cref="M:MathLib.Qb.ShiftedFractions"/> that takes a rational number and a base.
+            </summary>
+            <remarks>This method does not require the costly creation of a <see cref="T:MathLib.Qb"/>.</remarks>
+            <param name="q">A rational number</param>
+            <param name="base_">The base</param>
+            <returns>An enumerable sequence of rational numbers representing the shifted fractional parts in base <paramref name="base_"/>.</returns>
+            <seealso cref="M:MathLib.Qb.ShiftedFractions"/>
+        </member>
+        <member name="M:MathLib.Q.Coefficients(System.Int32)">
+            <summary>
+            Light version of <see cref="M:MathLib.Qb.Coefficients"/> that takes a rational number and a base.
+            </summary>
+            <remarks>This method does not require the costly creation of a <see cref="T:MathLib.Qb"/>.</remarks>
+            <param name="q">A rational number</param>
+            <param name="base_">The base</param>
+            <returns>An enumerable sequence of integers representing the coefficients of <paramref name="q"/> in base <paramref name="base_"/>.</returns>
+            <seealso cref = "M:MathLib.Qb.Coefficients" />
+            <seealso cref="M:MathLib.Qb.ShiftedFractions"/>
+        </member>
         <member name="P:MathLib.Q.Sign">
             <summary>
             Sign of the current rational number.
@@ -1685,16 +1699,6 @@
             <seealse cref="!:Q.BaseShiftRight(int, int)"/>
             <seealso cref="!:Q.BaseShiftLeftSingle(int)"/>
         </member>
-        <member name="M:MathLib.Qb.ShiftedFractions(MathLib.Q,MathLib.Base)">
-            <summary>
-            Static version of <see cref="M:MathLib.Qb.ShiftedFractions"/> that takes a rational number and a base.
-            </summary>
-            <remarks>This method does not require the costly creation of a <see cref="T:MathLib.Qb"/>.</remarks>
-            <param name="q">A rational number</param>
-            <param name="base_">The base</param>
-            <returns>An enumerable sequence of rational numbers representing the shifted fractional parts in base <paramref name="base_"/>.</returns>
-            <seealso cref="M:MathLib.Qb.ShiftedFractions"/>
-        </member>
         <member name="M:MathLib.Qb.Coefficients">
             <summary>
             Returns the coefficient (or digit) expansion of a rational number in the specified base, expressed as a sequence of integers (modulo b). 
@@ -1706,16 +1710,6 @@
             <para>Thus, each coefficient is a number modulo <see cref="P:MathLib.Qb.Base"/>.</para>
             </remarks>
             <returns>An enumerable sequence of integers representing the coefficients in base <see cref="P:MathLib.Qb.Base"/>.</returns>
-        </member>
-        <member name="M:MathLib.Qb.Coefficients(MathLib.Q,MathLib.Base)">
-            <summary>
-            Static version of <see cref="M:MathLib.Qb.Coefficients"/> that takes a rational number and a base.
-            </summary>
-            <remarks>This method does not require the costly creation of a <see cref="T:MathLib.Qb"/>.</remarks>
-            <param name="q">A rational number</param>
-            <param name="base_">The base</param>
-            <returns>An enumerable sequence of integers representing the coefficients of <paramref name="q"/> in base <paramref name="base_"/>.</returns>
-            <seealso cref="M:MathLib.Qb.ShiftedFractions"/>
         </member>
         <member name="M:MathLib.Qb.RepetendShiftLeft">
             <summary>
@@ -1839,14 +1833,14 @@
             </code>
             </example>
         </member>
-        <member name="P:MathLib.Qp.Base">
-            <summary>
-            Returns the prime base of this p-adic number.
-            </summary>
-        </member>
         <member name="P:MathLib.Qp.Generator">
             <summary>
             A reverse generator that can be used to generate the coefficients of the p-adic number, in reverse order (least significant digit first).
+            </summary>
+        </member>
+        <member name="P:MathLib.Qp.Base">
+            <summary>
+            Returns the prime base of this p-adic number.
             </summary>
         </member>
         <member name="M:MathLib.Qp.FindKQ(MathLib.Q,System.Int32)">

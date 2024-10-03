@@ -29,7 +29,6 @@ public class ModelController
     public int InputBase
     {
         get => InputBuffer.Base;
-        set => InputBuffer.Base = value;
     }
     //private int _numberBase;   
     //public int NumberBase
@@ -74,8 +73,8 @@ public class ModelController
 
     private bool OutputEmpty => this.OutputEntries.Count == 0;
 
-    public bool InputEmpty => this.InputBuffer.Length == 0;
-     
+    public bool InputEmpty => this.InputBuffer.IsEmpty;
+
     private NumberEntry LastOutput => this.OutputEntries[^1];
 
     private NumberEntry SecondLastOutput => this.OutputEntries[^2];
@@ -111,10 +110,19 @@ public class ModelController
         savedData.input = this.InputBuffer.String();
     }
 
+    public void PerformInputBaseChange(int newBase)
+    {
+        if (newBase == InputBase) return;
+        this.CurrentChange = this.CurrentChange.ChangeInputBase(newBase);
+    }
+
+
     public void PerformAddOutput(NumberEntry numberEntry, bool isUndoPoint)
     {
         this.CurrentChange = this.CurrentChange.AddOutput(numberEntry).SetUndoPoint(isUndoPoint);
     }
+
+    public void PerformEnter() => PerformUnaryOperation((a) => a, InputEmpty);
 
     public void PerformAddInput(string input) => this.CurrentChange = this.CurrentChange.AddInput(input);
 
