@@ -141,7 +141,7 @@ public class ModelController
         } 
         else 
         this.CurrentChange = InputEmpty ?
-            this.CurrentChange.ReplaceOutput(new NumberEntry(result)) :
+            this.CurrentChange.RemoveOutput().AddOutput(new NumberEntry(result)) :
             this.CurrentChange.ClearInput().AddOutput(new NumberEntry(result));
     }
 
@@ -155,8 +155,8 @@ public class ModelController
         if (result.IsNaN) return;
 
         this.CurrentChange = InputEmpty ?
-            this.CurrentChange.RemoveOutput().ReplaceOutput(new NumberEntry(result)) :
-            this.CurrentChange.ClearInput().ReplaceOutput(new NumberEntry(result));
+            this.CurrentChange.RemoveOutput().RemoveOutput().AddOutput(new NumberEntry(result)) :
+            this.CurrentChange.ClearInput().RemoveOutput().AddOutput(new NumberEntry(result));
     }
 
     public void PerformBackDrop()
@@ -174,10 +174,8 @@ public class ModelController
 
     public void PerformClear()
     {
-        if (!InputEmpty)
-            this.CurrentChange = this.CurrentChange.ClearInput();
-        if (!OutputEmpty)
-            this.CurrentChange = this.CurrentChange.ClearAllOutputs();
+        this.CurrentChange = this.CurrentChange.ClearInput();
+        this.CurrentChange = this.CurrentChange.ClearAllOutputs();
     }
 
     public void PerformCopy2()
@@ -193,7 +191,6 @@ public class ModelController
     {
         if (this.CurrentChange is NoChange)
             return;
-
         do
         {
             this.CurrentChange = this.CurrentChange.Rollback();

@@ -19,6 +19,22 @@ public class InputBaseChange : Change
         return this;
     }
 
+    //public Change ChangeInputBase(int newBase)
+    //{
+    //    if (ModelController.InputEmpty)
+    //        return this.SetUndoPoint(false).FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase)).Execute();
+
+    //    Q q = ModelController.InputBuffer.AsQ();
+    //    return this.SetUndoPoint(false)
+    //        .FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase)).Execute()
+    //        .ClearInput()
+    //        .HasFiniteExpansion(q, newBase)
+    //            ? AddInput(q.ToStringFinite(newBase))
+    //            : AddOutput(new NumberEntry(q));
+
+    //}
+
+
     public override Change Rollback()
     {
         new InputBaseChange(ModelController, NewBase, OldBase).Execute();

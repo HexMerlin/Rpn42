@@ -33,16 +33,16 @@ public abstract class Change
     public Change ChangeInputBase(int newBase)
     {
         if (ModelController.InputEmpty)
-            return this.SetUndoPoint(false).FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase)).Execute();
+            return this.FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase)).Execute();
         
         Q q = ModelController.InputBuffer.AsQ();
-        return this.SetUndoPoint(false)
+        return this
             .FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase)).Execute()
             .ClearInput()
             .HasFiniteExpansion(q, newBase)
                 ? AddInput(q.ToStringFinite(newBase))
                 : AddOutput(new NumberEntry(q));
-                
+         
     }
 
     public Change AddInput(string input) 
@@ -55,7 +55,9 @@ public abstract class Change
         => this.FollowedBy(new RemoveInput(ModelController, count)).Execute();
 
     public Change ClearInput() 
-          => this.FollowedBy(new RemoveInput(ModelController)).Execute();
+          => ModelController.InputBuffer.IsEmpty 
+            ? this
+            : this.FollowedBy(new RemoveInput(ModelController)).Execute();
    
     public Change AddOutput(NumberEntry numberEntry) 
         => this.FollowedBy(new AddOutput(ModelController, numberEntry)).Execute();
@@ -66,16 +68,13 @@ public abstract class Change
     //we remove them one by one, so they all are tracked by the undo system
     public Change ClearAllOutputs()
     {
-        Change change = RemoveOutput();
+        Change change = this;
         while (ModelController.OutputEntries.Count > 0)
             change = change.RemoveOutput();
         return change;
     }
 
-    public Change ReplaceInput(string input) => this.ClearInput().AddInput(input);
-
-    public Change ReplaceOutput(NumberEntry numberEntry) => this.RemoveOutput().AddOutput(numberEntry);
-
+ 
     public Change FollowedBy(Change next)
     {
         next.Previous = this;
