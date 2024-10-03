@@ -70,7 +70,24 @@ public partial class MainViewControl
 
     }
 
- 
+    private void OnButtonGridClick(ClickEvent evt)
+    {
+        if (evt.target is not UnityButton unityButton)
+            return;
+
+        AbstractButton? button = AbstractButton.Button(unityButton);
+        if (button is null) return; //button not assigned
+
+        GuiEnable = false;
+
+        button.Execute(ModelController);
+        ModelController.SetUndoPoint();
+
+        RequestUIRefresh();
+        GuiEnable = true;
+
+    }
+
     private void OnCellClick(ClickEvent evt)
     {
         if (evt.target is Label cellLabel)
@@ -129,24 +146,7 @@ public partial class MainViewControl
         if (!hasFocus) // Save data when the app loses focus
             SaveData();
     }
-   
-    private void OnButtonGridClick(ClickEvent evt)
-    {
-        if (evt.target is not UnityButton unityButton)
-            return;
 
-        AbstractButton? button = AbstractButton.Button(unityButton);
-        if (button is null) return; //button not assigned
-
-        GuiEnable = false;
-
-        button.Execute(ModelController);
-        ModelController.SetUndoPoint();
-
-        RequestUIRefresh();
-        GuiEnable = true;
-       
-    }
 
     private void OnButtonGridGeometryChanged(GeometryChangedEvent evt)
     {

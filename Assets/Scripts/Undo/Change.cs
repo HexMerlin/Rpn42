@@ -33,47 +33,35 @@ public abstract class Change
     public Change ChangeInputBase(int newBase)
     {
         if (ModelController.InputEmpty)
-        {
-            return this.FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase));
-        }
-        else
-        {
-            Q q = ModelController.InputBuffer.AsQ();
-            if (HasFiniteExpansion(q, newBase))
-            {
-                return ReplaceInput(q.ToStringFinite(newBase))
-                    .FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase))
-                    .Prepend(this.SetUndoPoint(false));
-            }
-            else
-            {
-                return ClearInput()
-                    .AddOutput(new NumberEntry(q))
-                    .FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase))
-                    .Execute()
-                    .Prepend(this.SetUndoPoint(false));
+            return this.SetUndoPoint(false).FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase)).Execute();
+        
+        Q q = ModelController.InputBuffer.AsQ();
+        return this.SetUndoPoint(false)
+            .FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase)).Execute()
+            .ClearInput()
+            .HasFiniteExpansion(q, newBase)
+                ? AddInput(q.ToStringFinite(newBase))
+                : AddOutput(new NumberEntry(q));
                 
-            }
-        }
     }
 
     public Change AddInput(string input) 
-        => new AddInput(ModelController, input).Execute().Prepend(this);
+        => this.FollowedBy(new AddInput(ModelController, input)).Execute();
 
     public Change RemoveInputChar() 
-        => new RemoveInput(ModelController, 1).Execute().Prepend(this);
+        => this.FollowedBy(new RemoveInput(ModelController, 1)).Execute();
 
     public Change RemoveInputChars(int count) 
-        => new RemoveInput(ModelController, count).Execute().Prepend(this);
+        => this.FollowedBy(new RemoveInput(ModelController, count)).Execute();
 
     public Change ClearInput() 
-          => new RemoveInput(ModelController).Execute().Prepend(this);
+          => this.FollowedBy(new RemoveInput(ModelController)).Execute();
    
     public Change AddOutput(NumberEntry numberEntry) 
-        => new AddOutput(ModelController, numberEntry).Execute().Prepend(this);
+        => this.FollowedBy(new AddOutput(ModelController, numberEntry)).Execute();
 
     public Change RemoveOutput() 
-        => new RemoveOutput(ModelController).Execute().Prepend(this);
+        => this.FollowedBy(new RemoveOutput(ModelController)).Execute();
 
     //we remove them one by one, so they all are tracked by the undo system
     public Change ClearAllOutputs()
@@ -84,16 +72,9 @@ public abstract class Change
         return change;
     }
 
-    public Change ReplaceInput(string input) => ClearInput().AddInput(input);
+    public Change ReplaceInput(string input) => this.ClearInput().AddInput(input);
 
-    public Change ReplaceOutput(NumberEntry numberEntry) => RemoveOutput().AddOutput(numberEntry);
-
-    public Change Prepend(Change previous)
-    {
-        previous.Next = this;
-        this.Previous = previous;
-        return this;
-    }
+    public Change ReplaceOutput(NumberEntry numberEntry) => this.RemoveOutput().AddOutput(numberEntry);
 
     public Change FollowedBy(Change next)
     {
@@ -102,8 +83,7 @@ public abstract class Change
         return next;
     }
 
-
-    public static bool HasFiniteExpansion(Q q, int base_)
+    public bool HasFiniteExpansion(Q q, int base_)
     {
         if (base_ is not (2 or 3 or 5 or 7 or 10))
             throw new ArgumentOutOfRangeException(nameof(base_), base_, "Base must be 2, 3, 5, 7, or 10");
