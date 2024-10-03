@@ -22,6 +22,7 @@ public class NumberEntry
         Base2Entry = new Lazy<BaseEntry>(() => new BaseEntry(q, 2));
         Base3Entry = new Lazy<BaseEntry>(() => new BaseEntry(q, 3));
         Base5Entry = new Lazy<BaseEntry>(() => new BaseEntry(q, 5));
+        Base7Entry = new Lazy<BaseEntry>(() => new BaseEntry(q, 7));
         Base10Entry = new Lazy<BaseEntry>(() => new BaseEntry(q, 10));
 
     }
@@ -34,6 +35,8 @@ public class NumberEntry
     private Lazy<BaseEntry> Base3Entry { get; }
 
     private Lazy<BaseEntry> Base5Entry { get; }
+
+    private Lazy<BaseEntry> Base7Entry { get; }
 
     private Lazy<BaseEntry> Base10Entry { get; }
 
@@ -106,6 +109,7 @@ public class NumberEntry
         2 => Base2Entry.Value,
         3 => Base3Entry.Value,
         5 => Base5Entry.Value,
+        7 => Base7Entry.Value,
         10 => Base10Entry.Value,
         _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown base"),
     };
