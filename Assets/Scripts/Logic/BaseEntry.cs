@@ -10,11 +10,15 @@ internal class BaseEntry
         Qb = new Lazy<Qb>(() => new Qb(q, new Base(base_)));
         Qp = new Lazy<Qp>(() => CreateQp(q, base_));
 
-        StringExpanded = new Lazy<string>(() => Qb.Value.ToStringExpandedSigned());
+        StringQpGenerator = new Lazy<string>(() => Qp.Value.Generator.ToStringCanonical());
+
+        StringExpanded = new Lazy<string>(() => Qb.Value.ToStringExpanded());
+        StringQpExpanded = new Lazy<string>(() => Qp.Value.Generator.ToStringExpanded());
+
         StringPeriodic = new Lazy<string>(() => Qb.Value.ToStringPeriodic());
         StringQpPeriodic = new Lazy<string>(() => Qp.Value.ToStringPeriodic());
         StringRotations = new Lazy<string>(() => Qb.Value.ToStringRotations());
-        StringQpGenerator = new Lazy<string>(() => Qp.Value.Generator.ToStringCanonical());
+      
         StringRepetend = new Lazy<string>(() => Qb.Value.ToStringRepetend());
         StringRepetendFactorization = new Lazy<string>(() => Primes.Factorization(Qb.Value.PeriodicPart.IntValue).ToString());
         StringPeriod = new Lazy<string>(() => Qb.Value.Period.ToString());
@@ -32,20 +36,22 @@ internal class BaseEntry
             return MathLib.Qp.NaN; 
         }
     }
+    internal Lazy<string> StringQpGenerator { get; }
 
     internal Lazy<Qb> Qb { get; }
 
     internal Lazy<Qp> Qp { get; }
 
     internal Lazy<string> StringExpanded { get; }
-
+    internal Lazy<string> StringQpExpanded { get; }
+    
     internal Lazy<string> StringPeriodic { get; }
 
     internal Lazy<string> StringQpPeriodic { get; }
 
     internal Lazy<string> StringRotations { get; }
 
-    internal Lazy<string> StringQpGenerator { get; }
+
 
     internal Lazy<string> StringRepetend { get; }
 

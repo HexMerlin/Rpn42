@@ -60,7 +60,7 @@ public class NumberEntry
 
     private static string Col0Title(Format _) => "Canonical";
 
-    private string Col0Data(Format _) => StringCanonical.Value;
+    private string Col0Data(Format format) => StringCanonical.Value + " " + BaseEntry(format).StringQpGenerator.Value;
 
     private static string Col1Title(Format format) 
         => format.Mode switch
@@ -76,6 +76,7 @@ public class NumberEntry
     private string Col1Data(Format format) 
         => format.Mode switch
     {
+        Mode.Normal => BaseEntry(format).StringExpanded.Value,
         Mode.Periodic => BaseEntry(format).StringPeriodic.Value,
         Mode.PAdic => BaseEntry(format).StringQpGenerator.Value,
         Mode.Repetend => BaseEntry(format).StringRepetend.Value,
@@ -85,9 +86,9 @@ public class NumberEntry
 
     private static string Col2Title(Format format) => format.Mode switch
     {
-        Mode.Normal => "p-adic",
-        Mode.Periodic => "p-Adic",
-        Mode.PAdic => "p-Adic",
+        Mode.Normal => "Expanded p-adic",
+        Mode.Periodic => "p-adic",
+        Mode.PAdic => "p-adic",
         Mode.Rotations => "Rotations",
         Mode.Factorization => "Factors",
         Mode.Repetend => "Repetend Factors",
@@ -97,7 +98,7 @@ public class NumberEntry
 
     private string Col2Data(Format format) => format.Mode switch
     {
-        Mode.Normal => BaseEntry(format).StringQpGenerator.Value,
+        Mode.Normal => BaseEntry(format).StringQpExpanded.Value,
         Mode.Periodic => BaseEntry(format).StringQpPeriodic.Value,
         Mode.PAdic => BaseEntry(format).StringQpPeriodic.Value,
         Mode.Rotations => BaseEntry(format).StringRotations.Value,
