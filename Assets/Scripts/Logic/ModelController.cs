@@ -41,7 +41,7 @@ public class ModelController
 
     public int OutputCount => this.OutputEntries.Count;
 
-    private bool OutputEmpty => this.OutputEntries.Count == 0;
+    public bool OutputEmpty => this.OutputEntries.Count == 0;
 
     public bool InputEmpty => this.InputBuffer.IsEmpty;
 
@@ -124,22 +124,16 @@ public class ModelController
 
         if (result.IsNaN) return;
 
-        this.CurrentChange = InputEmpty ?
-            this.CurrentChange.RemoveOutput().RemoveOutput().AddOutput(new NumberEntry(result)) :
-            this.CurrentChange.ClearInput().RemoveOutput().AddOutput(new NumberEntry(result));
+        this.CurrentChange = InputEmpty 
+            ? this.CurrentChange.RemoveOutput().RemoveOutput().AddOutput(new NumberEntry(result)) 
+            : this.CurrentChange.ClearInput().RemoveOutput().AddOutput(new NumberEntry(result));
     }
 
     public void PerformBackDrop()
     {
-        if (InputEmpty)
-        {
-            if (OutputEmpty) return;
-            this.CurrentChange = this.CurrentChange.RemoveOutput();
-        }
-        else
-        {
-            this.CurrentChange = this.CurrentChange.RemoveInputChar();
-        }
+       this.CurrentChange = InputEmpty 
+            ? this.CurrentChange.RemoveOutput() 
+            : this.CurrentChange.RemoveInputChar();
     }
 
     public void PerformClear()

@@ -32,38 +32,36 @@ public abstract class Change
 
     public Change ChangeInputBase(int newBase)
     {
-        if (ModelController.InputEmpty)
-            return FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase)).Execute();
-        
-        Q q = ModelController.InputBuffer.AsQ();
-        var result = this
-            .FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase)).Execute()
-            .ClearInput();
+        Q q = ModelController.InputEmpty ? Q.NaN : ModelController.InputBuffer.AsQ();
 
-            return q.HasFiniteExpansion(newBase) 
-                ? result.AddInput(q.ToStringFinite(newBase))
-                : result.AddOutput(new NumberEntry(q));
+        Change result = this.FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase));
+        
+        return q.IsNaN 
+            ? result
+            : q.HasFiniteExpansion(newBase)
+                ? result.ClearInput().AddInput(q.ToStringFinite(newBase))
+                : result.ClearInput().AddOutput(new NumberEntry(q));
     }
 
     public Change AddInput(string input) 
-        => this.FollowedBy(new AddInput(ModelController, input)).Execute();
+        => this.FollowedBy(new AddInput(ModelController, input));
 
     public Change RemoveInputChar() 
-        => this.FollowedBy(new RemoveInput(ModelController, 1)).Execute();
+        => this.FollowedBy(new RemoveInput(ModelController, 1));
 
     public Change RemoveInputChars(int count) 
-        => this.FollowedBy(new RemoveInput(ModelController, count)).Execute();
+        => this.FollowedBy(new RemoveInput(ModelController, count));
 
-    public Change ClearInput() 
-          => ModelController.InputBuffer.IsEmpty 
+    public Change ClearInput()
+          => ModelController.InputBuffer.IsEmpty
             ? this
-            : this.FollowedBy(new RemoveInput(ModelController)).Execute();
+            : this.FollowedBy(new RemoveInput(ModelController));
    
     public Change AddOutput(NumberEntry numberEntry) 
-        => this.FollowedBy(new AddOutput(ModelController, numberEntry)).Execute();
+        => this.FollowedBy(new AddOutput(ModelController, numberEntry));
 
     public Change RemoveOutput() 
-        => this.FollowedBy(new RemoveOutput(ModelController)).Execute();
+        => ModelController.OutputEmpty ? this : this.FollowedBy(new RemoveOutput(ModelController));
 
     //we remove them one by one, so they all are tracked by the undo system
     public Change ClearAllOutputs()
@@ -74,10 +72,9 @@ public abstract class Change
         return change;
     }
 
- 
     public Change FollowedBy(Change next)
     {
-        this.Next = next;
+        this.Next = next.Execute();
         next.Previous = this;
         return next;
     }

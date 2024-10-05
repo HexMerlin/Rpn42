@@ -65,6 +65,7 @@ public class InputBuffer
     private static Q ParseNumber(string input, int base_)
     {
         input = input.Trim();
+        if (input.Length == 0) return Q.NaN;
         int pointIndex = input.IndexOf('.');
         if (pointIndex == -1)
             return new Q(BigIntegerExtensions.Parse(input, base_));
