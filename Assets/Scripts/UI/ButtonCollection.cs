@@ -41,6 +41,7 @@ public class ButtonCollection : IEnumerable<AbstractButton>
             new ButtonProd(UnityButton("button-prod")),
             new ButtonClear(UnityButton("button-clear")),
             new ButtonMod(UnityButton("button-mod")),
+            new ButtonGenerator(UnityButton("button-generator")),
             new ButtonDivMersenne(UnityButton("button-div-ones")),
             new ButtonUndo(UnityButton("button-undo")),
             new ButtonRedo(UnityButton("button-redo")),
@@ -51,7 +52,6 @@ public class ButtonCollection : IEnumerable<AbstractButton>
 
             new ButtonMode(UnityButton("button-mode-normal"), Mode.Normal, false),
             new ButtonMode(UnityButton("button-mode-periodic"), Mode.Periodic, false),
-            new ButtonMode(UnityButton("button-mode-padic"), Mode.PAdic, false),
             new ButtonMode(UnityButton("button-mode-rot"), Mode.Rotations, false),
             new ButtonMode(UnityButton("button-mode-factor"), Mode.Factorization, true),
             new ButtonMode(UnityButton("button-mode-repetend"), Mode.Repetend, true),

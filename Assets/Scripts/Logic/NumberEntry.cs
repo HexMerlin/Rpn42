@@ -60,14 +60,13 @@ public class NumberEntry
 
     private static string Col0Title(Format _) => "Canonical";
 
-    private string Col0Data(Format format) => StringCanonical.Value + " " + BaseEntry(format).StringQpGenerator.Value;
+    private string Col0Data(Format _) => StringCanonical.Value;
 
     private static string Col1Title(Format format) 
         => format.Mode switch
     {
-        Mode.Normal => "Expanded p-ary",
-        Mode.Periodic => "p-Ary",
-        Mode.PAdic => "Generator",
+        Mode.Normal => "",
+        Mode.Periodic => "",
         Mode.Repetend => "Repetend",
         Mode.Period => "Period",
         _ => "",
@@ -76,19 +75,19 @@ public class NumberEntry
     private string Col1Data(Format format) 
         => format.Mode switch
     {
-        Mode.Normal => BaseEntry(format).StringExpanded.Value,
-        Mode.Periodic => BaseEntry(format).StringPeriodic.Value,
-        Mode.PAdic => BaseEntry(format).StringQpGenerator.Value,
+        Mode.Normal => "",
+        Mode.Periodic => "",
+        Mode.Rotations => "",
+        Mode.Factorization => "",
         Mode.Repetend => BaseEntry(format).StringRepetend.Value,
         Mode.Period => BaseEntry(format).StringPeriod.Value,
-        _ => "",
+        _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown format"),
     };
 
     private static string Col2Title(Format format) => format.Mode switch
     {
-        Mode.Normal => "Expanded p-adic",
-        Mode.Periodic => "p-adic",
-        Mode.PAdic => "p-adic",
+        Mode.Normal => "Expanded",
+        Mode.Periodic => "Periodic",
         Mode.Rotations => "Rotations",
         Mode.Factorization => "Factors",
         Mode.Repetend => "Repetend Factors",
@@ -98,9 +97,8 @@ public class NumberEntry
 
     private string Col2Data(Format format) => format.Mode switch
     {
-        Mode.Normal => BaseEntry(format).StringQpExpanded.Value,
-        Mode.Periodic => BaseEntry(format).StringQpPeriodic.Value,
-        Mode.PAdic => BaseEntry(format).StringQpPeriodic.Value,
+        Mode.Normal => BaseEntry(format).StringExpanded.Value,
+        Mode.Periodic => BaseEntry(format).StringPeriodic.Value,
         Mode.Rotations => BaseEntry(format).StringRotations.Value,
         Mode.Factorization => StringFactorization.Value,
         Mode.Repetend => BaseEntry(format).StringRepetendFactorization.Value,

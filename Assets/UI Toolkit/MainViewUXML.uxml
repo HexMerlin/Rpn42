@@ -25,7 +25,7 @@
             <ui:VisualElement name="row-1" style="flex-grow: 1; flex-direction: row; justify-content: center;">
                 <ui:Button name="button-mode-normal" text="Normal" class="button mode-button" />
                 <ui:Button name="button-mode-periodic" text="Periodic" class="button mode-button" />
-                <ui:Button name="button-mode-padic" text="P-Adic" class="button mode-button" />
+                <ui:Button name="button-mode-rot" text="Rot" class="button mode-button" />
                 <ui:Button class="button" />
                 <ui:Button name="button-pow" text="xʸ" class="button" />
                 <ui:Button name="button-in-base-2" text="Base 2" class="button base-button" />
@@ -35,10 +35,10 @@
                 <ui:Button name="button-in-base-10" text="Dec" class="button base-button" />
             </ui:VisualElement>
             <ui:VisualElement name="row-2" style="flex-grow: 1; flex-direction: row; justify-content: center;">
-                <ui:Button class="button" />
-                <ui:Button name="button-mode-rot" text="Rot" class="button mode-button" />
-                <ui:Button class="button" />
-                <ui:Button class="button" />
+                <ui:Button name="button-mode-factor" text="Factor" class="button mode-button" />
+                <ui:Button name="button-mode-repetend" text="Repetend" class="button mode-button" />
+                <ui:Button name="button-mode-period" text="Period" class="button mode-button" />
+                <ui:Button name="button-mode-partition" text="Partition" enabled="false" class="button mode-button" />
                 <ui:Button name="button-square" text="x²" class="button" />
                 <ui:Button text="÷" name="button-quotient" class="button" />
                 <ui:Button text="7" name="button-7" class="button" />
@@ -47,10 +47,10 @@
                 <ui:Button text="←" name="button-back-drop" class="button" />
             </ui:VisualElement>
             <ui:VisualElement name="row-3" style="flex-grow: 1; flex-direction: row; justify-content: center;">
-                <ui:Button name="button-mode-factor" text="Factor" class="button mode-button" />
-                <ui:Button name="button-mode-repetend" text="Repetend" class="button mode-button" />
-                <ui:Button name="button-mode-period" text="Period" class="button mode-button" />
-                <ui:Button name="button-mode-partition" text="Partition" class="button mode-button" />
+                <ui:Button name="button-generator" text="G-tor" class="button" />
+                <ui:Button class="button" />
+                <ui:Button class="button" />
+                <ui:Button class="button" />
                 <ui:Button name="button-reciprocal" text="1/x" class="button" />
                 <ui:Button text="x" name="button-prod" class="button" />
                 <ui:Button text="4" name="button-4" class="button" />

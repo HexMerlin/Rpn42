@@ -20,14 +20,3 @@ public struct Format : IEquatable<Format>
 
     public bool Equals(Format other) => Mode == other.Mode && Base == other.Base;
 }
-
-public enum Mode 
-{ 
-    Normal,    //Fractional, Expanded,
-    Periodic, //Fractional, Normal,
-    PAdic,
-    Rotations, 
-    Factorization,
-    Repetend,
-    Period, 
-}

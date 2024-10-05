@@ -40,7 +40,7 @@ public abstract class Change
             .FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase)).Execute()
             .ClearInput();
 
-            return HasFiniteExpansion(q, newBase) 
+            return q.HasFiniteExpansion(newBase) 
                 ? result.AddInput(q.ToStringFinite(newBase))
                 : result.AddOutput(new NumberEntry(q));
     }
@@ -82,27 +82,6 @@ public abstract class Change
         return next;
     }
 
-    public static bool HasFiniteExpansion(Q q, int base_)
-    {
-        if (base_ is not (2 or 3 or 5 or 7 or 10))
-            throw new ArgumentOutOfRangeException(nameof(base_), base_, "Base must be 2, 3, 5, 7, or 10");
 
-        if (base_ != 10)
-            return q.Denominator.Abs().IsPowerOf(base_);
-
-
-        var d = q.Denominator.Abs();
-        while (d > 1)
-        {
-            if (d % 2 == 0)
-                d /= 2;
-            else if (d % 5 == 0)
-                d /= 5;
-            else
-                return false;
-        }
-
-        return true;
-    }
 }
 

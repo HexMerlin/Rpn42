@@ -82,12 +82,14 @@
     <Compile Include="Assets\Scripts\Logic\StringParser.cs" />
     <Compile Include="Assets\Scripts\Logic\Format.cs" />
     <Compile Include="Assets\Scripts\Persistence\PersistenceManager.cs" />
+    <Compile Include="Assets\Scripts\Logic\Mode.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonDiff.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonProd.cs" />
     <Compile Include="Assets\Scripts\UI\NumberDialog.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonRepFactor.cs" />
     <Compile Include="Assets\Scripts\Persistence\SavedDataJsonConverter.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonRepetendShiftRight.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonGenerator.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonSum.cs" />
     <Compile Include="Assets\Scripts\Undo\RemoveOutput.cs" />
     <Compile Include="Assets\Scripts\UI\MainViewControl.Callbacks.cs" />
