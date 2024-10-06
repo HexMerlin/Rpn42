@@ -181,7 +181,7 @@ public class ModelController
       
         return InputEmpty ?
             (OutputCount > 1 ? SecondLastOutput.Q : Q.NaN, lastOutput)
-            : (lastOutput, InputBuffer.AsQ());
+            : (lastOutput, InputBuffer.Q);
     }
 
 }

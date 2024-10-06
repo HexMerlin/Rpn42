@@ -32,11 +32,11 @@ public abstract class Change
 
     public Change ChangeInputBase(int newBase)
     {
-        Q q = ModelController.InputEmpty ? Q.NaN : ModelController.InputBuffer.AsQ();
+        Q q = ModelController.InputEmpty ? Q.NaN : ModelController.InputBuffer.Q;
 
         Change result = this.FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase));
-        
-        return q.IsNaN 
+
+        return q.IsNaN
             ? result
             : q.HasFiniteExpansion(newBase)
                 ? result.ClearInput().AddInput(q.ToStringFinite(newBase))

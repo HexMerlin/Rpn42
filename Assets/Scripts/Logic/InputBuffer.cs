@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿#nullable enable
+using System.Numerics;
 using System;
 using System.Text;
 using MathLib;
@@ -10,6 +11,17 @@ public class InputBuffer
         private set; 
     }
 
+    private Q? _q;
+
+    public Q Q
+    {
+        get
+        {
+            _q ??= ParseNumber(sb, Base);
+            return _q;
+        }
+    } 
+
     private readonly StringBuilder sb;
 
     public InputBuffer(int base_)
@@ -17,42 +29,37 @@ public class InputBuffer
         this.sb = new StringBuilder();
         Base = base_;
     }
-
+  
     public int Length => this.sb.Length;
 
     public bool IsEmpty => this.sb.Length == 0;
 
+    private void InvalidateQ() => this._q = null;
+
     public void ChangeBase(int newBase)
     {
-        if (newBase == Base) return;
+        if (newBase == Base) return;  
         Base = newBase;
     }
 
-    //public void ChangeBase(int newBase)
-    //{
-    //    if (newBase == Base) return;
+   
+    public void Clear()
+    {
+        this.sb.Clear();
+        InvalidateQ();
+    }
 
-    //    if (sb.Length > 0)
-    //    {
-    //        Q q = AsQ();
-    //        sb.Clear();
-    //        sb.Append(q.ToStringFinite(newBase));
-
-    //    }
-    //    Base = newBase;
-    //}
-
-    public void Clear() => this.sb.Clear();
-
-    public void Append(string input) 
-        => this.sb.Append(input);
-
+    public void Append(string input)
+    {
+        this.sb.Append(input);
+        InvalidateQ();
+    }
+      
     public void RemoveChars(int startIndex, int count)
     {
         sb.Remove(startIndex, count);
+        InvalidateQ();
     }
-
-    public Q AsQ() => ParseNumber(sb.ToString(), Base);
 
     /// <summary>
     /// Parses a number from a string denoting its positional representation.
@@ -61,11 +68,11 @@ public class InputBuffer
     /// <remarks>
     /// The method handles numbers with arbitrary magnitude and precision.
     /// </remarks>
-    /// <param name="input">The string representation of the number.</param>
-    private static Q ParseNumber(string input, int base_)
+    /// <param name="sb">A <see cref="StringBuilder"/> containing a string of the number.</param>
+    private static Q ParseNumber(StringBuilder sb, int base_)
     {
-        input = input.Trim();
-        if (input.Length == 0) return Q.NaN;
+        if (sb.Length == 0) return Q.NaN;
+        string input = sb.ToString();
         int pointIndex = input.IndexOf('.');
         if (pointIndex == -1)
             return new Q(BigIntegerExtensions.Parse(input, base_));

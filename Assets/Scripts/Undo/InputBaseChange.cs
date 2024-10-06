@@ -1,6 +1,4 @@
-﻿
-using MathLib;
-using System;
+﻿using System;
 
 public class InputBaseChange : Change
 {
@@ -9,9 +7,11 @@ public class InputBaseChange : Change
 
     public InputBaseChange(ModelController modelController, int oldBase, int newBase) : base(modelController)
     {
+        if (oldBase == newBase) throw new ArgumentException("Old and new base must not be the same.");
         this.OldBase = oldBase;
         this.NewBase = newBase;
     }
+
 
     public override Change Execute()
     {
@@ -24,24 +24,6 @@ public class InputBaseChange : Change
         ModelController.InputBuffer.ChangeBase(OldBase);
         return Previous;
     }
-
-    //public Change ChangeInputBase(int newBase)
-    //{
-    //    if (ModelController.InputEmpty)
-    //        return this.SetUndoPoint(false).FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase)).Execute();
-
-    //    Q q = ModelController.InputBuffer.AsQ();
-    //    return this.SetUndoPoint(false)
-    //        .FollowedBy(new InputBaseChange(ModelController, ModelController.InputBase, newBase)).Execute()
-    //        .ClearInput()
-    //        .HasFiniteExpansion(q, newBase)
-    //            ? AddInput(q.ToStringFinite(newBase))
-    //            : AddOutput(new NumberEntry(q));
-
-    //}
-
-
-
 
 
 }
