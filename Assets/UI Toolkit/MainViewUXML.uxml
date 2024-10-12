@@ -47,8 +47,8 @@
                 <ui:Button text="←" name="button-back-drop" class="button" />
             </ui:VisualElement>
             <ui:VisualElement name="row-3" style="flex-grow: 1; flex-direction: row; justify-content: center;">
+                <ui:Button name="button-generator-retain" text="G-tor+" class="button" />
                 <ui:Button name="button-generator" text="G-tor" class="button" />
-                <ui:Button class="button" />
                 <ui:Button class="button" />
                 <ui:Button class="button" />
                 <ui:Button name="button-reciprocal" text="1/x" class="button" />

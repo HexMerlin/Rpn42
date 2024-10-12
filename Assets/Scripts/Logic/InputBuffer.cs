@@ -13,14 +13,7 @@ public class InputBuffer
 
     private Q? _q;
 
-    public Q Q
-    {
-        get
-        {
-            _q ??= ParseNumber(sb, Base);
-            return _q;
-        }
-    } 
+    public Q Q => this._q ??= ParseNumber(sb, Base);
 
     private readonly StringBuilder sb;
 
