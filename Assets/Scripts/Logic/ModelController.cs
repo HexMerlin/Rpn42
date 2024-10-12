@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MathLib;
+using NUnit.Framework.Interfaces;
 
 public class ModelController 
 {
@@ -92,27 +93,56 @@ public class ModelController
         this.CurrentChange = this.CurrentChange.AddOutput(numberEntry).SetUndoPoint(isUndoPoint);
     }
 
-    public void PerformEnter() => PerformUnaryOperation((a) => a, InputEmpty);
+    public void PerformEnter() 
+    {
+        if (InputEmpty) 
+            PerformCopy1();
+        else 
+            PushInput();
+    }
 
     public void PerformAddInput(string input) => this.CurrentChange = this.CurrentChange.AddInput(input);
 
-    public void PerformUnaryOperation(Func<Q, Q> operation, bool retainOperand = false)
+    public bool PushInput()
+    {
+        if (InputEmpty) return true;
+        (Q _, Q operand) = PeekOperands();
+        if (operand.IsNaN) return false; //assert operand is not NaN
+        this.CurrentChange = this.CurrentChange.ClearInput().AddOutput(new NumberEntry(operand));
+        return true;
+    }
+
+    public void PerformCopy1()
+    {
+        if (OutputCount < 1) return;
+        this.CurrentChange = this.CurrentChange.AddOutput(LastOutput);
+    }
+
+    public void PerformCopy2()
+    {
+        if (OutputCount < 2) return;
+        NumberEntry secondLastOutput = this.SecondLastOutput;
+        NumberEntry lastOutput = this.LastOutput;
+        this.CurrentChange = this.CurrentChange.AddOutput(secondLastOutput);
+        this.CurrentChange = this.CurrentChange.AddOutput(lastOutput);
+    }
+
+ 
+    public void PerformUnaryOperation(Func<Q, Q> operation, bool replaceOperand = true)
     { 
         (Q _, Q operand) = PeekOperands();
         if (operand.IsNaN) return; //need 1 operand to perform operation: abort operation
-
         Q result = operation(operand);
-
         if (result.IsNaN) return;
 
-        if (retainOperand)
-        {
-            this.CurrentChange = this.CurrentChange.AddOutput(new NumberEntry(result));
-        } 
-        else 
-        this.CurrentChange = InputEmpty ?
-            this.CurrentChange.RemoveOutput().AddOutput(new NumberEntry(result)) :
-            this.CurrentChange.ClearInput().AddOutput(new NumberEntry(result));
+        if (replaceOperand)
+            this.CurrentChange = InputEmpty ?
+                this.CurrentChange.RemoveOutput() :
+                this.CurrentChange.ClearInput();
+        else if (!InputEmpty)
+               this.CurrentChange = this.CurrentChange.ClearInput().AddOutput(new NumberEntry(operand));
+        
+        this.CurrentChange = this.CurrentChange.AddOutput(new NumberEntry(result));
     }
 
     public void PerformBinaryOperation(Func<Q, Q, Q> operation)
@@ -140,15 +170,6 @@ public class ModelController
     {
         this.CurrentChange = this.CurrentChange.ClearInput();
         this.CurrentChange = this.CurrentChange.ClearAllOutputs();
-    }
-
-    public void PerformCopy2()
-    {
-        if (OutputCount < 2) return;
-        NumberEntry secondLastOutput = this.SecondLastOutput;
-        NumberEntry lastOutput = this.LastOutput;
-        this.CurrentChange = this.CurrentChange.AddOutput(secondLastOutput);
-        this.CurrentChange = this.CurrentChange.AddOutput(lastOutput);
     }
 
     public void PerformUndo()
