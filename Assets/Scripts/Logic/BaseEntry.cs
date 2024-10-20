@@ -7,7 +7,7 @@ internal class BaseEntry
     
     public BaseEntry(Q q, int base_)
     {
-        Qb = new Lazy<Qb>(() => new Qb(q, new Base(base_)));
+        Qb = new Lazy<Qb>(() => new Qb(q, base_));
         //Qp = new Lazy<Qp>(() => CreateQp(q, base_));
 
         //StringQpGenerator = new Lazy<string>(() => Qp.Value.Generator.ToStringCanonical());
@@ -25,19 +25,6 @@ internal class BaseEntry
         StringPeriodFactorization = new Lazy<string>(() => Primes.Factorization(Qb.Value.Period).ToString());
     }
 
-    //private static Qp CreateQp(Q q, int base_)
-    //{
-    //    try {
-    //        return new Qp(q, new Base(base_));
-            
-    //    }
-    //    catch 
-    //    {            
-    //        return MathLib.Qp.NaN; 
-    //    }
-    //}
-
-   // internal Lazy<string> StringQpGenerator { get; }
 
     internal Lazy<Qb> Qb { get; }
 

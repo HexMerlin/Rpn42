@@ -81,6 +81,7 @@
     <Compile Include="Assets\Scripts\UI\MainViewControl.cs" />
     <Compile Include="Assets\Scripts\Logic\StringParser.cs" />
     <Compile Include="Assets\Scripts\Logic\Format.cs" />
+    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonToTuple.cs" />
     <Compile Include="Assets\Scripts\Persistence\PersistenceManager.cs" />
     <Compile Include="Assets\Scripts\Logic\Mode.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonDiff.cs" />

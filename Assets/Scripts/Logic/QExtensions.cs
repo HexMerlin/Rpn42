@@ -11,7 +11,7 @@ public static class QExtensions
 {
 
     public static Q PadicGenerator(this Q q, int base_)
-        => new Qp(q, new Base(base_)).Generator;
+        => new Qp(q, base_).Generator;
 
     /// <summary>
     /// Divides the given rational number by the next Mersenne number greater than or equal to the numerator.

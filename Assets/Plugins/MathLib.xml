@@ -6,66 +6,24 @@
     <members>
         <member name="T:MathLib.Base">
             <summary>
-            Represents a base for number representation.
+            Contains extensions for base in number representations.
             </summary>
         </member>
-        <member name="P:MathLib.Base.IntValue">
-            <summary>
-            Returns base value as an integer.
-            </summary>
-        </member>
-        <member name="M:MathLib.Base.op_Implicit(MathLib.Base)~System.Int32">
-            <summary>
-            Implicitly converts a <see cref="T:MathLib.Base"/> to an integer.
-            </summary>
-            <param name="b">The <see cref="T:MathLib.Base"/> to convert.</param>
-        </member>
-        <member name="M:MathLib.Base.#ctor(System.Int32)">
-            <summary>
-            Initializes a new instance of the <see cref="T:MathLib.Base"/> struct.
-            </summary>
-            <param name="base_">The base value.</param>
-        </member>
-        <member name="M:MathLib.Base.IsPurelyPeriodic(MathLib.Q)">
+        <member name="M:MathLib.Base.IsPurelyPeriodic(System.Int32,MathLib.Q)">
             <summary>
             Checks if the given rational number is purely periodic in the current base.
             </summary>
+            <param name="base_">The base.</param>
             <param name="q">The rational number to check.</param>
             <returns><see langword="true"/> <c>iff</c> the rational number is purely periodic.</returns>
         </member>
-        <member name="M:MathLib.Base.Pow(System.Int32)">
+        <member name="M:MathLib.Base.Pow(System.Int32,System.Int32)">
             <summary>
             Raises the base to the specified exponent.
             </summary>
+            <param name="base_">The base.</param>
             <param name="exponent">The exponent.</param>
             <returns>The result of raising the base to the exponent.</returns>
-        </member>
-        <member name="M:MathLib.Base.Equals(System.Object)">
-            <inheritdoc/>
-        </member>
-        <member name="M:MathLib.Base.GetHashCode">
-            <inheritdoc/>
-        </member>
-        <member name="M:MathLib.Base.Equals(MathLib.Base)">
-            <inheritdoc/>
-        </member>
-        <member name="M:MathLib.Base.CompareTo(MathLib.Base)">
-            <inheritdoc/>
-        </member>
-        <member name="P:MathLib.Base.ZeroInt">
-            <summary>
-            Gets a <see cref="T:MathLib.BaseInt"/> representing the value zero in the current base.
-            The length for 0 is always 0.
-            </summary>
-        </member>
-        <member name="M:MathLib.Base.op_Equality(MathLib.Base,MathLib.Base)">
-            <inheritdoc/>
-        </member>
-        <member name="M:MathLib.Base.op_Inequality(MathLib.Base,MathLib.Base)">
-            <inheritdoc/>
-        </member>
-        <member name="M:MathLib.Base.ToString">
-            <inheritdoc/>
         </member>
         <member name="T:MathLib.BaseInt">
             <summary>
@@ -96,7 +54,7 @@
             <para>For ascending order, the value is reversed when the <see cref="T:MathLib.BaseInt"/> is created.</para>
             </remarks>
         </member>
-        <member name="M:MathLib.BaseInt.#ctor(MathLib.Base,System.Numerics.BigInteger,System.Int32)">
+        <member name="M:MathLib.BaseInt.#ctor(System.Int32,System.Numerics.BigInteger,System.Int32)">
             <summary>
             Initializes a new instance of the <see cref="T:MathLib.BaseInt"/> struct.
             </summary>
@@ -1076,7 +1034,7 @@
             In general mathematics, the concept of "integral part" is not objectively defined, since it has two possible interpretations (or modes).
             These interpretations are defined by whether we regard the set of all pure fractions to include the number 1 or not.
             We denote these interpretations (modes), as FIO (Fractions Include One) and FEO (Fractions Exclude One), respectively.
-            <para>For instance, in decimal, the number 1 has the following two interpretations:</para>
+            <para>For instance, in decimal, the number 1 could have the following two interpretations:</para>
             <code> 
             1 = 0.999999... (FIO)
             1 = 1.000000... (FEO)
@@ -1086,9 +1044,9 @@
             <para>Irrespective of the mode, any number is always the sum of its integral and fractional parts.</para>
             <para>In FIO, all numbers will have a non-zero-terminating expansion.</para>
             <para>In FEO, any number that can terminate (with an ultimately infinite expansion of zeros) will do so.</para>
-            <para>Only numbers where the denominator is a power of the base, can have different representations in FIO and FEO.</para>
+            <para>Only numbers with a period of 0, can have different representations in FIO and FEO.</para>
             <para>To make <see cref="P:MathLib.Q.IntegralPart"/> and <see cref="P:MathLib.Q.FractionalPart"/> well defined, yet allow access to both FIO and FEO,
-            we assign FIO to all positive numbers, and FEO to all negative numbers and zero.</para>
+            we assign FIO to all positive numbers, and FEO to all negative numbers and zero. This will make all members of Q have only one correct expansion.</para>
             <para>This whole logic is completely governed by the implementation of <see cref="P:MathLib.Q.IntegralPart"/>.
             Hence, we do not need to manage modes anywhere in the code base.
             </para>
@@ -1240,7 +1198,7 @@
             <exception cref="!:ArgumentException">Thrown when the bases of <paramref name="pAryPreperiodic"/> and <paramref name="pAryPeriodic"/> are not equal.</exception>
             <returns>A new <see cref="T:MathLib.Q"/> representing the rational number derived from the given parts.</returns>
         </member>
-        <member name="M:MathLib.Q.InBase(MathLib.Base)">
+        <member name="M:MathLib.Q.InBase(System.Int32)">
             <summary>
             Extends the current rational number to a <see cref="T:MathLib.Qb"/> with the specified base.
             </summary>
@@ -1635,12 +1593,12 @@
             Numeric concatenation of the preperiodic and periodic parts.
             </summary>
         </member>
-        <member name="M:MathLib.Qb.#ctor(System.Numerics.BigInteger,System.Numerics.BigInteger,MathLib.Base)">
+        <member name="M:MathLib.Qb.#ctor(System.Numerics.BigInteger,System.Numerics.BigInteger,System.Int32)">
             <summary>
             Constructor for a <see cref="T:MathLib.Qb"/> that takes a numerator, denominator and a base. 
             The rational number is automatically normalized to its simplest form.
             </summary>
-            <remarks>If you already have an object of type <see cref="T:MathLib.Q"/>, then the constructor <see cref="!:Qb.Qb(Q, int)"/> will be faster.
+            <remarks>If you already have an object of type <see cref="T:MathLib.Q"/>, then the constructor <see cref="M:MathLib.Qb.#ctor(MathLib.Q,System.Int32)"/> will be faster.
             <para>Or alternatively, you can simply call <see cref="M:MathLib.Q.InBase(System.Int32)"/> on the Q instance</para>
             </remarks>
             <param name="numerator">The numerator of the rational number.</param>
@@ -1669,7 +1627,7 @@
             Constructor for a NaN Qb instance.
             </summary>
         </member>
-        <member name="M:MathLib.Qb.#ctor(MathLib.Q,MathLib.Base)">
+        <member name="M:MathLib.Qb.#ctor(MathLib.Q,System.Int32)">
             <summary>
             Extends a rational number to a Qb extension with the specific base <paramref name="base_"/>.
             </summary>
@@ -1736,7 +1694,7 @@
             <param name="coefficientCount">The number of coefficients to include, starting from the leftmost. (default=16)</param>
             <returns>The expanded string representation of the current instance of <see cref="T:MathLib.Qb"/>.</returns>
             <remarks>
-            The sign of a number is not encoded by (kept by) the expanded representation, since some Q and -Q can have the same string representation.
+            The sign of a number is not encoded by (contained in) the expanded representation, since some Q and -Q can have the same string representation.
             However, negative numbers, completes the generation, by enabling us to generate all ultimately periodic expansions, including those that are not covered by the positive rational numbers.
             </remarks>
             <example>
@@ -1902,6 +1860,21 @@
             Constructor for a NaN Qp instance.
             </summary>
         </member>
+        <member name="M:MathLib.Qp.#ctor(MathLib.Q,System.Int32)">
+            <summary>
+             Constructor for a p-adic number.
+             </summary>
+             <param name="q">The rational number to represent as a p-adic number.</param>
+             <param name="base_">The prime base of the p-adic number.</param>
+        </member>
+        <member name="M:MathLib.Qp.#ctor(MathLib.BaseInt,MathLib.BaseInt,System.Int32)">
+            <summary>
+            Constructor for a p-adic number for the specified preperiodic and periodic parts, and an optional first exponent.
+            </summary>
+            <param name="pAdicPreperiodic">The p-adic preperiodic part of the number.</param>
+            <param name="pAdicPeriodic">The p-adic periodic part of the number.</param>
+            <param name="firstExponent">The first exponent of the number (Default value = <c>0</c>).</param>
+        </member>
         <member name="M:MathLib.Qp.Coefficients">
             <summary>
             Constructor for a p-adic number.
@@ -1921,14 +1894,14 @@
             Default string representation of the p-adic number.
             </summary>
         </member>
-        <member name="M:MathLib.Qp.ReciprocalGenerator(System.Numerics.BigInteger,MathLib.Base)">
+        <member name="M:MathLib.Qp.ReciprocalGenerator(System.Numerics.BigInteger,System.Int32)">
             <summary>
             Returns a reverse generator for the p-adic number denoting the reciprocal of a given integer in the base <paramref name="base_"/>.
             </summary>
             <param name="n">The integer to take the reciprocal of</param>
             <param name="base_">The base (p) of the resulting p-adic number</param>
         </member>
-        <member name="M:MathLib.Qp.ReciprocalCoefficients(System.Numerics.BigInteger,MathLib.Base)">
+        <member name="M:MathLib.Qp.ReciprocalCoefficients(System.Numerics.BigInteger,System.Int32)">
             <summary>
             Generates the p-adic coefficients of the reciprocal of <paramref name="n"/> in the base <paramref name="base_"/>.
             Also returns a remainder with each coefficient.
@@ -1936,20 +1909,6 @@
             <param name="n">The number whose reciprocal's p-adic expansion is computed.</param>
             <param name="base_">The prime base of the p-adic expansion.</param>
             <returns>An enumerable tuple sequence (coefficient, remainder).</returns>
-        </member>
-        <member name="M:MathLib.QTuple.PAryInterpretation(System.Boolean,MathLib.BaseInt,MathLib.BaseInt,System.Int32)">
-            <summary>
-            Returns a <see cref="T:MathLib.Q"/> from the given parts of a base-specific expansion.
-            </summary>
-            <remarks>
-            This method derives the <see cref="!:Numerator"/> and <see cref="!:Denominator"/> from the given parameters.
-            </remarks>
-            <param name="negative">A boolean indicating if the number is negative.</param>
-            <param name="pAryPreperiodic">The preperiodic part as an integer.</param>
-            <param name="pAryPeriodic">The periodic part as an integer.</param>
-            <param name="firstExponent">The exponent index of the first coefficient of the number.</param>
-            <exception cref="!:ArgumentException">Thrown when the bases of <paramref name="pAryPreperiodic"/> and <paramref name="pAryPeriodic"/> are not equal.</exception>
-            <returns>A new <see cref="T:MathLib.Q"/> representing the rational number derived from the given parts.</returns>
         </member>
     </members>
 </doc>

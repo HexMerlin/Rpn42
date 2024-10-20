@@ -127,6 +127,16 @@ public class ModelController
         this.CurrentChange = this.CurrentChange.AddOutput(lastOutput);
     }
 
+    public void PerformToTuple()
+    {
+        (Q _, Q operand) = PeekOperands();
+        if (operand.IsNaN) return; //need 1 operand to perform operation: abort operation
+        QTuple qTuple = new QTuple(operand, OutputBase);
+        this.CurrentChange = InputEmpty ?
+               this.CurrentChange.RemoveOutput() :
+               this.CurrentChange.ClearInput();
+        this.CurrentChange = this.CurrentChange.AddOutput(new NumberEntry(qTuple.A)).AddOutput(new NumberEntry(qTuple.B));
+    }
  
     public void PerformUnaryOperation(Func<Q, Q> operation, bool replaceOperand = true)
     { 

@@ -43,6 +43,7 @@ public class ButtonCollection : IEnumerable<AbstractButton>
             new ButtonMod(UnityButton("button-mod")),
             new ButtonGenerator(UnityButton("button-generator-retain"), replaceOperand: false),
             new ButtonGenerator(UnityButton("button-generator"), replaceOperand: true),
+            new ButtonToTuple(UnityButton("button-to-tuple")),
             new ButtonDivMersenne(UnityButton("button-div-ones")),
             new ButtonUndo(UnityButton("button-undo")),
             new ButtonRedo(UnityButton("button-redo")),

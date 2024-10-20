@@ -31,7 +31,7 @@
                 <ui:Button name="button-in-base-2" text="Base 2" class="button base-button" />
                 <ui:Button name="button-in-base-3" text="Base 3" class="button base-button" />
                 <ui:Button name="button-in-base-5" text="Base 5" class="button base-button" />
-                <ui:Button name="button-in-base-7" text="Base 5" class="button base-button" />
+                <ui:Button name="button-in-base-7" text="Base 7" class="button base-button" />
                 <ui:Button name="button-in-base-10" text="Dec" class="button base-button" />
             </ui:VisualElement>
             <ui:VisualElement name="row-2" style="flex-grow: 1; flex-direction: row; justify-content: center;">
@@ -49,7 +49,7 @@
             <ui:VisualElement name="row-3" style="flex-grow: 1; flex-direction: row; justify-content: center;">
                 <ui:Button name="button-generator-retain" text="G-tor+" class="button" />
                 <ui:Button name="button-generator" text="G-tor" class="button" />
-                <ui:Button class="button" />
+                <ui:Button name="button-to-tuple" text="→Tuple" class="button" />
                 <ui:Button class="button" />
                 <ui:Button name="button-reciprocal" text="1/x" class="button" />
                 <ui:Button text="x" name="button-prod" class="button" />
