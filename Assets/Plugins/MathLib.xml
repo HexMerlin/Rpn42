@@ -431,6 +431,13 @@
             <param name="delimiter">The delimiter to insert between each element. Defaults to an empty string.</param>
             <returns>A string with the joined elements.</returns>
         </member>
+        <member name="M:MathLib.EnumerableExtensions.Sum(System.Collections.Generic.IEnumerable{System.Numerics.BigInteger})">
+            <summary>
+            Sum of all elements in the specified <paramref name="source"/>.
+            </summary>
+            <param name="source">Collection of <see cref="T:System.Numerics.BigInteger"/> elements.</param>
+            <returns>Total sum as <see cref="T:System.Numerics.BigInteger"/>.</returns>
+        </member>
         <member name="T:MathLib.Lib">
             <summary>
             Static class for general assembly methods
