@@ -5,5 +5,7 @@
     Rotations, 
     Factorization,
     Repetend,
-    Period, 
+    Period,
+    Forms,
+    BalDigits,
 }

@@ -1,4 +1,7 @@
 ﻿using MathLib;
+using MathLib.Misc;
+using MathLib.Prime;
+using MathLib.BalMult;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +12,50 @@ using System.Threading.Tasks;
 
 public static class QExtensions
 {
+
+    public static string ToStringNonAdjacentForm(this Q q)
+    {
+        static char ToC(int b) => b == 0 ? '0' : b == 1 ? '+' : '-';
+        if (!q.IsInteger) return "";
+        return Forms.ToNonAdjacentForm(q.Numerator).Select(ToC).Str();
+    }
+
+    public static string ToStringBalancedBinary(this Q q)
+    {
+        static char ToC(int b) => b == 1 ? '+' : '-';
+        if (!q.IsInteger || q.Numerator.IsEven) return "";
+        return Forms.ToBalancedBits(q.Numerator).Select(ToC).Str();
+    }
+
+    public static string ToStringBalDigitsCorrect(this Q q)
+    {
+        if (!q.IsInteger || q.Numerator.IsEven) return "";
+        var (x, y) = Factors(q.Numerator);
+        Product product = new Product(x, y);
+        return product.Coeffs.Select(c => c.ToString()).Str(" ");
+    }
+
+    public static string ToStringBalDigitsPredicted(this Q q)
+    {
+        if (!q.IsInteger || q.Numerator.IsEven) return "";
+        var (x, y) = Factors(q.Numerator);
+        Product product = new Product(x, y);
+
+        int[] balDigits = BalDigits.ToBalancedDigits(x * y, product.XLength, product.YLength);
+        return balDigits.Select(c => c.ToString()).Str(" ");
+    }
+
+    private static (BigInteger x, BigInteger y) Factors(BigInteger integer)
+    {
+        var factorization = Primes.Factorization(integer);
+        
+        if (factorization.PrimeFactors.Length == 1)
+            return (integer, 1);
+        var x = factorization.PrimeFactors[0];
+        var y = integer / x;
+        return BigInteger.Abs(x) >= BigInteger.Abs(y) ? (x, y) : (y, x);
+    }
+
 
     public static Q PadicGenerator(this Q q, int base_)
         => new Qp(q, base_).Generator;

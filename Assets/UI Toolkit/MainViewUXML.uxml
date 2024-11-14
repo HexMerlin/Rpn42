@@ -26,7 +26,7 @@
                 <ui:Button name="button-mode-normal" text="Normal" class="button mode-button" />
                 <ui:Button name="button-mode-periodic" text="Periodic" class="button mode-button" />
                 <ui:Button name="button-mode-rot" text="Rot" class="button mode-button" />
-                <ui:Button class="button" />
+                <ui:Button name="button-mode-forms" text="Forms" class="button mode-button" />
                 <ui:Button name="button-pow" text="xʸ" class="button" />
                 <ui:Button name="button-in-base-2" text="Base 2" class="button base-button" />
                 <ui:Button name="button-in-base-3" text="Base 3" class="button base-button" />
@@ -38,7 +38,7 @@
                 <ui:Button name="button-mode-factor" text="Factor" class="button mode-button" />
                 <ui:Button name="button-mode-repetend" text="Repetend" class="button mode-button" />
                 <ui:Button name="button-mode-period" text="Period" class="button mode-button" />
-                <ui:Button name="button-mode-partition" text="Partition" enabled="false" class="button mode-button" />
+                <ui:Button name="button-mode-bal-digits" text="BalDigits" enabled="true" class="button mode-button" />
                 <ui:Button name="button-square" text="x²" class="button" />
                 <ui:Button text="÷" name="button-quotient" class="button" />
                 <ui:Button text="7" name="button-7" class="button" />

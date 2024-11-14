@@ -98,7 +98,6 @@
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonRepetendShiftLeft.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonQuotient.cs" />
     <Compile Include="Assets\Scripts\Logic\ModelController.cs" />
-    <Compile Include="Assets\Scripts\UI\Buttons\Specific\ButtonModePAdic.cs" />
     <Compile Include="Assets\Scripts\Undo\Change.cs" />
     <Compile Include="Assets\Scripts\Logic\DeferredResult.cs" />
     <Compile Include="Assets\Scripts\UI\Buttons\AbstractButton.cs" />

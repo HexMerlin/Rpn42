@@ -58,6 +58,8 @@ public class ButtonCollection : IEnumerable<AbstractButton>
             new ButtonMode(UnityButton("button-mode-factor"), Mode.Factorization, true),
             new ButtonMode(UnityButton("button-mode-repetend"), Mode.Repetend, true),
             new ButtonMode(UnityButton("button-mode-period"), Mode.Period, true),
+            new ButtonMode(UnityButton("button-mode-forms"), Mode.Forms, false),
+            new ButtonMode(UnityButton("button-mode-bal-digits"), Mode.BalDigits, true),
 
             new ButtonBase(UnityButton("button-out-base-2"), isInputBase: false, 2),
             new ButtonBase(UnityButton("button-out-base-3"), isInputBase: false, 3),

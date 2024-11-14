@@ -18,7 +18,11 @@ public class NumberEntry
     {
         this.Q = q;
         StringCanonical = new Lazy<string>(() => q.ToStringCanonical());
+        StringNonAdjacentForm = new Lazy<string>(() => q.ToStringNonAdjacentForm());
+        StringBalancedBinary = new Lazy<string>(() => " " + q.ToStringBalancedBinary());
         StringFactorization = new Lazy<string>(() => q.ToStringFactorization());
+        StringBalDigitsCorrect = new Lazy<string>(() => q.ToStringBalDigitsCorrect());
+        StringBalDigitsPredicted = new Lazy<string>(() => q.ToStringBalDigitsPredicted());
         Base2Entry = new Lazy<BaseEntry>(() => new BaseEntry(q, 2));
         Base3Entry = new Lazy<BaseEntry>(() => new BaseEntry(q, 3));
         Base5Entry = new Lazy<BaseEntry>(() => new BaseEntry(q, 5));
@@ -28,7 +32,15 @@ public class NumberEntry
     }
     private Lazy<string> StringCanonical { get; }
 
+    private Lazy<string> StringNonAdjacentForm { get; }
+    
+    private Lazy<string> StringBalancedBinary { get; }
+
     private Lazy<string> StringFactorization { get; }
+
+    private Lazy<string> StringBalDigitsCorrect { get; }
+    
+    private Lazy<string> StringBalDigitsPredicted { get; }
 
     private Lazy<BaseEntry> Base2Entry { get; }
     
@@ -69,6 +81,8 @@ public class NumberEntry
         Mode.Periodic => "",
         Mode.Repetend => "Repetend",
         Mode.Period => "Period",
+        Mode.Forms => "NAF",
+        Mode.BalDigits => "Bal digits predicted",
         _ => "",
     };
 
@@ -81,6 +95,8 @@ public class NumberEntry
         Mode.Factorization => "",
         Mode.Repetend => BaseEntry(format).StringRepetend.Value,
         Mode.Period => BaseEntry(format).StringPeriod.Value,
+        Mode.Forms => StringNonAdjacentForm.Value,
+        Mode.BalDigits => StringBalDigitsPredicted.Value,
         _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown format"),
     };
 
@@ -92,6 +108,8 @@ public class NumberEntry
         Mode.Factorization => "Factors",
         Mode.Repetend => "Repetend Factors",
         Mode.Period => "Period Factors",
+        Mode.Forms => "BalBin",
+        Mode.BalDigits => "Bal digits correct",
         _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown format"),
     };
 
@@ -103,6 +121,8 @@ public class NumberEntry
         Mode.Factorization => StringFactorization.Value,
         Mode.Repetend => BaseEntry(format).StringRepetendFactorization.Value,
         Mode.Period => BaseEntry(format).StringPeriodFactorization.Value,
+        Mode.Forms => StringBalancedBinary.Value,
+        Mode.BalDigits => StringBalDigitsCorrect.Value,
         _ => throw new ArgumentOutOfRangeException(nameof(Format), format, "Unknown format"),
     };
 

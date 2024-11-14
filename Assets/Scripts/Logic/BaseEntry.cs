@@ -8,15 +8,11 @@ internal class BaseEntry
     public BaseEntry(Q q, int base_)
     {
         Qb = new Lazy<Qb>(() => new Qb(q, base_));
-        //Qp = new Lazy<Qp>(() => CreateQp(q, base_));
-
-        //StringQpGenerator = new Lazy<string>(() => Qp.Value.Generator.ToStringCanonical());
-
+   
         StringExpanded = new Lazy<string>(() => Qb.Value.ToStringExpanded());
-        //StringQpExpanded = new Lazy<string>(() => Qp.Value.Generator.ToStringExpanded());
-
+       
         StringPeriodic = new Lazy<string>(() => Qb.Value.ToStringPeriodic());
-       // StringQpPeriodic = new Lazy<string>(() => Qp.Value.ToStringPeriodic());
+      
         StringRotations = new Lazy<string>(() => Qb.Value.ToStringRotations());
       
         StringRepetend = new Lazy<string>(() => Qb.Value.ToStringRepetend());
@@ -28,18 +24,11 @@ internal class BaseEntry
 
     internal Lazy<Qb> Qb { get; }
 
-    //internal Lazy<Qp> Qp { get; }
-
     internal Lazy<string> StringExpanded { get; }
-    //internal Lazy<string> StringQpExpanded { get; }
-    
+ 
     internal Lazy<string> StringPeriodic { get; }
 
-    //internal Lazy<string> StringQpPeriodic { get; }
-
     internal Lazy<string> StringRotations { get; }
-
-
 
     internal Lazy<string> StringRepetend { get; }
 
@@ -48,6 +37,6 @@ internal class BaseEntry
     internal Lazy<string> StringPeriod { get; }
 
     internal Lazy<string> StringPeriodFactorization { get; }
-    
+
 }
 

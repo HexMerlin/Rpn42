@@ -17,11 +17,5 @@ public static class StringParser
 
     }
 
-    //public static string[] TokenizeNumberStrings(string input)
-    //{
-    //    return string.IsNullOrWhiteSpace(input)
-    //        ? Array.Empty<string>()
-    //        : Regex.Matches(input, @"-?\d*\.?\d+").Select(m => m.Value).ToArray();
-    //}
 }
 
