@@ -1,6 +1,6 @@
 ﻿🚀 Rpn42: A RPN Calculator for mobile devices (Android, iOS) written in Unity and C#
 
-It is currently in development and not yet ready for public release.
+It is currently in development. No current plan for public release.
 
 🌟 Features
 
